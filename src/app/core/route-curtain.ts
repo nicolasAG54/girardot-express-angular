@@ -2,6 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DestroyRef, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationSkipped, Router } from '@angular/router';
+import { SITE_CONTENT } from './site-content';
 
 export type CurtainDirection = 'to-project' | 'to-home';
 
@@ -9,7 +10,7 @@ interface CurtainRun {
   id: number;
   direction: CurtainDirection;
   element: HTMLElement;
-  strips: { black: HTMLElement; yellow: HTMLElement }[];
+  strips: { accent: HTMLElement; surface: HTMLElement }[];
   animations: Animation[];
   timeout?: ReturnType<typeof setTimeout>;
   frame?: number;
@@ -23,9 +24,15 @@ export class RouteCurtain {
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private active?: CurtainRun;
   private keyboard = false;
+  private logoReady = false;
 
   constructor() {
     if (!this.browser) return;
+    // Decode on the initial route so the logo cannot pop in halfway through.
+    // A slow or failed asset falls back to immediate navigation.
+    const logo = this.document.createElement('img');
+    logo.src = SITE_CONTENT.logoUrl;
+    void logo.decode().then(() => { this.logoReady = true; }, () => undefined);
     const keyboard = () => { this.keyboard = true; };
     const pointer = () => { this.keyboard = false; };
     const dismiss = () => { if (this.active) this.dismiss(this.active); };
@@ -58,7 +65,7 @@ export class RouteCurtain {
 
   async cover(id: number, direction: CurtainDirection): Promise<boolean> {
     if (this.active) this.dismiss(this.active);
-    if (!this.browser || this.keyboard || window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    if (!this.browser || !this.logoReady || this.keyboard || window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
         typeof this.document.documentElement.animate !== 'function') return true;
 
     // Focusing a link in the compact menu can start a smooth viewport scroll.
@@ -79,11 +86,13 @@ export class RouteCurtain {
     layer.style.width = `${width + height + 6}px`;
     const signature = this.document.createElement('div');
     signature.className = 'route-curtain__signature';
-    const firstName = this.document.createElement('span');
-    const lastName = this.document.createElement('span');
-    firstName.textContent = 'Girardot';
-    lastName.textContent = 'Express';
-    signature.append(firstName, this.document.createTextNode(' '), lastName);
+    const logo = this.document.createElement('img');
+    logo.src = SITE_CONTENT.logoUrl;
+    logo.alt = '';
+    logo.width = 2953;
+    logo.height = 2953;
+    logo.draggable = false;
+    signature.append(logo);
     element.append(layer);
     const count = Math.ceil((width + height + 6) / (width / (width <= 720 ? 6 : 10)));
     const run: CurtainRun = { id, direction, element, strips: [], animations: [] };
@@ -94,35 +103,40 @@ export class RouteCurtain {
       const stripLeft = index * (width + height + 6) / count;
       strip.style.left = `${stripLeft}px`;
       strip.style.width = `calc(${100 / count}% + 3px)`;
-      const black = this.document.createElement('div');
-      const yellow = this.document.createElement('div');
-      black.className = 'route-curtain__paint route-curtain__paint--black';
-      yellow.className = 'route-curtain__paint route-curtain__paint--yellow';
-      // Each yellow panel carries a clipped piece of the same printed name.
-      // Counter the layer's skew so the assembled lettering stays horizontal.
+      const accent = this.document.createElement('div');
+      const surface = this.document.createElement('div');
+      accent.className = 'route-curtain__paint route-curtain__paint--accent';
+      surface.className = 'route-curtain__paint route-curtain__paint--surface';
+      // Each panel carries a clipped piece of one continuous gradient and logo.
+      // Counter the layer's skew to preserve the official logo's proportions.
       // At rest: layerLeft + stripLeft + printLeft + height / 2 === 0.
       const print = this.document.createElement('div');
       print.className = 'route-curtain__print';
       print.style.left = `${3 - stripLeft}px`;
       print.style.width = `${width}px`;
       print.style.height = `${height}px`;
+      for (const corner of ['top', 'bottom']) {
+        const echo = logo.cloneNode(true) as HTMLImageElement;
+        echo.className = `route-curtain__echo route-curtain__echo--${corner}`;
+        print.append(echo);
+      }
       print.append(signature.cloneNode(true));
-      yellow.append(print);
-      strip.append(black, yellow);
+      surface.append(print);
+      strip.append(accent, surface);
       layer.append(strip);
-      run.strips.push({ black, yellow });
+      run.strips.push({ accent, surface });
     }
     this.document.body.append(element);
     // A stalled lazy chunk must not trap the visitor behind a painted screen.
     run.timeout = setTimeout(() => this.dismiss(run), 1600);
     try {
       const from = direction === 'to-home' ? '101%' : '-101%';
-      const entrance = run.strips.flatMap(({ black, yellow }, index) => {
+      const entrance = run.strips.flatMap(({ accent, surface }, index) => {
         const order = direction === 'to-home' ? count - 1 - index : index;
         const delay = order * 150 / (count - 1);
         return [
-          this.animate(run, black, from, '0%', 200, delay),
-          this.animateAssembly(run, yellow, from, 200, delay + 50),
+          this.animate(run, accent, from, '0%', 200, delay),
+          this.animateAssembly(run, surface, from, 200, delay + 50),
         ];
       });
       await Promise.all(entrance);
@@ -138,12 +152,12 @@ export class RouteCurtain {
     run.element.dataset['phase'] = 'revealing';
     try {
       const to = run.direction === 'to-home' ? '-101%' : '101%';
-      const exit = run.strips.flatMap(({ black, yellow }, index) => {
+      const exit = run.strips.flatMap(({ accent, surface }, index) => {
         const order = run.direction === 'to-home' ? run.strips.length - 1 - index : index;
         const delay = order * 130 / (run.strips.length - 1);
         return [
-          this.animate(run, yellow, '0%', to, 200, delay),
-          this.animate(run, black, '0%', to, 200, delay + 45),
+          this.animate(run, surface, '0%', to, 200, delay),
+          this.animate(run, accent, '0%', to, 200, delay + 45),
         ];
       });
       await Promise.all(exit);

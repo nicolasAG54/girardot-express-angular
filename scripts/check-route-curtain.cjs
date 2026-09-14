@@ -51,11 +51,11 @@ async function idle(p) {
     const geometry = await p.evaluate(() => {
      const e = document.querySelector('.route-curtain');
      const r = e.getBoundingClientRect();
-     const paints = [...e.querySelectorAll('.route-curtain__paint--yellow')];
+     const paints = [...e.querySelectorAll('.route-curtain__paint--surface')];
      const first = paints[0].getAnimations()[0], last = paints.at(-1).getAnimations()[0];
      return { direction: e.dataset.direction, origin: first.effect.getKeyframes()[0].transform, firstDelay: first.effect.getTiming().delay, lastDelay: last.effect.getTiming().delay, width: r.width, height: r.height, color: getComputedStyle(paints[0]).backgroundColor, skew: getComputedStyle(e.firstElementChild).transform, overflow: document.documentElement.scrollWidth - innerWidth, headerTop: document.querySelector('header').getBoundingClientRect().top };
     });
-    assert.equal(geometry.color, 'rgb(243, 183, 26)');
+    assert.equal(geometry.color, 'rgb(255, 207, 23)');
     assert.equal(geometry.skew, 'matrix(1, 0, -1, 1, 0, 0)');
     assert.equal(geometry.width, viewport.width); assert.equal(geometry.height, viewport.height); assert.equal(geometry.overflow, 0);
     assert.equal(geometry.direction, target === '/' ? 'to-home' : 'to-project');
@@ -65,19 +65,21 @@ async function idle(p) {
     await p.evaluate(() => window.curtainAnimations.forEach(a => { a.currentTime = 260; }));
     await p.screenshot({ path: path.join(out, `${viewport.width}-${target === '/' ? 'home' : 'project'}-assembling.png`) });
     await p.evaluate(() => window.curtainAnimations.forEach(a => { a.currentTime = a.effect.getComputedTiming().endTime - 0.01; }));
-    assert.equal(await p.locator('.route-curtain__signature').count(), await p.locator('.route-curtain__paint--yellow').count());
-    assert.ok(await p.locator('.route-curtain__signature').evaluateAll(es => es.every(e => e.parentElement.parentElement.classList.contains('route-curtain__paint--yellow') && e.getAnimations().length === 0 && getComputedStyle(e).opacity === '1')));
+    assert.equal(await p.locator('.route-curtain__signature').count(), await p.locator('.route-curtain__paint--surface').count());
+    assert.ok(await p.locator('.route-curtain__signature').evaluateAll(es => es.every(e => e.parentElement.parentElement.classList.contains('route-curtain__paint--surface') && e.getAnimations().length === 0 && getComputedStyle(e).opacity === '1')));
     const signature = await p.locator('.route-curtain__signature').first().evaluate(e => {
-     const style = getComputedStyle(e);
-     return { text: e.textContent, opacity: +style.opacity, font: style.fontFamily, transform: style.transform, lines: [...e.children].map(span => span.getBoundingClientRect().toJSON()) };
+     const img = e.querySelector('img');
+     return { ready: img.complete && img.naturalWidth > 0, src: img.getAttribute('src'), bounds: e.getBoundingClientRect().toJSON(), opacity: getComputedStyle(e).opacity };
     });
-    assert.equal(signature.text, 'Girardot Express'); assert.ok(signature.opacity > 0.99);
-    assert.ok(signature.font.startsWith('Poppins')); assert.equal(signature.transform, 'none');
-    signature.lines.forEach(r => assert.ok(r.left >= 0 && r.right <= viewport.width && r.top >= 0 && r.bottom <= viewport.height));
-    assert.ok(target === '/'
-     ? signature.lines[0].top > signature.lines[1].bottom
-     : signature.lines[1].top > signature.lines[0].bottom);
-    assert.equal(signature.lines[0].left > signature.lines[1].left, target === '/');
+    assert.equal(signature.ready, true, 'Logo must be decoded before painting the curtain');
+    assert.ok(signature.src.endsWith('/assets/brand/girardot-express-logo.png'));
+    assert.equal(signature.opacity, '1');
+    const r = signature.bounds;
+    assert.ok(r.left >= 0 && r.right <= viewport.width && r.top >= 0 && r.bottom <= viewport.height);
+    assert.ok(Math.abs(r.width - r.height) < 1, 'Keep the official logo square');
+    assert.ok(Math.abs((r.left + r.right) / 2 - viewport.width / 2) < 2);
+    assert.ok(Math.abs((r.top + r.bottom) / 2 - viewport.height / 2) < 2);
+    assert.equal(await p.locator('.route-curtain__paint--accent').first().evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(237, 108, 25)');
     await p.screenshot({ path: path.join(out, `${viewport.width}-${target === '/' ? 'home' : 'project'}-covered.png`) });
     await p.evaluate(() => window.curtainAnimations.forEach(a => a.finish()));
     await p.waitForURL(base + target); await idle(p);
@@ -110,10 +112,11 @@ async function idle(p) {
   assert.equal(new URL(interrupted.url()).pathname, '/');
   report.cases.push({ rapidCancellation: true, curtainRemoved: true });
   await interrupted.close();
-  for (const variant of ['reduced', 'keyboard', 'no-waapi']) {
+  for (const variant of ['reduced', 'keyboard', 'no-waapi', 'logo-error']) {
    const p = await browser.newPage({ viewport: { width: 1440, height: 960 }, ...(variant === 'reduced' ? { reducedMotion: 'reduce' } : {}) });
    p.on('pageerror', e => report.errors.push(e.message));
    if (variant === 'no-waapi') await p.addInitScript(() => { Element.prototype.animate = undefined; });
+   if (variant === 'logo-error') await p.route('**/girardot-express-logo.png', route => route.abort('failed'));
    await p.goto(base); await p.waitForTimeout(700);
    await p.evaluate(() => {
     window.sawCurtain = false;

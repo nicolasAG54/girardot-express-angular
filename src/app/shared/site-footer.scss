@@ -18,14 +18,27 @@
   gap: clamp(2rem, 5vw, 5rem);
 }
 
+.footer-brand {
+  width: min(100%, 32ch);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .footer-brand a {
   width: fit-content;
   display: block;
-  background: var(--white);
+  margin-inline: auto;
   text-decoration: none;
 }
 
-.footer-brand img { display: block; width: 164px; height: 164px; object-fit: contain; }
+.footer-brand img {
+  display: block;
+  width: 164px;
+  height: 164px;
+  object-fit: contain;
+  // Negativo monocromo sobre el PNG transparente; manual de marca, página 7.
+  filter: brightness(0) invert(1);
+}
 .footer-brand p { max-width: 32ch; margin: 1.15rem 0 0; color: rgb(255 255 255 / 0.7); font-size: 0.85rem; line-height: 1.7; }
 
 .footer-group { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; }

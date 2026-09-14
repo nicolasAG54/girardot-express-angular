@@ -1,6 +1,6 @@
 # Versión 3 · Implementación del 14 de septiembre de 2026
 
-Base: commit `0d248ad` (`version 2 finalizada`). Trabajo en la rama `version-3`, sin publicar ni modificar el respaldo de V2.
+Base: commit `0d248ad` (`version 2 finalizada`). Trabajo en la rama `V3`, sin modificar el respaldo de V2.
 
 ## Implementado
 
@@ -55,3 +55,8 @@ Nombres institucionales comprobados el 14 de septiembre de 2026. La ubicación d
 ## Revisión de diseño
 
 Se preserva la identidad existente: Poppins, fotografía amplia, alto contraste y cortina diagonal. El ajuste añade contenido útil y acentos del isotipo sin sustituir la navegación aprobada. La tipografía y los controles mantienen jerarquía, contraste y acceso por teclado; los desplegables son nativos y el movimiento respeta la preferencia de reducción de animaciones.
+## Ajuste posterior: cortina con logo
+
+Trabajo sobre la rama `V3` creada por el usuario. La cortina diagonal conserva su ensamblado y dirección inversa, con el logo vertical oficial en lugar de las palabras sueltas. El negro se sustituye por naranja intenso y el amarillo pasa a un degradado luminoso inspirado en la referencia. Marcas de agua discretas completan las esquinas; cambian de lado al volver a Inicio. El archivo del logo permanece intacto.
+
+Se precarga y decodifica el logo al iniciar la aplicación. La navegación no espera por un recurso lento o fallido: omite la cortina si aún no está listo. Las imágenes quedan integradas en las piezas desde el primer fotograma. Pruebas reproducibles: `scripts/check-route-curtain.cjs`, con escritorio/móvil, ambas direcciones, historial, cancelación, redimensionado, teclado, reducción de movimiento, ausencia de WAAPI y fallo de imagen. Capturas en `../.codex_artifacts/v3-curtain-logo/`.

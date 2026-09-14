@@ -722,8 +722,8 @@
 }
 
 .project-location__map {
-  overflow: hidden;
-  border-radius: 12px;
+  --location-map-height: 520px;
+  --location-map-mobile-height: 360px;
   align-self: center;
 }
 
