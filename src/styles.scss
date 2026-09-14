@@ -1,0 +1,152 @@
+@use './app/core/route-curtain';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+
+:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --white: #ffffff;
+  --ink: #101010;
+  --ink-soft: #525154;
+  --ink-faint: #767676;
+  --line: #ddddda;
+  --surface: #f2f1ee;
+  --yellow: #f3b71a;
+  --yellow-strong: #f5c54b;
+  --orange: #f4a51c;
+  --teal: #2199b3;
+  --teal-deep: #176e78;
+  --dark: #11100f;
+  --dark-teal: #214d4a;
+  --error: #9f3030;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --page-max: 1320px;
+  --page-pad: clamp(1.25rem, 5vw, 5rem);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --layer-header: 50;
+  --header-height: 100px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+html.is-route-changing { scroll-behavior: auto; }
+
+/* Native hash links need an inset on their targets. Putting it on the whole
+   viewport also pushes already-visible sticky navigation links when focused. */
+main[id], main [id] { scroll-margin-top: var(--header-height); }
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Poppins, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, button, input, select, textarea { font-family: Poppins, 'Segoe UI', sans-serif; }
+img, video { max-width: 100%; }
+video[appVideoReveal] {
+  opacity: 0;
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+video[appVideoReveal].is-video-ready { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  video[appVideoReveal] { transition: none; }
+}
+a { color: inherit; }
+a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--teal-deep);
+  outline-offset: 3px;
+}
+
+h1, h2, h3, h4, p { text-wrap: pretty; }
+main [tabindex='-1']:focus { outline: none; }
+
+.section { padding-block: clamp(4rem, 6.5vw, 6rem); }
+.section-shell { width: min(calc(100% - (2 * var(--page-pad))), var(--page-max)); margin-inline: auto; }
+
+.button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.76rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.button:active { transform: scale(0.97); }
+.button-yellow, .button-primary { background: var(--yellow); color: var(--ink); }
+.button-dark { background: var(--ink); color: var(--white); }
+.button-white { background: var(--white); color: var(--ink); }
+.button-outline, .button-secondary { border-color: rgb(16 16 16 / 0.25); background: transparent; color: var(--ink); }
+.button-outline-light { border-color: rgb(255 255 255 / 0.52); background: transparent; color: var(--white); }
+.text-link { color: inherit; font-weight: 600; text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
+
+[data-reveal-on-scroll='pending'] {
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: opacity, transform;
+}
+
+[data-reveal-on-scroll='visible'] {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover { transform: translateY(-2px); }
+  .button-yellow:hover, .button-primary:hover { background: var(--yellow-strong); }
+  .button-dark:hover { background: #2b2b2b; }
+}
+
+@media (max-width: 1200px) {
+  :root { --header-height: 88px; }
+}
+
+@media (max-width: 720px) {
+  :root { --page-pad: 1rem; }
+  .section { padding-block: clamp(4.5rem, 18vw, 7rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal-on-scroll] { opacity: 1; transform: none; transition: none; }
+  .button { transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease; }
+  .button:active { opacity: 0.86; transform: none; }
+
+}

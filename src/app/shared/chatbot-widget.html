@@ -1,0 +1,91 @@
+<button
+  #launcher
+  class="chatbot-launcher"
+  type="button"
+  aria-label="Abrir asistente de Girardot Express"
+  aria-controls="girardot-chatbot"
+  [attr.aria-expanded]="isOpen()"
+  (click)="togglePanel()"
+>
+  <span>¿Te ayudo?</span>
+  <span class="chatbot-launcher__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
+      <path d="M5 6.5h14v9H9l-4 3v-12Z" />
+      <path d="M9 10h.01M12 10h.01M15 10h.01" />
+    </svg>
+  </span>
+</button>
+
+@if (isOpen()) {
+  <section
+    id="girardot-chatbot"
+    class="chatbot-panel"
+    aria-labelledby="chatbot-title"
+  >
+    <header class="chatbot-header">
+      <span class="chatbot-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 6h14v10H9l-4 3V6Z"/><path d="M9 10h6M9 13h4"/></svg></span>
+      <div>
+        <h2 id="chatbot-title">Conversemos</h2>
+        <p><span aria-hidden="true"></span>Orientación automática</p>
+      </div>
+      <button type="button" aria-label="Cerrar asistente" (click)="closePanel()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg>
+      </button>
+    </header>
+
+    <div
+      #conversation
+      class="chatbot-conversation"
+      role="log"
+      aria-live="polite"
+      aria-relevant="additions"
+    >
+      <div class="chatbot-quick-actions" aria-label="Preguntas rápidas">
+        @for (action of quickActions; track action.label) {
+          <button type="button" (click)="selectQuickAction(action)">{{ action.label }}</button>
+        }
+      </div>
+
+      @for (message of messages(); track message.id) {
+        <article
+          class="chatbot-message"
+          [class.chatbot-message--user]="message.role === 'user'"
+        >
+          <p>{{ message.text }}</p>
+          @if (message.actions?.length) {
+            <div class="chatbot-message__actions">
+              @for (action of message.actions; track action.label) {
+                <a
+                  [href]="action.href"
+                  [attr.target]="action.external ? '_blank' : null"
+                  [attr.rel]="action.external ? 'noopener' : null"
+                  (click)="handleAction(action, $event)"
+                >{{ action.label }}</a>
+              }
+            </div>
+          }
+        </article>
+      }
+    </div>
+
+    <form class="chatbot-composer" (submit)="submitMessage($event)">
+      <label class="sr-only" for="chatbot-message">Escribe tu pregunta</label>
+      <input
+        #messageInput
+        id="chatbot-message"
+        type="text"
+        maxlength="240"
+        autocomplete="off"
+        placeholder="Pregunta sobre Girardot Express"
+        [value]="draft()"
+        (input)="updateDraft($event)"
+      />
+      <button type="submit" aria-label="Enviar pregunta" [disabled]="!draft().trim()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m5 12 14-7-4.5 14-3-5.5L5 12Z" />
+          <path d="m11.5 13.5 3-3" />
+        </svg>
+      </button>
+    </form>
+  </section>
+}

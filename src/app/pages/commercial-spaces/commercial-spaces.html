@@ -1,0 +1,88 @@
+<section class="commercial-hero">
+  <img src="assets/render-1.webp" alt="Vista arquitectónica de los espacios comerciales de Girardot Express" width="1765" height="904" fetchpriority="high" />
+  <div class="commercial-shade"></div>
+  <div class="commercial-copy hero-enter">
+    <p>Espacios comerciales · Girardot, Colombia</p>
+    <h1>Tu marca en <span>Girardot</span> <strong>Express.</strong></h1>
+    <div>
+      <p>Un proyecto de conveniencia que integra comercio, servicios, bienestar y gastronomía en una ubicación estratégica.</p>
+      <a class="button button-primary" href="#interes-comercial">Registrar interés</a>
+    </div>
+  </div>
+</section>
+
+<section class="facts-section">
+  <div class="section-shell">
+    <p class="facts-note">Cifras proyectadas para evaluación comercial</p>
+    <div class="facts-grid">
+      @for (fact of facts; track fact.label) {
+        <article><strong>{{ fact.value }}</strong><span>{{ fact.label }}</span></article>
+      }
+    </div>
+    <p class="disclaimer">Las cifras y características pueden cambiar durante el desarrollo y validación del proyecto.</p>
+  </div>
+</section>
+
+<section class="why-section section">
+  <div class="section-shell">
+    <div class="why-heading">
+      <h2>Una ciudad en movimiento. Una oportunidad para estar más cerca.</h2>
+      <p>La mezcla comercial se construye para responder a una rutina local activa y a la dinámica regional del Alto Magdalena.</p>
+    </div>
+    <div class="why-list">
+      <article><h3>Conexión regional</h3><p>Girardot articula los recorridos entre Bogotá, el Alto Magdalena y los principales destinos de clima cálido.</p></article>
+      <article><h3>Visitas durante todo el año</h3><p>La actividad local convive con fines de semana, temporadas y eventos que amplían el flujo de visitantes.</p></article>
+      <article><h3>Conveniencia cotidiana</h3><p>Un formato pensado para marcas capaces de resolver necesidades frecuentes con rapidez y cercanía.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="profiles-section">
+  <div class="section-shell profiles-layout">
+    <div class="profiles-title"><h2>La mezcla que completa cada visita.</h2><p>Aún no publicamos marcas. Estamos construyendo una oferta coherente con las necesidades de la zona.</p></div>
+    <div class="profiles-list">
+      <span>Comercio y conveniencia</span>
+      <span>Servicios</span>
+      <span>Bienestar y actividad física</span>
+      <span>Gastronomía</span>
+      <span>Experiencias familiares</span>
+    </div>
+  </div>
+</section>
+
+<section class="levels-section section">
+  <div class="section-shell levels-layout">
+    <div class="levels-visual"><img src="assets/render-3.webp" alt="Fachada y accesos proyectados de Girardot Express" width="1765" height="904" loading="lazy" /></div>
+    <div class="levels-content">
+      <h2>Tres niveles para una visita completa.</h2>
+      <div class="level-list">
+        @for (level of levels; track level.name) {
+          <article><div><h3>{{ level.name }}</h3><p>{{ level.use }}</p></div><strong>{{ level.area }}</strong></article>
+        }
+      </div>
+      <p class="disclaimer">Distribución proyectada. La disponibilidad se confirma de manera individual con el equipo comercial.</p>
+    </div>
+  </div>
+</section>
+
+<section class="process-section section">
+  <div class="section-shell process-layout">
+    <h2>Una conversación directa, con la información que tu marca necesita.</h2>
+    <ol>
+      <li><span>Cuéntanos sobre tu marca</span><p>Comparte el formato, la categoría y el área que estás buscando.</p></li>
+      <li><span>Revisamos el encaje comercial</span><p>El equipo valida la afinidad con la mezcla y la disponibilidad vigente.</p></li>
+      <li><span>Recibe información actualizada</span><p>Te contactamos con datos confirmados para continuar la evaluación.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="interes-comercial" class="commercial-contact">
+  <div class="section-shell contact-layout">
+    <div class="contact-copy">
+      <h2>Hablemos del espacio adecuado para tu marca.</h2>
+      <p>Este formulario inicia la conversación. La disponibilidad, condiciones y documentos se entregarán directamente por el equipo comercial.</p>
+      <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+    </div>
+    <app-contact-form context="commercial" />
+  </div>
+</section>

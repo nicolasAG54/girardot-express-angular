@@ -1,0 +1,52 @@
+<header #headerElement class="site-header">
+  <div class="nav-shell">
+    <a class="brand" routerLink="/" aria-label="Ir al inicio de Girardot Express" (click)="closeMenu()">
+      <img src="assets/brand/girardot-express-horizontal.png" alt="" width="910" height="380" fetchpriority="high" />
+    </a>
+
+    <button #menuButton class="menu-button" type="button" [attr.aria-expanded]="menuOpen()" aria-controls="primary-navigation" (click)="toggleMenu()">
+      <span>{{ menuOpen() ? 'Cerrar' : 'Menú' }}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">@if (menuOpen()) {<path d="m6 6 12 12M18 6 6 18" />} @else {<path d="M4 8h16M4 16h16" />}</svg>
+    </button>
+
+    <nav
+      id="primary-navigation"
+      class="primary-nav"
+      [class.is-open]="menuOpen()"
+      [attr.aria-label]="routeContext() === 'project' ? 'Navegación de espacios comerciales' : 'Navegación principal'"
+    >
+      <div #navStage class="nav-stage">
+        <div class="context-nav" [class.context-nav--home]="routeContext() === 'home'" [class.context-nav--project]="routeContext() === 'project'">
+          @for (group of navGroups(); track $index; let i = $index) {
+            <div class="nav-group" [class.nav-group--topics]="i === 0">
+              @for (item of group; track item.section) {
+                <a
+                  [routerLink]="item.path"
+                  [fragment]="item.fragment"
+                  [class.home-link]="item.section === 'inicio'"
+                  [class.is-active]="isActive(item)"
+                  [attr.aria-current]="ariaCurrent(item)"
+                  (click)="selectSection(item, $event)"
+                >{{ item.label }}</a>
+              }
+            </div>
+          }
+          <span class="nav-indicator" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <a class="route-switch-link" [class.route-switch-link--home]="routeContext() === 'project'" [routerLink]="routeContext() === 'project' ? '/' : '/proyecto'" (click)="closeMenu()">
+        <span>{{ routeContext() === 'project' ? 'Inicio' : 'Espacios comerciales' }}</span>
+        <span class="route-switch-icon" [class.route-switch-icon--back]="routeContext() === 'project'" aria-hidden="true">
+          <svg viewBox="0 0 24 24">@if (routeContext() === 'project') {<path d="M19 12H5m6-6-6 6 6 6" />} @else {<path d="M5 12h14m-6-6 6 6-6 6" />}</svg>
+        </span>
+      </a>
+    </nav>
+
+    <div class="nav-utilities" aria-label="Accesos rápidos">
+      <a [href]="site.whatsappUrl" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.3-4A8 8 0 1 1 20 11.6Z"/><path d="M9.2 8.2c.4 2.9 2 4.5 4.8 5.5"/></svg>
+      </a>
+    </div>
+  </div>
+</header>

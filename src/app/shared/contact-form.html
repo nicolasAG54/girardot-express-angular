@@ -1,0 +1,119 @@
+<form class="contact-form" [formGroup]="form" (ngSubmit)="openWhatsApp()" novalidate>
+  <div class="field-row">
+    <label>
+      <span>Nombre completo</span>
+      <input
+        type="text"
+        formControlName="name"
+        id="contact-name"
+        autocomplete="name"
+        required
+        aria-required="true"
+        placeholder="¿Cómo te llamas?"
+        [attr.aria-invalid]="submitted() && form.controls.name.invalid ? 'true' : null"
+        [attr.aria-describedby]="submitted() && form.controls.name.invalid ? 'contact-name-error' : null"
+      />
+      @if (submitted() && form.controls.name.invalid) {
+        <small id="contact-name-error" role="alert">Escribe tu nombre.</small>
+      }
+    </label>
+
+    <label>
+      <span>Teléfono</span>
+      <input
+        type="tel"
+        formControlName="phone"
+        id="contact-phone"
+        autocomplete="tel"
+        required
+        aria-required="true"
+        placeholder="Tu número de contacto"
+        [attr.aria-invalid]="submitted() && form.controls.phone.invalid ? 'true' : null"
+        [attr.aria-describedby]="submitted() && form.controls.phone.invalid ? 'contact-phone-error' : null"
+      />
+      @if (submitted() && form.controls.phone.invalid) {
+        <small id="contact-phone-error" role="alert">Escribe un número de contacto.</small>
+      }
+    </label>
+  </div>
+
+  <label>
+    <span>Correo electrónico <em>Opcional</em></span>
+    <input
+      type="email"
+      formControlName="email"
+      id="contact-email"
+      autocomplete="email"
+      placeholder="nombre@correo.com"
+      [attr.aria-invalid]="submitted() && form.controls.email.invalid ? 'true' : null"
+      [attr.aria-describedby]="submitted() && form.controls.email.invalid ? 'contact-email-error' : null"
+    />
+    @if (submitted() && form.controls.email.invalid) {
+      <small id="contact-email-error" role="alert">Revisa el formato del correo.</small>
+    }
+  </label>
+
+  <label>
+    <span>¿Qué te interesa?</span>
+    <select
+      formControlName="interest"
+      id="contact-interest"
+      required
+      aria-required="true"
+      [attr.aria-invalid]="submitted() && form.controls.interest.invalid ? 'true' : null"
+      [attr.aria-describedby]="submitted() && form.controls.interest.invalid ? 'contact-interest-error' : null"
+    >
+      <option value="" disabled>Selecciona una opción</option>
+      @if (context === 'commercial') {
+        <option value="Local comercial">Local comercial</option>
+        <option value="Gastronomía">Gastronomía</option>
+        <option value="Servicios o bienestar">Servicios o bienestar</option>
+        <option value="Alianza comercial">Alianza comercial</option>
+      } @else {
+        <option value="Información general">Información general</option>
+        <option value="Cómo llegar">Cómo llegar</option>
+        <option value="Trabajar con nosotros">Trabajar con nosotros</option>
+        <option value="Espacios comerciales">Espacios comerciales</option>
+      }
+    </select>
+    @if (submitted() && form.controls.interest.invalid) {
+      <small id="contact-interest-error" role="alert">Selecciona una opción.</small>
+    }
+  </label>
+
+  <label>
+    <span>Cuéntanos un poco más</span>
+    <textarea
+      formControlName="message"
+      id="contact-message"
+      rows="4"
+      required
+      aria-required="true"
+      placeholder="Escribe aquí tu consulta"
+      [attr.aria-invalid]="submitted() && form.controls.message.invalid ? 'true' : null"
+      [attr.aria-describedby]="submitted() && form.controls.message.invalid ? 'contact-message-error' : null"
+    ></textarea>
+    @if (submitted() && form.controls.message.invalid) {
+      <small id="contact-message-error" role="alert">Escribe un mensaje breve.</small>
+    }
+  </label>
+
+  <label class="consent">
+    <input
+      type="checkbox"
+      formControlName="consent"
+      id="contact-consent"
+      required
+      aria-required="true"
+      [attr.aria-invalid]="submitted() && form.controls.consent.invalid ? 'true' : null"
+      [attr.aria-describedby]="submitted() && form.controls.consent.invalid ? 'contact-consent-error' : null"
+    />
+    <span>Acepto que mis datos sean usados para responder esta solicitud.</span>
+  </label>
+  @if (submitted() && form.controls.consent.invalid) {
+    <small id="contact-consent-error" class="consent-error" role="alert">Necesitamos tu autorización para continuar.</small>
+  }
+
+  <button class="button button-primary" type="submit">Continuar por WhatsApp</button>
+  <p class="form-note">Se abrirá WhatsApp con tu consulta preparada. Allí podrás revisarla y enviarla al equipo.</p>
+</form>

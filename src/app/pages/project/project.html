@@ -1,0 +1,323 @@
+<section id="project-top" tabindex="-1" class="project-hero" aria-labelledby="project-title" data-nav-section="project-top">
+  <div class="project-hero__media" aria-hidden="true">
+    <video
+      appVideoReveal
+      appHeroVideo
+      #heroPlayback="heroPlayback"
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="assets/hero-first-frame.jpg"
+    >
+      <source src="assets/hero-loop.mp4" type="video/mp4" />
+    </video>
+    <img
+      class="project-hero__fallback"
+      src="assets/hero-first-frame.jpg"
+      alt=""
+      width="1280"
+      height="720"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="project-hero__veil"></div>
+
+  <button
+    class="project-hero__pause"
+    type="button"
+    [attr.aria-label]="!heroPlayback.playing() ? 'Reproducir video de portada' : 'Pausar video de portada'"
+    [attr.aria-pressed]="!heroPlayback.playing()"
+    (click)="heroPlayback.toggle()"
+  >
+    @if (!heroPlayback.playing()) {
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z" /></svg>
+    } @else {
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6v12M16 6v12" /></svg>
+    }
+  </button>
+
+  <div class="project-shell project-hero__content" data-reveal="hero">
+    <h1 id="project-title">Tu marca, más cerca de nuevas oportunidades.</h1>
+    <p>
+      Espacios comerciales en una zona de crecimiento de Girardot, con acceso desde la
+      vía nacional y una fachada pensada para dar visibilidad a tu negocio.
+    </p>
+    <p class="project-hero__opening">{{ site.openingLabel }}</p>
+    <div class="project-actions" aria-label="Acciones del proyecto">
+      <a class="project-button project-button--yellow" routerLink="/proyecto" fragment="contacto-comercial">Solicitar información comercial</a>
+      <a class="project-button project-button--light" routerLink="/proyecto" fragment="cifras">Explorar los espacios</a>
+    </div>
+  </div>
+  <span class="project-hero__visual-note">Visualización arquitectónica del proyecto</span>
+</section>
+
+<section id="cifras" tabindex="-1" class="project-metrics" aria-labelledby="metrics-title" data-nav-section="cifras" appRevealOnScroll>
+  <div class="project-shell project-metrics__stage">
+    <header class="project-section-heading" data-reveal="copy">
+      <h2 id="metrics-title">Un punto estratégico para crecer.</h2>
+      <p>
+        Girardot Express se desarrolla en una zona en crecimiento, sobre una vía nacional
+        y con acceso desde la ciudad. Su conexión regional con Bogotá y la exposición de
+        su fachada suman oportunidades de visibilidad para las marcas.
+      </p>
+    </header>
+    <p class="project-metrics__instruction">Selecciona una cifra para conocer qué representa.</p>
+    <div class="project-metrics__grid">
+      <div id="metric-detail" class="project-metrics__summary" aria-live="polite" aria-atomic="true" data-reveal="copy">
+        <h3>{{ activeMetric().title }}</h3>
+        <p>{{ activeMetric().description }}</p>
+      </div>
+
+      @for (fact of facts; track fact.label; let index = $index) {
+        <button
+          type="button"
+          [class]="'project-metric project-metric--' + (index + 1)"
+          [class.is-selected]="selectedMetric() === index"
+          [attr.aria-pressed]="selectedMetric() === index"
+          aria-controls="metric-detail"
+          (click)="selectedMetric.set(index)"
+          data-reveal="metric"
+        >
+          <strong>{{ fact.value }}</strong>
+          <span>{{ fact.label }}</span>
+        </button>
+      }
+    </div>
+
+    <p class="project-metrics__note" data-reveal="note">
+      Cifras proyectadas, sujetas al desarrollo y validación final del proyecto.
+    </p>
+  </div>
+</section>
+
+<section id="etapas" tabindex="-1" class="project-stages" aria-labelledby="stages-title" data-nav-section="etapas" appRevealOnScroll>
+  <div class="project-shell">
+    <header class="project-section-heading project-section-heading--dark" data-reveal="copy">
+      <h2 id="stages-title">Un proyecto que avanza por etapas.</h2>
+      <p>
+        La construcción y la comercialización avanzan de la mano. Conoce el momento
+        del proyecto y conversa con el equipo sobre la participación de tu marca.
+      </p>
+    </header>
+
+    <ol class="project-stages__timeline" data-reveal="copy">
+      <li>
+        <h3>Construcción y comercialización</h3>
+        <p>El proyecto se encuentra en desarrollo. Es el momento de conocer los formatos y evaluar un espacio con el equipo comercial.</p>
+        <span>Etapa actual</span>
+      </li>
+      <li>
+        <h3>Primera etapa de apertura</h3>
+        <p>{{ site.openingLabel }}. El equipo compartirá el alcance y las novedades confirmadas.</p>
+        <span>Primera apertura prevista</span>
+      </li>
+      <li>
+        <h3>Desarrollo futuro</h3>
+        <p>Las siguientes etapas acompañarán el desarrollo del proyecto. Sus alcances y fechas se comunicarán cuando estén definidos.</p>
+        <span>Por definir</span>
+      </li>
+    </ol>
+
+    <div id="mezcla" class="project-stages__commercial" data-reveal="copy">
+      <div>
+        <h3>Encuentra el formato para tu marca.</h3>
+        <p>Locales, islas y espacios gastronómicos forman parte de la propuesta comercial. Solicita los planos, las opciones vigentes y los avances de construcción directamente al equipo.</p>
+      </div>
+      <a class="project-button project-button--yellow" [href]="site.whatsappUrl" target="_blank" rel="noopener">Consultar espacios y avances</a>
+    </div>
+  </div>
+</section>
+
+<section id="arquitectura" tabindex="-1" class="project-architecture" aria-labelledby="architecture-title" data-nav-section="arquitectura" appRevealOnScroll>
+  <div class="project-shell project-architecture__layout">
+    <div class="project-architecture__media" data-reveal="media">
+      <div class="project-architecture__frame">
+        <img
+          class="project-architecture__main"
+          src="assets/render-1.webp"
+          alt="Arquitectura abierta y paisajismo proyectados para Girardot Express"
+          width="1765"
+          height="904"
+          loading="lazy"
+        />
+      </div>
+      <img
+        class="project-architecture__detail"
+        src="assets/vida-cotidiana.webp"
+        alt="Detalle proyectado de acceso y locales en Girardot Express"
+        width="1280"
+        height="720"
+        loading="lazy"
+      />
+      <p class="project-architecture__caption">Renders de referencia del proyecto.</p>
+    </div>
+
+    <div class="project-architecture__content" data-reveal="copy">
+      <h2 id="architecture-title">Arquitectura que aprovecha el clima.</h2>
+      <p class="project-architecture__lead">
+        El proyecto propone una experiencia comercial más abierta, confortable y conectada
+        con su entorno.
+      </p>
+
+      <div class="project-architecture__features">
+        @for (feature of architectureFeatures; track feature.title) {
+          <article>
+            <span aria-hidden="true"></span>
+            <div>
+              <h3>{{ feature.title }}</h3>
+              <p>{{ feature.description }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios-proyecto" tabindex="-1" class="project-services" aria-labelledby="services-title" data-nav-section="servicios-proyecto" appRevealOnScroll>
+  <div class="project-shell">
+    <header class="project-section-heading" data-reveal="copy">
+      <h2 id="services-title">Infraestructura que acompaña a tu negocio.</h2>
+      <p>Comodidades y espacios previstos para apoyar la operación comercial y la llegada de visitantes.</p>
+    </header>
+
+    <div class="project-services__grid">
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <path d="M5 25h22M8 25V12h16v13M12 12V8h8v4M12 17h2M18 17h2M12 21h2M18 21h2" />
+        </svg>
+        <h3>Coworking</h3>
+        <p>Áreas previstas para trabajar, reunirse y conectarse.</p>
+      </article>
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <path d="M7 25V13h18v12M10 13l6-6 6 6M12 20h8M16 16v8" />
+        </svg>
+        <h3>Parque infantil</h3>
+        <p>Un espacio contemplado para que las familias compartan.</p>
+      </article>
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <circle cx="9" cy="10" r="2.5" />
+          <circle cx="16" cy="7.5" r="2.5" />
+          <circle cx="23" cy="10" r="2.5" />
+          <path d="M10 24c0-5 2.5-8 6-8s6 3 6 8c-3-1-4-1-6 0-2-1-3-1-6 0Z" />
+        </svg>
+        <h3>Espacio para mascotas</h3>
+        <p>Áreas previstas para integrar a las mascotas en los recorridos del centro comercial.</p>
+      </article>
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <path d="M8 5v9c0 2 1.5 3.5 3.5 3.5S15 16 15 14V5M11.5 5v22M23 5c-3 2-4 5-4 9v4h5M23 5v22" />
+        </svg>
+        <h3>Plazoleta gastronómica</h3>
+        <p>Sabores y espacios previstos para hacer una pausa y encontrarse.</p>
+      </article>
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <path d="m7 20 2-8h14l2 8M5 20h22v5H5zM9 25v2M23 25v2M10 20h12" />
+          <circle cx="10" cy="22.5" r="1" />
+          <circle cx="22" cy="22.5" r="1" />
+        </svg>
+        <h3>Parqueaderos</h3>
+        <p>Espacios proyectados para automóviles, motos y bicicletas.</p>
+      </article>
+      <article data-reveal="item">
+        <svg aria-hidden="true" viewBox="0 0 32 32">
+          <path d="M5 25h22M8 25V9h16v16M12 25v-7h8v7M11 13h10" />
+          <path d="m18 10 3 3-3 3" />
+        </svg>
+        <h3>Accesibilidad</h3>
+        <p>Rampas, ascensores y escaleras eléctricas contemplados para conectar los recorridos.</p>
+      </article>
+    </div>
+
+    <div class="project-services__electric" data-reveal="copy">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 27V7h14v20M4 27h18M10 11h6M20 13h3l3 4v7a2 2 0 0 1-4 0v-4M26 17v-5l-3-3"/><path d="m14 15-4 5h5l-3 4"/></svg>
+      <div><h3>Movilidad eléctrica prevista</h3><p>El proyecto contempla infraestructura de carga. Su alcance y disponibilidad se confirmarán durante el desarrollo.</p></div>
+    </div>
+
+    <p class="project-services__note">
+      Características contempladas dentro del proyecto, sujetas a validación durante su
+      desarrollo.
+    </p>
+  </div>
+</section>
+
+<section id="galeria-proyecto" tabindex="-1" class="project-gallery" aria-labelledby="gallery-title" data-nav-section="galeria-proyecto" appRevealOnScroll>
+  <div class="project-shell">
+    <header class="project-section-heading" data-reveal="copy">
+      <h2 id="gallery-title">Explora la arquitectura del proyecto.</h2>
+      <p>Recorre las vistas proyectadas de la plazoleta, la fachada y los accesos. Las imágenes corresponden a renders arquitectónicos.</p>
+    </header>
+    <div class="project-gallery__controls" aria-label="Elegir vista del proyecto">
+      @for (item of galleryImages; track item.src; let index = $index) {
+        <button type="button" [attr.aria-pressed]="selectedGalleryIndex() === index" aria-controls="project-gallery-view" (click)="selectedGalleryIndex.set(index)">{{ item.title }}</button>
+      }
+    </div>
+    <figure id="project-gallery-view" class="project-gallery__view" data-reveal="media">
+      <a [href]="activeGalleryImage().src" target="_blank" rel="noopener" [attr.aria-label]="'Ampliar render: ' + activeGalleryImage().title + ' (abre en otra pestaña)'">
+        <img [src]="activeGalleryImage().src" [alt]="activeGalleryImage().alt" [width]="activeGalleryImage().width" [height]="activeGalleryImage().height" loading="lazy" />
+        <span class="project-gallery__expand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>Ampliar render</span>
+      </a>
+      <figcaption aria-live="polite"><strong>{{ activeGalleryImage().title }}</strong><span>Render arquitectónico · Imagen de referencia</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="ubicacion-proyecto" tabindex="-1" class="project-location" aria-labelledby="location-title" data-nav-section="ubicacion-proyecto" appRevealOnScroll>
+  <div class="project-shell project-location__layout">
+    <div class="project-location__content" data-reveal="copy">
+      <h2 id="location-title">Ubica el próximo espacio de tu marca.</h2>
+      <p>{{ site.address }}</p>
+      <div class="project-actions">
+        <a
+          class="project-button project-button--yellow"
+          [href]="site.mapsUrl"
+          target="_blank"
+          rel="noopener"
+        >
+          Abrir en Google Maps
+        </a>
+        <a
+          class="project-button project-button--light"
+          [href]="site.wazeUrl"
+          target="_blank"
+          rel="noopener"
+        >
+          Ir con Waze
+        </a>
+      </div>
+    </div>
+
+    <div class="project-location__map" data-reveal="media">
+      <iframe
+        [src]="mapEmbedUrl"
+        title="Mapa de ubicación de Girardot Express"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<section id="contacto-comercial" tabindex="-1" class="project-contact" aria-labelledby="contact-title" data-nav-section="contacto-comercial" appRevealOnScroll>
+  <div class="project-shell project-contact__layout">
+    <div class="project-contact__content" data-reveal="copy">
+      <h2 id="contact-title">Hablemos de tu próximo espacio.</h2>
+      <p>
+        Si representas una marca, buscas un espacio comercial o quieres conocer más sobre
+        Girardot Express, inicia una conversación directa con el equipo.
+      </p>
+      <div class="project-contact__channels">
+        <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+        <a [href]="site.whatsappUrl" target="_blank" rel="noopener">
+          WhatsApp {{ site.whatsappLabel }}
+        </a>
+      </div>
+    </div>
+
+    <app-contact-form context="commercial" data-reveal="form" />
+  </div>
+</section>

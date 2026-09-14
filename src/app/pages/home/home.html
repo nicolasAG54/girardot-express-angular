@@ -1,0 +1,158 @@
+<section id="inicio" tabindex="-1" class="home-hero" aria-labelledby="hero-title" data-nav-section="inicio">
+  <div class="hero-scene" aria-hidden="true">
+    <img class="hero-poster" src="assets/hero-first-frame.jpg" alt="" width="1280" height="720" fetchpriority="high" />
+    <video appVideoReveal appHeroVideo #heroPlayback="heroPlayback" loop muted playsinline preload="metadata" poster="assets/hero-first-frame.jpg">
+      <source src="assets/hero-loop.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-content section-shell">
+    <h1 id="hero-title">Todo lo que necesitas.<br /><strong>Más cerca.</strong></h1>
+    <p>Compras, servicios, gastronomía, bienestar, espacios para compartir y experiencias en un solo lugar.</p>
+    <a class="hero-opening" routerLink="/proyecto" fragment="etapas">
+      <span>{{ site.openingLabel }}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+    </a>
+  </div>
+  <button class="hero-video-control" type="button" (click)="heroPlayback.toggle()" [attr.aria-label]="heroPlayback.playing() ? 'Pausar video de presentación' : 'Reproducir video de presentación'">
+    <svg viewBox="0 0 24 24" aria-hidden="true">@if (heroPlayback.playing()) {<path d="M9 5v14M15 5v14" />} @else {<path d="m8 5 11 7-11 7V5Z" />}</svg>
+  </button>
+  <span class="hero-visual-note">Visualización del proyecto</span>
+</section>
+
+<section id="quienes-somos" tabindex="-1" class="story-field section" aria-labelledby="story-title" data-nav-section="quienes-somos">
+  <div class="story-layout section-shell" appRevealOnScroll>
+    <div class="story-core">
+      <h2 id="story-title">Un mall para el ritmo real de Girardot.</h2>
+      <p>Somos un nuevo mall de conveniencia en el sector de La Colina. Un lugar abierto, cómodo y funcional, pensado para que puedas resolver tu día y encontrar tiempo para disfrutar.</p>
+      <a class="text-link" routerLink="/" fragment="experiencia">Explora el mall</a>
+    </div>
+    <figure class="story-image">
+      <img src="assets/vida-cotidiana.webp" alt="Visualización de los recorridos abiertos de Girardot Express" width="1280" height="720" loading="lazy" />
+      <figcaption>Un lugar para resolver, disfrutar y compartir.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="experiencia" tabindex="-1" class="visit-section section" aria-labelledby="visit-title" data-nav-section="experiencia">
+  <div class="section-shell" appRevealOnScroll>
+    <div class="section-heading section-heading-light">
+      <div><h2 id="visit-title">Todo lo que podrás vivir aquí.</h2><p>Un lugar, todos los días que caben en él.</p></div>
+      <a class="button button-outline-light" routerLink="/" fragment="contacto">Cuéntanos qué buscas</a>
+    </div>
+    <div class="visit-mosaic">
+      <a class="visit-card" routerLink="/" fragment="marcas">
+        <img src="assets/vida-cotidiana.webp" alt="Personas recorriendo los espacios comerciales" width="1280" height="720" loading="lazy" />
+        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Compras y servicios</strong><small>Todo lo que necesitas en un solo lugar.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+      </a>
+      <a class="visit-card" routerLink="/" fragment="marcas">
+        <img src="assets/generated/experience-dining.jpg" alt="Escena ilustrativa de opciones de gastronomía y una pausa para comer" width="1200" height="900" loading="lazy" />
+        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Gastronomía</strong><small>Sabores para cada momento del día.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+      </a>
+      <a class="visit-card" routerLink="/" fragment="servicios">
+        <img src="assets/generated/experience-gym.jpg" alt="Escena ilustrativa de entrenamiento y bienestar" width="1200" height="900" loading="lazy" />
+        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Gimnasio</strong><small>Entrena cerca de tu rutina.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+      </a>
+      <a class="visit-card" routerLink="/" fragment="servicios">
+        <img src="assets/generated/experience-family-pet.jpg" alt="Escena ilustrativa de un plan para compartir con familia y mascotas" width="1200" height="900" loading="lazy" />
+        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Familia y mascotas</strong><small>Un espacio para compartir.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+      </a>
+    </div>
+    <p class="visual-disclaimer">Las escenas de estilo de vida son ilustrativas. Marcas y programación por confirmar.</p>
+  </div>
+</section>
+
+<section id="servicios" tabindex="-1" class="services-section section" aria-labelledby="services-title" data-nav-section="servicios">
+  <div class="services-layout section-shell" appRevealOnScroll>
+    <div class="services-heading"><h2 id="services-title">Servicios que hacen la vida más fácil</h2><p>Comodidad para venir, quedarse y volver.</p></div>
+    <div class="service-grid">
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 17h22M8 17l2-7h12l2 7v8H8v-8Z"/><circle cx="11" cy="25" r="2"/><circle cx="21" cy="25" r="2"/></svg><h3>Parqueaderos</h3><p>Accesos pensados para una llegada sencilla.</p></article>
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26h22M7 26V6h18v20M12 11l4-4 4 4M12 20l4 4 4-4"/></svg><h3>Accesibilidad</h3><p>Rampas y ascensores para un recorrido más cómodo.</p></article>
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 27V5h13v22M5 27h19M21 10h3l3 4v9a2 2 0 0 1-4 0v-6M16 8l-4 7h6l-4 7"/></svg><h3>Movilidad eléctrica</h3><p>Infraestructura de carga prevista en el proyecto.</p></article>
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 25V10l9-5 9 5v15M11 25v-8h10v8M4 25h24"/></svg><h3>Coworking</h3><p>Lugares previstos para una pausa productiva.</p></article>
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="10" r="3"/><circle cx="22" cy="11" r="2.5"/><path d="M5 26c0-6 2-10 6-10s6 4 6 10M17 26c.3-4.8 2-8 5-8 3.4 0 5 3.2 5 8"/></svg><h3>Parque infantil</h3><p>Un espacio proyectado para los más pequeños.</p></article>
+      <article><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="10" r="3"/><circle cx="23" cy="10" r="3"/><circle cx="16" cy="7" r="3"/><path d="M9 24c0-5 3-8 7-8s7 3 7 8c0 3-3 4-7 4s-7-1-7-4Z"/></svg><h3>Zona para mascotas</h3><p>Un lugar para compartir también con ellas.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="marcas" tabindex="-1" class="brands-section section" aria-labelledby="brands-title" data-nav-section="marcas">
+  <div class="brands-layout section-shell" appRevealOnScroll>
+    <div class="brands-intro">
+      <h2 id="brands-title">Nuestras<br />marcas</h2>
+      <p>Estamos preparando una mezcla comercial para acompañar tu día, desde la primera vuelta hasta el último plan.</p>
+      <p class="brands-status">Pronto conocerás las marcas que nos acompañarán. El directorio se publicará cuando estén confirmadas.</p>
+      <a class="text-link" [href]="site.social.instagram" target="_blank" rel="noopener">Sigue las novedades en Instagram</a>
+    </div>
+    <div class="brand-offer" aria-label="La oferta que estamos preparando">
+      @for (category of brandCategories; track category.name) {
+        <div class="brand-offer-row"><h3>{{ category.name }}</h3><p>{{ category.title }}</p></div>
+      }
+    </div>
+  </div>
+</section>
+
+
+
+<section id="galeria" tabindex="-1" class="gallery-section section" aria-labelledby="gallery-title" data-nav-section="galeria">
+  <div class="section-shell" appRevealOnScroll>
+    <div class="section-heading"><div><h2 id="gallery-title">Así se ve lo que viene.</h2><p>Explora la arquitectura y los espacios de Girardot Express.</p></div><a class="text-link" routerLink="/" fragment="ubicacion">Ver dónde estamos</a></div>
+    <div class="gallery-grid">
+      @for (item of gallery; track item.src; let i = $index) {
+        <button class="gallery-image" type="button" (click)="openGallery(i, $event)" [attr.aria-label]="'Ampliar imagen: ' + item.title">
+          <img [src]="item.src" [alt]="item.alt" [width]="item.width" [height]="item.height" loading="lazy" />
+          <span>{{ item.title }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6m0 6 7-7" /></svg></span>
+        </button>
+      }
+    </div>
+    <p class="gallery-note">Renders de referencia del proyecto, sujetos a ajustes de diseño. El recorrido 360° se compartirá cuando esté disponible.</p>
+  </div>
+</section>
+
+<dialog #galleryDialog class="gallery-dialog" aria-labelledby="gallery-dialog-title" (close)="restoreGalleryScroll()" (keydown)="galleryKeydown($event)">
+  <div class="gallery-dialog-toolbar"><p id="gallery-dialog-title">Galería de Girardot Express</p><button class="gallery-close" type="button" (click)="closeGallery()" aria-label="Cerrar galería"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button></div>
+  <figure><img [src]="selectedImage().src" [alt]="selectedImage().alt" [width]="selectedImage().width" [height]="selectedImage().height" /><figcaption aria-live="polite">{{ selectedImage().title }} <span>{{ galleryIndex() + 1 }} / {{ gallery.length }}</span></figcaption></figure>
+  <div class="gallery-dialog-actions"><button type="button" (click)="moveGallery(-1)">Anterior</button><p>Visualización del proyecto</p><button type="button" (click)="moveGallery(1)">Siguiente</button></div>
+</dialog>
+
+<section id="novedades" tabindex="-1" class="updates-section section" aria-labelledby="updates-title" data-nav-section="novedades">
+  <div class="section-shell" appRevealOnScroll>
+    <div class="section-heading"><div><h2 id="updates-title">Cada día estamos más cerca.</h2><p>Girardot Express está en construcción y comercialización. {{ site.openingLabel }}.</p></div><a class="button button-outline" routerLink="/proyecto" fragment="etapas">Así avanza el proyecto</a></div>
+
+  </div>
+</section>
+
+<section id="ubicacion" tabindex="-1" class="access-banner" aria-labelledby="access-title" data-nav-section="ubicacion">
+  <img src="assets/render-3.webp" alt="Acceso vehicular y fachada proyectada de Girardot Express" width="1765" height="898" loading="lazy" />
+  <span class="access-shade" aria-hidden="true"></span>
+  <div class="access-content section-shell" appRevealOnScroll>
+    <div><h2 id="access-title">Fácil acceso.<br />Siempre cerca.</h2><p>{{ site.address }}</p><p>Sobre la Vía Nariño, en el sector de La Colina.</p><div class="access-actions"><a class="button button-white" [href]="site.mapsUrl" target="_blank" rel="noopener">Cómo llegar con Google Maps</a><a class="button button-outline-light" [href]="site.wazeUrl" target="_blank" rel="noopener">Abrir en Waze</a></div></div>
+    <iframe class="access-map" [src]="mapUrl" title="Mapa de ubicación de Girardot Express en Diagonal 9 número 23–31" loading="lazy" referrerpolicy="no-referrer"></iframe>
+  </div>
+</section>
+
+<section id="contacto" tabindex="-1" class="contact-section section" aria-labelledby="contact-title" data-nav-section="contacto">
+  <div class="contact-layout section-shell" appRevealOnScroll>
+    <div class="contact-copy"><h2 id="contact-title">Conversemos.</h2><p>Cuéntanos qué necesitas. Al completar el formulario podrás enviar tu consulta al equipo por WhatsApp.</p><div class="contact-detail"><span>Correo</span><a [href]="'mailto:' + site.email">{{ site.email }}</a></div><div class="contact-detail"><span>WhatsApp</span><a [href]="site.whatsappUrl" target="_blank" rel="noopener">{{ site.whatsappLabel }}</a></div></div>
+    <app-contact-form context="general" />
+  </div>
+</section>
+
+<section id="proyecto" tabindex="-1" class="project-teaser section" aria-labelledby="project-title" data-nav-section="proyecto">
+  <div class="project-teaser-grid section-shell" appRevealOnScroll>
+    <div class="project-copy">
+      <h2 id="project-title">Tu marca también puede estar aquí.</h2>
+      <p>Conecta con una comunidad que quiere tener más cerca lo que necesita. Conoce las oportunidades para tu negocio en Girardot Express.</p>
+      <ul>
+        <li>Iluminación natural y ventilación cruzada</li><li>Áreas abiertas e integración con el entorno</li>
+        <li>Espacios para comercio, servicios y gastronomía</li><li>Contacto dedicado para marcas e inversionistas</li>
+      </ul>
+      <div class="project-actions"><a class="button button-yellow" routerLink="/proyecto">Espacios comerciales</a><a class="button button-outline" routerLink="/proyecto" fragment="contacto-comercial">Hablar con el equipo</a></div>
+    </div>
+    <figure class="project-media">
+      <img src="assets/render-1.webp" alt="Arquitectura abierta proyectada de Girardot Express" width="1765" height="904" loading="lazy" />
+      <img class="project-media-detail" src="assets/render-3.webp" alt="Fachada y accesos proyectados" width="1765" height="898" loading="lazy" />
+    </figure>
+  </div>
+</section>
+

@@ -1,0 +1,80 @@
+.route-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.route-curtain__layer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transform: skewX(-45deg);
+}
+
+.route-curtain__strip {
+  position: absolute;
+  top: 0;
+  height: calc(100% + 3px);
+  overflow: hidden;
+}
+
+.route-curtain__paint {
+  position: absolute;
+  inset: 0;
+  transform: translateY(-101%);
+}
+
+.route-curtain__paint--black { background: var(--ink); }
+.route-curtain__paint--yellow { background: var(--yellow); overflow: hidden; }
+
+.route-curtain__print {
+  position: absolute;
+  top: 0;
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+.route-curtain__signature {
+  position: absolute;
+  inset: 0;
+  width: min(76vw, 840px);
+  height: max-content;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vw, 0.9rem);
+  color: var(--ink);
+  font-family: Poppins, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+}
+
+.route-curtain__signature span:first-of-type {
+  align-self: flex-start;
+  font-size: clamp(2.375rem, 8.2vw, 6rem);
+}
+
+.route-curtain__signature span:last-of-type {
+  align-self: flex-end;
+  font-size: clamp(3.0625rem, 10.6vw, 7.75rem);
+  font-weight: 700;
+}
+
+/* Reflect both axes of the composition when the curtain travels upward. */
+.route-curtain[data-direction='to-home'] .route-curtain__signature {
+  flex-direction: column-reverse;
+  span:first-of-type { align-self: flex-end; }
+  span:last-of-type { align-self: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .route-curtain__signature { width: 84vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-curtain { display: none; }
+}

@@ -1,0 +1,34 @@
+<footer class="site-footer">
+  <div class="footer-shell">
+    <div class="footer-brand">
+      <a routerLink="/" aria-label="Ir al inicio de Girardot Express">
+        <img [src]="site.logoUrl" alt="" width="164" height="164" loading="lazy" />
+      </a>
+      <p>Un centro comercial práctico para resolver, disfrutar y seguir con tu día.</p>
+    </div>
+    <div class="footer-group">
+      <h2>Explora</h2>
+      <a routerLink="/" fragment="quienes-somos">Quiénes somos</a>
+      <a routerLink="/" fragment="experiencia">Explora el mall</a>
+      <a routerLink="/" fragment="marcas">Nuestras marcas</a>
+      <a routerLink="/" fragment="galeria">Galería</a>
+      <a routerLink="/" fragment="ubicacion">Cómo llegar</a>
+      <a routerLink="/proyecto">Espacios comerciales</a>
+    </div>
+    <div class="footer-group">
+      <h2>Conversemos</h2>
+      <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      <a [href]="site.whatsappUrl" target="_blank" rel="noopener">WhatsApp {{ site.whatsappLabel }}</a>
+      <a routerLink="/proyecto" fragment="contacto-comercial">Información comercial</a>
+    </div>
+    <div class="footer-group">
+      <h2>Síguenos</h2>
+      <a [href]="site.social.instagram" target="_blank" rel="noopener">Instagram<br />@girardotexpresscc</a>
+    </div>
+  </div>
+  <p class="footer-statement">Todo lo que necesitas.<br /><span>Más cerca.</span></p>
+  <div class="footer-bottom">
+    <p>© {{ year }} Girardot Express</p>
+    <p>{{ site.address }}</p>
+  </div>
+</footer>
