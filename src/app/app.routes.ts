@@ -3,6 +3,10 @@ import { routeTransition } from './core/route-transition';
 
 export const routes: Routes = [
   {
+    path: 'preguntas-frecuentes',
+    loadComponent: () => import('./pages/faq/faq').then((module) => module.Faq),
+  },
+  {
     path: '',
     canActivate: [routeTransition],
     data: { transitionPage: 'home' },

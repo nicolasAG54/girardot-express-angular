@@ -722,19 +722,9 @@
 }
 
 .project-location__map {
-  min-height: 520px;
   overflow: hidden;
-  border-radius: 16px;
-  background: #2c2c2c;
-}
-
-.project-location__map iframe {
-  width: 100%;
-  height: 100%;
-  min-height: inherit;
-  display: block;
-  border: 0;
-  filter: grayscale(1) contrast(1.05);
+  border-radius: 12px;
+  align-self: center;
 }
 
 .project-contact {

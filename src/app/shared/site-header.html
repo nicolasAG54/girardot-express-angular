@@ -1,7 +1,7 @@
 <header #headerElement class="site-header">
   <div class="nav-shell">
     <a class="brand" routerLink="/" aria-label="Ir al inicio de Girardot Express" (click)="closeMenu()">
-      <img src="assets/brand/girardot-express-horizontal.png" alt="" width="910" height="380" fetchpriority="high" />
+      <img [src]="site.horizontalLogoUrl" alt="" width="910" height="380" fetchpriority="high" />
     </a>
 
     <button #menuButton class="menu-button" type="button" [attr.aria-expanded]="menuOpen()" aria-controls="primary-navigation" (click)="toggleMenu()">

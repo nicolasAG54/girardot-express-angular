@@ -142,7 +142,7 @@ describe('chatbot content', () => {
     expect(reply.answer).not.toMatch(/te contactaremos|datos (guardados|enviados)|solicitud (enviada|registrada)|Respuesta sugerida|Acción sugerida|Se nombran las redes/);
     for (const action of reply.actions ?? []) {
       if (action.external) expect(action.href).toMatch(/^https:\/\//);
-      else expect(action.href).toMatch(/^\/proyecto(?:#contacto-comercial)?$|^mailto:/);
+      else expect(action.href).toMatch(/^\/proyecto(?:#contacto-comercial)?$|^\/#quienes-somos$|^mailto:/);
     }
   });
 });

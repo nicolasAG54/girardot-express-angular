@@ -199,7 +199,7 @@ export class SiteHeader {
   @HostListener('window:resize')
   protected realignNavigationIndicator(): void {
     this.clearDestination();
-    if (window.innerWidth > 1200) this.closeMenu();
+    if (window.innerWidth > 1280) this.closeMenu();
     this.scheduleSectionTracking(this.router.url);
     this.scheduleNavigationIndicator();
   }
@@ -324,6 +324,7 @@ export class SiteHeader {
   }
 
   private sectionFromUrl(url: string, context: NavContext): string {
+    if (url.split(/[?#]/)[0] === '/preguntas-frecuentes') return '';
     const fragment = url.split('#')[1]?.split('?')[0];
     if (!fragment) return this.defaultSection(context);
     return fragment;

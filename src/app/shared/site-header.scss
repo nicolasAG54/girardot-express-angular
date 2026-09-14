@@ -16,11 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-inline: auto;
 }
-.brand { display: block; flex: 0 0 180px; text-decoration: none; }
-.brand img { display: block; width: 180px; height: auto; }
+.brand { display: block; flex: 0 0 200px; text-decoration: none; }
+.brand img { display: block; width: 200px; height: auto; }
 .primary-nav { display: flex; align-items: center; gap: 1.25rem; flex: 1; min-width: 0; white-space: nowrap; }
 .nav-stage { view-transition-name: route-navigation; display: grid; flex: 1; min-width: 0; }
 .context-nav {
@@ -42,7 +42,7 @@
   min-height: 44px;
   padding-block: 0.65rem;
   color: var(--ink-soft);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
   transition: color 160ms ease;
@@ -108,10 +108,10 @@
   .route-switch-link:hover .route-switch-icon:not(.route-switch-icon--back) svg { transform: translateX(2px); }
   .route-switch-link:hover .route-switch-icon--back svg { transform: translateX(-2px); }
 }
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   .nav-shell { gap: 1rem; }
-  .brand { flex-basis: 160px; margin-right: auto; }
-  .brand img { width: 160px; }
+  .brand { flex-basis: 176px; margin-right: auto; }
+  .brand img { width: 176px; }
   .menu-button { display: inline-flex; order: 3; }
   .nav-utilities { display: flex; order: 2; }
   .nav-utilities a { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); }

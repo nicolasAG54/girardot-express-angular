@@ -7,10 +7,10 @@
   </div>
   <div class="hero-shade" aria-hidden="true"></div>
   <div class="hero-content section-shell">
-    <h1 id="hero-title">Todo lo que necesitas.<br /><strong>Más cerca.</strong></h1>
-    <p>Compras, servicios, gastronomía, bienestar, espacios para compartir y experiencias en un solo lugar.</p>
+    <h1 id="hero-title">{{ site.slogan.split(',')[0] }},<br /><strong>{{ site.slogan.split(',')[1].trim() }}</strong></h1>
+    <p>Compras, gastronomía y servicios que se encuentran con tu día.</p>
     <a class="hero-opening" routerLink="/proyecto" fragment="etapas">
-      <span>{{ site.openingLabel }}</span>
+      <span><strong>{{ site.openingPeriod }}</strong><small>{{ site.openingCaption }}</small></span>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
     </a>
   </div>
@@ -25,6 +25,8 @@
     <div class="story-core">
       <h2 id="story-title">Un mall para el ritmo real de Girardot.</h2>
       <p>Somos un nuevo mall de conveniencia en el sector de La Colina. Un lugar abierto, cómodo y funcional, pensado para que puedas resolver tu día y encontrar tiempo para disfrutar.</p>
+      <p>Un mall de conveniencia reúne las compras cotidianas, los servicios y las pausas del día en un mismo recorrido. Nuestra propuesta combina esa cercanía con espacios abiertos para encontrarte, trabajar y compartir.</p>
+      <p>Se construye para quienes viven en Girardot y para quienes la visitan: familias, vecinos y personas que buscan hacer sus vueltas con comodidad, sin dejar de disfrutar la ciudad.</p>
       <a class="text-link" routerLink="/" fragment="experiencia">Explora el mall</a>
     </div>
     <figure class="story-image">
@@ -43,7 +45,7 @@
     <div class="visit-mosaic">
       <a class="visit-card" routerLink="/" fragment="marcas">
         <img src="assets/vida-cotidiana.webp" alt="Personas recorriendo los espacios comerciales" width="1280" height="720" loading="lazy" />
-        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Compras y servicios</strong><small>Todo lo que necesitas en un solo lugar.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+        <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Compras y servicios</strong><small>Resuelve tus compras en un mismo recorrido.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
       </a>
       <a class="visit-card" routerLink="/" fragment="marcas">
         <img src="assets/generated/experience-dining.jpg" alt="Escena ilustrativa de opciones de gastronomía y una pausa para comer" width="1200" height="900" loading="lazy" />
@@ -59,12 +61,8 @@
       </a>
     </div>
     <p class="visual-disclaimer">Las escenas de estilo de vida son ilustrativas. Marcas y programación por confirmar.</p>
-  </div>
-</section>
-
-<section id="servicios" tabindex="-1" class="services-section section" aria-labelledby="services-title" data-nav-section="servicios">
-  <div class="services-layout section-shell" appRevealOnScroll>
-    <div class="services-heading"><h2 id="services-title">Servicios que hacen la vida más fácil</h2><p>Comodidad para venir, quedarse y volver.</p></div>
+    <div id="servicios" tabindex="-1" class="services-layout visit-services" aria-labelledby="services-title">
+    <div class="services-heading"><h3 id="services-title">Ven a tu manera.<br />Quédate a gusto.</h3><p>Facilidades previstas para acompañar cada plan.</p></div>
     <div class="service-grid">
       <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 17h22M8 17l2-7h12l2 7v8H8v-8Z"/><circle cx="11" cy="25" r="2"/><circle cx="21" cy="25" r="2"/></svg><h3>Parqueaderos</h3><p>Accesos pensados para una llegada sencilla.</p></article>
       <article><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26h22M7 26V6h18v20M12 11l4-4 4 4M12 20l4 4 4-4"/></svg><h3>Accesibilidad</h3><p>Rampas y ascensores para un recorrido más cómodo.</p></article>
@@ -73,6 +71,17 @@
       <article><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="10" r="3"/><circle cx="22" cy="11" r="2.5"/><path d="M5 26c0-6 2-10 6-10s6 4 6 10M17 26c.3-4.8 2-8 5-8 3.4 0 5 3.2 5 8"/></svg><h3>Parque infantil</h3><p>Un espacio proyectado para los más pequeños.</p></article>
       <article><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="10" r="3"/><circle cx="23" cy="10" r="3"/><circle cx="16" cy="7" r="3"/><path d="M9 24c0-5 3-8 7-8s7 3 7 8c0 3-3 4-7 4s-7-1-7-4Z"/></svg><h3>Zona para mascotas</h3><p>Un lugar para compartir también con ellas.</p></article>
     </div>
+    </div>
+  </div>
+</section>
+
+<section id="sostenibilidad" tabindex="-1" class="sustainability" aria-labelledby="sustainability-title">
+  <img src="assets/render-1.webp" alt="Render de la plazoleta abierta, los recorridos y la vegetación proyectada de Girardot Express" width="1765" height="904" loading="lazy" />
+  <div class="sustainability-copy section-shell">
+    <h2 id="sustainability-title">Un espacio abierto a una nueva manera de vivir la ciudad.</h2>
+    <p>Diseñado para aprovechar la iluminación natural, favorecer la ventilación y conectar sus espacios con el entorno, Girardot Express propone una experiencia comercial más abierta, confortable y consciente.</p>
+    <ul><li>Iluminación natural</li><li>Ventilación cruzada</li><li>Áreas abiertas</li><li>Materiales ecoeficientes</li></ul>
+    <small>Visualización del proyecto. Atributos previstos en el diseño.</small>
   </div>
 </section>
 
@@ -86,7 +95,10 @@
     </div>
     <div class="brand-offer" aria-label="La oferta que estamos preparando">
       @for (category of brandCategories; track category.name) {
-        <div class="brand-offer-row"><h3>{{ category.name }}</h3><p>{{ category.title }}</p></div>
+        <details class="brand-offer-row" name="brand-category">
+          <summary><span>{{ category.name }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></summary>
+          <div class="brand-description"><h3>{{ category.title }}</h3><p>{{ category.description }}</p><small>Oferta proyectada. Marcas y operadores por confirmar.</small><a class="text-link" routerLink="/proyecto" fragment="contacto-comercial">Quiero traer mi marca</a></div>
+        </details>
       }
     </div>
   </div>
@@ -127,7 +139,7 @@
   <span class="access-shade" aria-hidden="true"></span>
   <div class="access-content section-shell" appRevealOnScroll>
     <div><h2 id="access-title">Fácil acceso.<br />Siempre cerca.</h2><p>{{ site.address }}</p><p>Sobre la Vía Nariño, en el sector de La Colina.</p><div class="access-actions"><a class="button button-white" [href]="site.mapsUrl" target="_blank" rel="noopener">Cómo llegar con Google Maps</a><a class="button button-outline-light" [href]="site.wazeUrl" target="_blank" rel="noopener">Abrir en Waze</a></div></div>
-    <iframe class="access-map" [src]="mapUrl" title="Mapa de ubicación de Girardot Express en Diagonal 9 número 23–31" loading="lazy" referrerpolicy="no-referrer"></iframe>
+    <app-location-map />
   </div>
 </section>
 
@@ -144,7 +156,7 @@
       <h2 id="project-title">Tu marca también puede estar aquí.</h2>
       <p>Conecta con una comunidad que quiere tener más cerca lo que necesita. Conoce las oportunidades para tu negocio en Girardot Express.</p>
       <ul>
-        <li>Iluminación natural y ventilación cruzada</li><li>Áreas abiertas e integración con el entorno</li>
+        <li>Ubicación sobre la Vía Nariño</li><li>Formatos para diferentes negocios</li>
         <li>Espacios para comercio, servicios y gastronomía</li><li>Contacto dedicado para marcas e inversionistas</li>
       </ul>
       <div class="project-actions"><a class="button button-yellow" routerLink="/proyecto">Espacios comerciales</a><a class="button button-outline" routerLink="/proyecto" fragment="contacto-comercial">Hablar con el equipo</a></div>

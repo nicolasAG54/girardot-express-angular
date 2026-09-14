@@ -249,6 +249,15 @@
 .brands-intro .text-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.85rem; }
 .brand-offer { border-top: 1px solid #c6c5c1; }
 .brand-offer-row { padding-block: 1.45rem; border-bottom: 1px solid #c6c5c1; }
+.brand-offer-row summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 44px; cursor: pointer; list-style: none; font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 500; }
+.brand-offer-row summary::-webkit-details-marker { display: none; }
+.brand-offer-row summary svg { width: 24px; height: 24px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; transition: transform 200ms var(--ease-out); }
+.brand-offer-row[open] summary svg { transform: rotate(45deg); }
+.brand-offer-row[open] summary { color: #1a5b9e; }
+.brand-description { padding: 1.2rem 0 .25rem; }
+.brand-offer-row .brand-description h3 { font-size: 1.1rem; }
+.brand-description small { display: block; margin-top: 1rem; color: var(--ink-soft); font-size: .75rem; }
+.brand-description .text-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: .75rem; font-size: .85rem; }
 .brand-offer-row h3 { margin: 0; font-size: clamp(1.3rem, 2vw, 1.8rem); line-height: 1.3; font-weight: 500; letter-spacing: -0.025em; }
 .brand-offer-row p { margin: 0.4rem 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; }
 
@@ -285,6 +294,20 @@
 .services-layout { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: clamp(3rem, 8vw, 8rem); }
 .services-heading h2 { font-size: clamp(2.4rem, 4vw, 4.2rem); }
 .services-heading p { max-width: 32ch; margin: 1.2rem 0 0; color: var(--ink-soft); line-height: 1.7; }
+.visit-services { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgb(255 255 255 / .25); }
+.visit-services .services-heading h3 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 500; line-height: 1.15; letter-spacing: -.03em; }
+.visit-services .services-heading p, .visit-services .service-grid p { color: #d8d8d4; }
+.visit-services .service-grid svg { color: #31c4ec; width: 42px; height: 42px; }
+.sustainability { position: relative; isolation: isolate; overflow: hidden; min-height: 760px; display: flex; align-items: flex-end; background: #142d29; color: white; }
+.sustainability > img { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sustainability::before { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(9 25 20 / .1), rgb(9 25 20 / .82) 65%); }
+.sustainability-copy { padding-block: clamp(4rem, 7vw, 7rem); }
+.sustainability h2 { max-width: 20ch; margin: 0; font-size: clamp(2.4rem, 4.8vw, 4.8rem); line-height: 1.08; letter-spacing: -.035em; font-weight: 500; }
+.sustainability p { max-width: 68ch; margin-top: 1.6rem; line-height: 1.75; color: #f0f4ef; }
+.sustainability ul { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; list-style: none; padding: 1.5rem 0; margin-top: 2rem; border-block: 1px solid rgb(255 255 255 / .4); }
+.sustainability li { display: flex; align-items: center; gap: .65rem; font-size: .9rem; }
+.sustainability li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #c6ba2f; }
+.sustainability small { color: #e2e9e0; font-size: .7rem; }
 .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem 2rem; }
 .service-grid article { min-width: 0; }
 .service-grid svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -400,3 +423,7 @@ app-contact-form { display: block; }
 }
 
 
+
+.hero-opening span { display: grid; gap: .15rem; }
+.hero-opening strong { font-size: 1.4em; font-weight: 600; }
+.hero-opening small { font-size: .72em; color: white; font-weight: 400; }

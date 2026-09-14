@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   HostListener,
@@ -14,7 +15,9 @@ import {
   ChatbotAction,
   ChatbotQuickAction,
   findChatbotReply,
+  FaqAudience,
 } from '../core/chatbot-content';
+import { SITE_CONTENT } from '../core/site-content';
 
 interface ChatMessage {
   readonly id: number;
@@ -41,14 +44,23 @@ export class ChatbotWidget {
 
   protected readonly isOpen = signal(false);
   protected readonly draft = signal('');
-  protected readonly quickActions = CHATBOT_QUICK_ACTIONS;
-  protected readonly messages = signal<readonly ChatMessage[]>([
-    {
-      id: 1,
-      role: 'assistant',
-      text: 'Hola. Puedo orientarte sobre Girardot Express, su ubicación y los espacios comerciales.',
-    },
-  ]);
+  protected readonly audience = signal<FaqAudience>('visitor');
+  private hasChosenAudience = false;
+  private readonly histories = signal<Record<FaqAudience, readonly ChatMessage[]>>({
+    visitor: [{ id: 0, role: 'assistant', text: 'Hola. Te ayudo a conocer la apertura, los servicios y cómo llegar a Girardot Express.' }],
+    commercial: [{ id: 1, role: 'assistant', text: 'Hola. Conversemos sobre tu marca: formatos, espacios disponibles y contacto con el equipo comercial.' }],
+  });
+  private readonly drafts = { visitor: '', commercial: '' };
+  protected readonly messages = computed(() => this.histories()[this.audience()]);
+  protected readonly quickActions = computed<readonly ChatbotQuickAction[]>(() => this.audience() === 'commercial'
+    ? CHATBOT_QUICK_ACTIONS
+    : [
+      { label: 'Apertura', prompt: '¿Cuándo abre Girardot Express?' },
+      { label: 'Cómo llegar', prompt: '¿Dónde está ubicado Girardot Express?' },
+      { label: 'Servicios', prompt: '¿Qué servicios tendrá Girardot Express?' },
+      { label: 'Marcas', prompt: '¿Qué marcas estarán en Girardot Express?' },
+      { label: 'Mascotas', prompt: '¿Girardot Express será pet friendly?' },
+    ]);
 
   constructor() {
     this.destroyRef.onDestroy(() => {
@@ -63,6 +75,10 @@ export class ChatbotWidget {
       return;
     }
 
+    if (!this.hasChosenAudience) {
+      this.audience.set(this.router.url.split(/[?#]/)[0] === '/proyecto' ? 'commercial' : 'visitor');
+      this.hasChosenAudience = true;
+    }
     this.isOpen.set(true);
     this.scheduleInputFocus();
   }
@@ -89,6 +105,18 @@ export class ChatbotWidget {
     this.sendQuestion(action.prompt);
   }
 
+  protected chooseAudience(audience: FaqAudience): void {
+    this.drafts[this.audience()] = this.draft();
+    this.audience.set(audience);
+    this.draft.set(this.drafts[audience]);
+    this.hasChosenAudience = true;
+    this.scheduleConversationScroll();
+  }
+
+  protected openFaq(event: MouseEvent): void {
+    this.handleAction({ label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' }, event);
+  }
+
   protected handleAction(action: ChatbotAction, event: MouseEvent): void {
     if (action.external || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
@@ -106,16 +134,24 @@ export class ChatbotWidget {
     if (!question) return;
 
     const reply = findChatbotReply(question);
-    this.messages.update((messages) => [
-      ...messages,
+    const audience = this.audience();
+    const actions = reply.actions?.map(action => {
+      if (!action.href.startsWith(SITE_CONTENT.whatsappUrl)) return action;
+      const url = new URL(action.href);
+      const context = audience === 'commercial' ? 'Consulta de una marca o negocio.' : 'Consulta de un visitante.';
+      url.searchParams.set('text', `${context}\n${url.searchParams.get('text') ?? ''}`);
+      return { ...action, href: url.toString() };
+    });
+    this.histories.update((histories) => ({ ...histories, [audience]: [
+      ...histories[audience],
       { id: this.nextMessageId++, role: 'user', text: question },
       {
         id: this.nextMessageId++,
         role: 'assistant',
         text: reply.answer,
-        actions: reply.actions,
+        actions,
       },
-    ]);
+    ] }));
     this.draft.set('');
     this.scheduleConversationScroll();
   }

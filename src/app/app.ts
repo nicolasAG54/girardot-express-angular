@@ -13,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
+import { SITE_CONTENT } from './core/site-content';
 import { SiteFooter } from './shared/site-footer';
 import { SiteHeader } from './shared/site-header';
 import { ChatbotWidget } from './shared/chatbot-widget';
@@ -38,6 +39,20 @@ export class App implements AfterViewInit {
   private activePath = this.router.url.split(/[?#]/)[0];
 
   constructor() {
+    let schema = this.pageDocument.head.querySelector<HTMLScriptElement>('#site-schema');
+    if (!schema) {
+      schema = this.pageDocument.createElement('script');
+      schema.id = 'site-schema';
+      schema.type = 'application/ld+json';
+      this.pageDocument.head.appendChild(schema);
+    }
+    schema.textContent = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'ShoppingCenter',
+      name: SITE_CONTENT.name, slogan: SITE_CONTENT.slogan, address: SITE_CONTENT.address,
+      geo: { '@type': 'GeoCoordinates', ...SITE_CONTENT.coordinates },
+      email: SITE_CONTENT.email, telephone: SITE_CONTENT.whatsappLabel,
+      sameAs: [SITE_CONTENT.social.instagram],
+    });
     // Router anchor scrolling uses window.scrollTo and does not read CSS scroll-padding.
     // Measure at the time of navigation so desktop, mobile and zoom share one offset.
     this.viewportScroller.setOffset(() => [

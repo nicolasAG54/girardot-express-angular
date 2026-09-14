@@ -17,6 +17,7 @@ export interface ChatbotQuickAction {
 }
 
 interface ChatbotIntent extends ChatbotReply {
+  readonly audience?: FaqAudience;
   readonly question: string;
   readonly keywords: readonly string[];
   readonly shortQueries?: readonly string[];
@@ -62,7 +63,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
     shortQueries: ['girardot express', 'centro comercial', 'mall de conveniencia'],
     answer:
       'Girardot Express es un nuevo mall de conveniencia que integra compras, servicios, gastronomía, bienestar y experiencias en un entorno abierto, cómodo y funcional, diseñado para que encuentres todo lo que necesitas en un solo lugar.',
-    actions: [{ label: 'Conocer el proyecto', href: '/proyecto' }],
+    actions: [{ label: 'Conocer el mall', href: '/#quienes-somos' }],
   },
   {
     question: '¿Dónde está ubicado Girardot Express?',
@@ -76,6 +77,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Hay locales disponibles?',
+    audience: 'commercial',
     keywords: [
       'locales disponibles', 'local disponible', 'hay locales', 'disponibilidad de locales',
       'disponibilidad de espacios', 'locales en arriendo', 'arrendar un local',
@@ -88,6 +90,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Cuánto cuesta un local?',
+    audience: 'commercial',
     keywords: [
       'precio de un local', 'precios de locales', 'valor de un local', 'costo de un local',
       'cuanto vale un local', 'cuanto cuesta el arriendo', 'valor del arriendo',
@@ -100,6 +103,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Qué tamaños de locales tienen disponibles?',
+    audience: 'commercial',
     keywords: [
       'tamano de local', 'tamanos de locales', 'metros cuadrados', 'cuantos metros',
       'area de un local', 'areas de locales', 'local grande', 'local pequeno', 'm2',
@@ -111,6 +115,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: 'Tengo un negocio y estoy interesado en un local',
+    audience: 'commercial',
     keywords: [
       'tengo un negocio', 'tengo una marca', 'llevar mi marca', 'quiero un local',
       'interesado en un local', 'expandir mi negocio', 'mi empresa', 'mi franquicia',
@@ -121,6 +126,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Cómo puedo separar o reservar un local?',
+    audience: 'commercial',
     keywords: [
       'separar un local', 'reservar un local', 'apartar un local', 'reserva de local',
       'proceso de arriendo', 'proceso de negociacion',
@@ -132,6 +138,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Qué marcas estarán en Girardot Express?',
+    audience: 'visitor',
     keywords: ['que marcas', 'marcas confirmadas', 'que tiendas', 'que negocios', 'quienes estaran', 'mezcla comercial'],
     shortQueries: ['marcas', 'tiendas', 'negocios'],
     answer:
@@ -147,6 +154,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Puedo conocer el proyecto antes de adquirir un local?',
+    audience: 'commercial',
     keywords: ['conocer el proyecto', 'visitar el proyecto', 'visita comercial', 'coordinar una reunion', 'presentacion del proyecto', 'antes de adquirir'],
     shortQueries: ['visita', 'visitar', 'reunion', 'presentacion', 'render'],
     answer:
@@ -155,18 +163,21 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Girardot Express tendrá restaurantes o plazoleta de comidas?',
+    audience: 'visitor',
     keywords: ['restaurantes', 'restaurante', 'gastronomia', 'plazoleta', 'comida', 'comidas', 'comer', 'cafe'],
     answer:
       'Sí. La gastronomía hará parte de la experiencia de Girardot Express. El proyecto contempla islas, plazoleta de comidas y espacios para diferentes conceptos gastronómicos, pensados para compartir, hacer una pausa y disfrutar con quienes quieras.',
   },
   {
     question: '¿Girardot Express tendrá parqueaderos?',
+    audience: 'visitor',
     keywords: ['parqueaderos', 'parqueadero', 'parqueo', 'estacionamiento', 'estacionar'],
     answer:
       'Sí. Girardot Express contará con zonas de parqueo para motos, bicicletas, carros y personas con movilidad reducida. El proyecto también contempla infraestructura para movilidad eléctrica.',
   },
   {
     question: '¿Dónde puedo ver los planos o encontrar información de los espacios disponibles?',
+    audience: 'commercial',
     keywords: ['planos', 'distribucion de espacios', 'distribucion comercial', 'portafolio comercial', 'portafolio'],
     answer:
       'Puedes solicitar el portafolio comercial y coordinar una reunión con nuestro equipo para conocer mejor el proyecto, su distribución y las alternativas disponibles según tu tipo de negocio. Usa estas opciones para iniciar la consulta con el equipo comercial.',
@@ -188,24 +199,28 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Qué servicios tendrá Girardot Express?',
+    audience: 'visitor',
     keywords: ['servicios', 'zonas comunes', 'amenidades', 'coworking', 'parque infantil', 'vigilancia', 'seguridad'],
     answer:
       'Girardot Express contará con plazoleta de comidas, espacios de coworking, parque infantil, zona para mascotas y facilidades de parqueo. También tendrá ascensores, escaleras eléctricas, rampas peatonales, vigilancia, circuito cerrado de televisión y sistemas de respaldo y seguridad.',
   },
   {
     question: '¿Girardot Express será pet friendly?',
+    audience: 'visitor',
     keywords: ['mascotas', 'perros', 'pet friendly', 'animales'],
     answer:
       'El proyecto contempla un espacio para mascotas. Las condiciones de ingreso y uso de estos espacios serán informadas oficialmente antes de la apertura.',
   },
   {
     question: '¿Habrá puntos de carga para vehículos eléctricos?',
+    audience: 'visitor',
     keywords: ['electrolinera', 'carga electrica', 'carga para vehiculos', 'carro electrico', 'vehiculo electrico', 'vehiculos electricos', 'cargador ev', 'cargadores'],
     answer:
       'Sí. Girardot Express contempla infraestructura de carga para vehículos eléctricos como parte de sus servicios y de su enfoque hacia una movilidad más sostenible.',
   },
   {
     question: '¿El proyecto tendrá facilidades de accesibilidad y movilidad?',
+    audience: 'visitor',
     keywords: ['accesibilidad', 'movilidad reducida', 'rampas', 'ascensores', 'escaleras electricas', 'discapacidad', 'silla de ruedas'],
     answer:
       'Sí. El diseño contempla facilidades de circulación y acceso, como rampas peatonales, ascensores y escaleras eléctricas, para hacer más cómodo el recorrido entre los diferentes espacios del mall.',
@@ -218,6 +233,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   },
   {
     question: '¿Por qué Girardot Express es una oportunidad para mi negocio?',
+    audience: 'commercial',
     keywords: ['oportunidad para mi negocio', 'oportunidad comercial', 'por que alquilar', 'por que arrendar', 'por que invertir en el proyecto', 'expansion de mi negocio', 'via nacional'],
     shortQueries: ['oportunidad', 'expansion'],
     answer: `Girardot Express es una oportunidad para posicionar tu negocio donde la ciudad está creciendo. Su ubicación en una zona de expansión, sobre una vía nacional de alto tráfico, su fácil acceso, cercanía con Bogotá y amplia fachada ofrecen exposición para nuevos formatos comerciales. Reunirá compras, gastronomía, servicios, bienestar y experiencias para residentes y visitantes. ${SITE_CONTENT.openingLabel}.`,
@@ -226,6 +242,7 @@ const chatbotIntents: readonly ChatbotIntent[] = [
   {
     // La opción de inversión necesita orientación comercial; no implica venta ni rentabilidad.
     question: 'Inversión en el Proyecto',
+    audience: 'commercial',
     keywords: ['quiero invertir', 'invertir en girardot express', 'comprar un local', 'venta de locales', 'retorno de inversion', 'rentabilidad', 'inversion'],
     answer:
       'Si te interesa invertir en el proyecto o consultar la posibilidad de adquirir un espacio, habla con nuestro equipo comercial. Un asesor podrá explicarte las alternativas y condiciones vigentes según tu interés.',
@@ -241,6 +258,21 @@ export const CHATBOT_QUICK_ACTIONS: readonly ChatbotQuickAction[] = [
   { label: 'Inversión en el Proyecto', prompt: 'Inversión en el Proyecto' },
   { label: 'Hablar con un asesor', prompt: '¿Cómo puedo comunicarme con un asesor?' },
 ];
+
+export type FaqAudience = 'visitor' | 'commercial';
+
+// The canonical client questions are also the public FAQ. The additional
+// investment intent remains in the assistant's commercial guidance.
+export const FAQ_ITEMS = chatbotIntents.filter(intent => intent.question !== 'Inversión en el Proyecto');
+
+export function searchFaq(query: string, audience: FaqAudience | 'all' = 'all') {
+  const words = normalize(query).split(' ').filter(Boolean);
+  return FAQ_ITEMS.filter(item => {
+    const content = normalize(`${item.question} ${item.answer} ${item.keywords.join(' ')}`);
+    return (audience === 'all' || !item.audience || item.audience === audience)
+      && words.every(word => content.includes(word));
+  });
+}
 
 export const CHATBOT_FALLBACK_REPLY: ChatbotReply = {
   answer:

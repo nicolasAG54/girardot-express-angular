@@ -14,6 +14,8 @@
       <a routerLink="/" fragment="galeria">Galería</a>
       <a routerLink="/" fragment="ubicacion">Cómo llegar</a>
       <a routerLink="/proyecto">Espacios comerciales</a>
+      <a routerLink="/preguntas-frecuentes">Preguntas frecuentes</a>
+      <a routerLink="/" fragment="sostenibilidad">Sostenibilidad</a>
     </div>
     <div class="footer-group">
       <h2>Conversemos</h2>
@@ -23,10 +25,10 @@
     </div>
     <div class="footer-group">
       <h2>Síguenos</h2>
-      <a [href]="site.social.instagram" target="_blank" rel="noopener">Instagram<br />@girardotexpresscc</a>
+      <a [href]="site.social.instagram" target="_blank" rel="noopener">Instagram<br />{{ site.socialHandle }}</a>
     </div>
   </div>
-  <p class="footer-statement">Todo lo que necesitas.<br /><span>Más cerca.</span></p>
+  <p class="footer-statement">Un lugar para resolver.<br /><span>Y tiempo para disfrutar.</span></p>
   <div class="footer-bottom">
     <p>© {{ year }} Girardot Express</p>
     <p>{{ site.address }}</p>

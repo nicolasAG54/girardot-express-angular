@@ -1,9 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, DestroyRef, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { SITE_CONTENT } from '../../core/site-content';
+import { LocationMap } from '../../shared/location-map';
 import { ContactForm } from '../../shared/contact-form';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { HeroVideoDirective } from '../../shared/hero-video.directive';
@@ -11,7 +12,7 @@ import { VideoRevealDirective } from '../../shared/video-reveal.directive';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, ContactForm, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
+  imports: [RouterLink, ContactForm, LocationMap, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -19,7 +20,6 @@ export class Home {
   @ViewChild('galleryDialog') private galleryDialog?: ElementRef<HTMLDialogElement>;
 
   protected readonly site = SITE_CONTENT;
-  protected readonly mapUrl = inject(DomSanitizer).bypassSecurityTrustResourceUrl(SITE_CONTENT.mapEmbedUrl);
   protected readonly galleryIndex = signal(0);
   protected readonly brandCategories = [
     { name: 'Compras', title: 'Lo que necesitas para tu día a día.', description: 'Comercios y formatos pensados para hacer tus compras cerca de casa.' },
@@ -44,16 +44,16 @@ export class Home {
   private readonly document = inject(DOCUMENT);
 
   constructor() {
-    this.titleService.setTitle('Girardot Express | Tu día más fácil');
+    this.titleService.setTitle(`${SITE_CONTENT.name} | ${SITE_CONTENT.slogan}`);
     this.meta.updateTag({
       name: 'description',
       content:
         `Compras, servicios, gastronomía, bienestar y experiencias en Girardot. ${SITE_CONTENT.openingLabel}.`,
     });
-    this.meta.updateTag({ property: 'og:title', content: 'Girardot Express | Todo más cerca' });
+    this.meta.updateTag({ property: 'og:title', content: `${SITE_CONTENT.name} | ${SITE_CONTENT.slogan}` });
     this.meta.updateTag({
       property: 'og:description',
-      content: `Todo lo que necesitas, más cerca. ${SITE_CONTENT.openingLabel}.`,
+      content: ` ${SITE_CONTENT.slogan} ${SITE_CONTENT.openingLabel}.`.trim(),
     });
     this.meta.updateTag({ property: 'og:url', content: '/' });
     this.setCanonical('/');

@@ -5,10 +5,11 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { COMMERCIAL_FACTS, SITE_CONTENT } from '../../core/site-content';
+import { LocationMap } from '../../shared/location-map';
 import { ContactForm } from '../../shared/contact-form';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { HeroVideoDirective } from '../../shared/hero-video.directive';
@@ -16,7 +17,7 @@ import { VideoRevealDirective } from '../../shared/video-reveal.directive';
 
 @Component({
   selector: 'app-project',
-  imports: [RouterLink, ContactForm, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
+  imports: [RouterLink, ContactForm, LocationMap, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
   templateUrl: './project.html',
   styleUrl: './project.scss',
 })
@@ -26,9 +27,6 @@ export class Project {
   protected readonly site = SITE_CONTENT;
   protected readonly selectedMetric = signal(0);
   protected readonly selectedGalleryIndex = signal(0);
-  protected readonly mapEmbedUrl = inject(DomSanitizer).bypassSecurityTrustResourceUrl(
-    SITE_CONTENT.mapEmbedUrl,
-  );
 
   protected readonly metricDetails = [
     {

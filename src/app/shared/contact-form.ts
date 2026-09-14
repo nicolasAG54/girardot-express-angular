@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, inject, signal } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SITE_CONTENT } from '../core/site-content';
@@ -9,7 +9,7 @@ import { SITE_CONTENT } from '../core/site-content';
   templateUrl: './contact-form.html',
   styleUrl: './contact-form.scss',
 })
-export class ContactForm {
+export class ContactForm implements OnChanges {
   @Input() context: 'general' | 'commercial' = 'general';
 
   protected readonly submitted = signal(false);
@@ -17,12 +17,24 @@ export class ContactForm {
   protected readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     phone: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    company: new FormControl('', { nonNullable: true }),
+    role: new FormControl('', { nonNullable: true }),
+    category: new FormControl('', { nonNullable: true }),
+    area: new FormControl('', { nonNullable: true }),
     interest: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     message: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     consent: new FormControl(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
   });
   private readonly hostElement = inject(ElementRef) as ElementRef<HTMLElement>;
+
+  ngOnChanges(): void {
+    for (const name of ['company', 'role', 'category', 'area'] as const) {
+      const control = this.form.controls[name];
+      control.setValidators(this.context === 'commercial' ? [Validators.required] : []);
+      control.updateValueAndValidity({ emitEvent: false });
+    }
+  }
 
   protected openWhatsApp(): void {
     this.submitted.set(true);
@@ -46,6 +58,10 @@ export class ContactForm {
       `Teléfono: ${value.phone}`,
       value.email ? `Correo: ${value.email}` : '',
       `Interés: ${value.interest}`,
+      ...(this.context === 'commercial' ? [
+        `Empresa o marca: ${value.company}`, `Cargo: ${value.role}`,
+        `Categoría del negocio: ${value.category}`, `Área requerida: ${value.area}`,
+      ] : []),
       value.message,
     ]
       .filter(Boolean)

@@ -1,0 +1,18 @@
+<section class="faq section-shell" aria-labelledby="faq-title">
+  <a class="text-link" routerLink="/">Volver al inicio</a>
+  <div class="faq-intro"><h1 id="faq-title">Antes de venir.<br />Antes de crecer.</h1><div><h2>Preguntas frecuentes</h2><p>Todo sobre tu próxima visita y las oportunidades para tu marca, en un mismo lugar.</p></div></div>
+  <div class="faq-tools">
+    <label for="faq-search">¿Qué te gustaría saber?</label>
+    <input id="faq-search" type="search" autocomplete="off" placeholder="Busca apertura, parqueaderos, locales…" [value]="query()" (input)="updateQuery($event)" />
+    <div class="faq-filters" aria-label="Tipo de consulta">@for (filter of filters; track filter.id) {<button type="button" [attr.aria-pressed]="audience() === filter.id" (click)="audience.set(filter.id)">{{ filter.label }}</button>}</div>
+    <p class="faq-count" role="status">{{ results().length }} {{ results().length === 1 ? 'pregunta disponible' : 'preguntas disponibles' }}</p>
+  </div>
+  <div class="faq-list">
+    @for (item of results(); track item.question) {
+      <details name="faq-question"><summary>{{ item.question }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></summary><div class="faq-answer"><p>{{ item.answer }}</p><div class="faq-actions">@for (action of item.actions; track action.href) { @if (action.external || action.href.startsWith('mailto:')) {<a class="text-link" [href]="action.href" [attr.target]="action.external ? '_blank' : null" rel="noopener">{{ action.label }}</a>} @else {<a class="text-link" [routerLink]="action.href.split('#')[0]" [fragment]="action.href.split('#')[1]">{{ action.label }}</a>} }</div></div></details>
+    } @empty {
+      <div class="faq-empty"><h2>No encontramos esa consulta.</h2><p>Prueba con una palabra como “apertura” o “locales”, o consulta directamente al equipo.</p><button type="button" (click)="query.set(''); audience.set('all')">Ver todas las preguntas</button></div>
+    }
+  </div>
+  <div class="faq-contact"><h2>¿Tu pregunta es otra?</h2><p>El equipo puede orientarte con tu consulta particular.</p><a class="button button-primary" [href]="site.whatsappUrl" target="_blank" rel="noopener">Conversar por WhatsApp</a></div>
+</section>

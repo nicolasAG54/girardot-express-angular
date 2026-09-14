@@ -33,6 +33,10 @@
       </button>
     </header>
 
+    <div class="chatbot-audience" aria-label="Tipo de conversación">
+      <button type="button" [attr.aria-pressed]="audience() === 'visitor'" (click)="chooseAudience('visitor')">Soy visitante</button>
+      <button type="button" [attr.aria-pressed]="audience() === 'commercial'" (click)="chooseAudience('commercial')">Tengo una marca</button>
+    </div>
     <div
       #conversation
       class="chatbot-conversation"
@@ -41,7 +45,7 @@
       aria-relevant="additions"
     >
       <div class="chatbot-quick-actions" aria-label="Preguntas rápidas">
-        @for (action of quickActions; track action.label) {
+        @for (action of quickActions(); track action.label) {
           <button type="button" (click)="selectQuickAction(action)">{{ action.label }}</button>
         }
       </div>
@@ -68,6 +72,7 @@
       }
     </div>
 
+    <a class="chatbot-faq-link" href="/preguntas-frecuentes" (click)="openFaq($event)">Ver todas las preguntas frecuentes</a>
     <form class="chatbot-composer" (submit)="submitMessage($event)">
       <label class="sr-only" for="chatbot-message">Escribe tu pregunta</label>
       <input

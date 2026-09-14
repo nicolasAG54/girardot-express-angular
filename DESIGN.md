@@ -415,3 +415,8 @@ Ajuste aprobado por indicación del usuario: los enlaces se agrupan hacia la der
 
 ### Indicador durante navegación por secciones (7 de septiembre de 2026)
 Al seleccionar un enlace, el subrayado sigue directamente el destino y conserva esa selección durante el desplazamiento suave, sin recorrer los capítulos intermedios. Al llegar se libera el seguimiento; rueda, tacto, teclas de desplazamiento o interacción fuera del header devuelven el control a la sección visible. Un segundo clic sustituye el destino pendiente. El historial sigue la posición restaurada. El bloqueo tiene liberación de respaldo y limpieza al destruir el componente. Prueba reproducible: scripts/check-nav-indicator.cjs, en escritorio y móvil y en ambas rutas, con captura de estados intermedios, clics sucesivos e interrupción manual.
+### Versión 3 · 14 de septiembre de 2026
+
+Refinamiento sobre la versión 2 aprobada: header compacto a la derecha, logo oficial ampliado, enlaces de 14 px y cambio a menú móvil en 1280 px. Se conserva la cortina diagonal y los controles de video. Experiencias y facilidades forman un capítulo; sostenibilidad ocupa una sección con render a todo el ancho y tratamiento verde oscuro. Azul #1A5B9E en selección de categorías, preguntas y mapas; cian #31C4EC en iconos sobre fondo oscuro. Amarillo #F3B71A permanece en las acciones principales y la transición aprobada.
+
+Nueva página de preguntas frecuentes con la misma tipografía y reglas de espaciado del sitio, controles nativos, búsqueda y filtros. Los perfiles del bot distinguen visitantes y marcas con historiales separados. Alcance, dependencias de contenido y validación: CAMBIOS_V3.md.
