@@ -135,10 +135,8 @@
 </section>
 
 <section id="ubicacion" tabindex="-1" class="access-banner" aria-labelledby="access-title" data-nav-section="ubicacion">
-  <img src="assets/render-3.webp" alt="Acceso vehicular y fachada proyectada de Girardot Express" width="1765" height="898" loading="lazy" />
-  <span class="access-shade" aria-hidden="true"></span>
   <div class="access-content section-shell" appRevealOnScroll>
-    <div><h2 id="access-title">Fácil acceso.<br />Siempre cerca.</h2><p>{{ site.address }}</p><p>Sobre la Vía Nariño, en el sector de La Colina.</p><div class="access-actions"><a class="button button-white" [href]="site.mapsUrl" target="_blank" rel="noopener">Cómo llegar con Google Maps</a><a class="button button-outline-light" [href]="site.wazeUrl" target="_blank" rel="noopener">Abrir en Waze</a></div></div>
+    <div class="access-heading"><h2 id="access-title">Encuéntranos<br />en Girardot.</h2><div class="access-directions"><p>{{ site.address }}</p><p>Sobre la Vía Nariño, en el sector de La Colina.</p><div class="access-actions"><a class="button button-primary" [href]="site.mapsUrl" target="_blank" rel="noopener">Cómo llegar con Google Maps</a><a class="button button-outline" [href]="site.wazeUrl" target="_blank" rel="noopener">Abrir en Waze</a></div></div></div>
     <app-location-map />
   </div>
 </section>

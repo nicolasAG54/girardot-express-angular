@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { FaqAudience, searchFaq } from '../../core/chatbot-content';
+import { searchFaq } from '../../core/chatbot-content';
 import { SITE_CONTENT } from '../../core/site-content';
 
 @Component({
@@ -14,9 +14,7 @@ import { SITE_CONTENT } from '../../core/site-content';
 export class Faq {
   protected readonly site = SITE_CONTENT;
   protected readonly query = signal('');
-  protected readonly audience = signal<FaqAudience | 'all'>('all');
-  protected readonly filters = [{ id: 'all', label: 'Todas' }, { id: 'visitor', label: 'Para visitantes' }, { id: 'commercial', label: 'Para marcas' }] as const;
-  protected readonly results = computed(() => searchFaq(this.query(), this.audience()));
+  protected readonly results = computed(() => searchFaq(this.query()));
 
   constructor() {
     inject(Title).setTitle(`Preguntas frecuentes | ${SITE_CONTENT.name}`);

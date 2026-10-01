@@ -12,6 +12,10 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
  try {
   for (const width of [1440, 1290, 1024, 390, 320]) {
    const page = await browser.newPage({ viewport: { width, height: 960 }, reducedMotion: 'reduce' });
+   await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({
+    contentType: 'image/png',
+    body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==', 'base64'),
+   }));
    page.on('pageerror', e => report.errors.push(e.message));
    await page.goto(base); await page.waitForSelector('app-home'); await pause(1400);
    const layout = await page.evaluate(() => {
@@ -33,10 +37,12 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
      await page.screenshot({path: path.join(out, `${width}-${section}.png`)});
     }
     const map = page.locator('app-location-map');
-    await map.getByRole('button', {name: 'Terminal', exact: true}).click(); await pause(150);
-    assert.match(await map.locator('iframe').getAttribute('src'), /Terminal/);
-    await map.getByRole('button', {name: 'Girardot Express', exact: true}).click(); await pause(150);
-    assert.match(await map.locator('iframe').getAttribute('src'), /4.299272/);
+    await map.locator('.location-marker--terminal').waitFor();
+    assert.equal(await map.locator('.location-marker').count(), 5);
+    await map.locator('.location-marker--terminal').click();
+    await map.locator('.leaflet-popup').waitFor();
+    assert.match(await map.locator('.leaflet-popup a[target="_blank"]').getAttribute('href'), /Terminal/);
+    await map.getByRole('button', {name: 'Ver todos los puntos del mapa', exact: true}).click();
     await page.getByRole('button', {name:'Abrir asistente de Girardot Express'}).click(); await pause(150);
     await page.locator('.chatbot-quick-actions').getByRole('button',{name:'Apertura',exact:true}).click(); await pause(150);
     const visitorHistory = await page.locator('.chatbot-message').allTextContents();
@@ -49,9 +55,8 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
     assert.deepEqual(await page.locator('.chatbot-message').allTextContents(),visitorHistory);
     await page.getByRole('link',{name:'Ver todas las preguntas frecuentes',exact:true}).click(); await pause(150);
     await page.waitForSelector('app-faq');
-    assert.equal(await page.locator('.faq-list details').count(),21);
+    assert.equal(await page.locator('.faq-list details').count(),8);
     assert.equal(await page.locator('header .is-active').count(),0);
-    await page.getByRole('button',{name:'Para marcas',exact:true}).click(); await pause(150);
     await page.locator('#faq-search').fill('cuesta un local'); await pause(150);
     assert.ok(await page.locator('.faq-list summary').count()>0);
     await page.locator('.faq-list summary').first().click(); await pause(150);
@@ -59,7 +64,7 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
     await page.locator('#faq-search').fill('zzzinexistente'); await pause(150);
     assert.ok(await page.locator('.faq-empty').isVisible());
     await page.getByRole('button',{name:'Ver todas las preguntas',exact:true}).click(); await pause(150);
-    assert.equal(await page.locator('.faq-list details').count(),21);
+    assert.equal(await page.locator('.faq-list details').count(),8);
     await page.goto(base+'/proyecto'); await page.waitForSelector('app-project'); await pause(500);
     await page.screenshot({path:path.join(out,`${width}-project.png`)});
     await page.locator('app-contact-form').scrollIntoViewIfNeeded();

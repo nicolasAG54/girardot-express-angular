@@ -19,6 +19,7 @@ export interface ChatbotQuickAction {
 interface ChatbotIntent extends ChatbotReply {
   readonly audience?: FaqAudience;
   readonly question: string;
+  readonly relatedQuestions?: readonly string[];
   readonly keywords: readonly string[];
   readonly shortQueries?: readonly string[];
 }
@@ -55,190 +56,147 @@ const instagramAction: ChatbotAction = {
   external: true,
 };
 
-// Las 21 preguntas del documento del cliente. Los datos comerciales se consultan con un asesor.
-const chatbotIntents: readonly ChatbotIntent[] = [
+export type FaqAudience = 'visitor' | 'commercial';
+
+// Ocho respuestas compartidas por la página y el asistente. Conservamos las
+// 21 preguntas originales como alias para que sigan siendo fáciles de encontrar.
+export const FAQ_ITEMS: readonly ChatbotIntent[] = [
   {
-    question: '¿Qué es Girardot Express?',
-    keywords: ['sobre girardot express', 'que es el proyecto', 'que tipo de centro comercial'],
-    shortQueries: ['girardot express', 'centro comercial', 'mall de conveniencia'],
-    answer:
-      'Girardot Express es un nuevo mall de conveniencia que integra compras, servicios, gastronomía, bienestar y experiencias en un entorno abierto, cómodo y funcional, diseñado para que encuentres todo lo que necesitas en un solo lugar.',
-    actions: [{ label: 'Conocer el mall', href: '/#quienes-somos' }],
+    question: '¿Qué es Girardot Express y cuándo abre?',
+    relatedQuestions: ['¿Qué es Girardot Express?', '¿Cuándo abre Girardot Express?'],
+    keywords: [
+      'sobre girardot express', 'que es el proyecto', 'que tipo de centro comercial',
+      'cuando abre', 'apertura', 'inauguracion', 'fecha de apertura', 'cuando van a abrir',
+    ],
+    shortQueries: ['girardot express', 'centro comercial', 'mall de conveniencia', 'abrir', 'fecha', '2026'],
+    answer: `Girardot Express es un nuevo mall de conveniencia que reunirá compras, servicios, gastronomía, bienestar y experiencias en un entorno abierto. ${SITE_CONTENT.openingLabel}. La fecha exacta de inauguración se anunciará en esta página y en nuestras redes sociales.`,
+    actions: [instagramAction],
   },
   {
-    question: '¿Dónde está ubicado Girardot Express?',
+    question: '¿Dónde está ubicado y cómo llego?',
+    relatedQuestions: ['¿Dónde está ubicado Girardot Express?'],
     keywords: [
       'ubicacion', 'direccion', 'donde queda', 'donde esta ubicado', 'como llegar',
       'via narino', 'la colina',
     ],
     shortQueries: ['mapa', 'sector'],
-    answer: `Girardot Express está ubicado en ${SITE_CONTENT.address}, sobre la Vía Nariño, en el sector de La Colina. Está en una zona de expansión de la ciudad, con conexión a transporte público y cercanía a escenarios deportivos. Puedes abrir el mapa para consultar cómo llegar.`,
+    answer: `Estamos en ${SITE_CONTENT.address}, sobre la Vía Nariño, en el sector de La Colina. Es una zona de expansión con conexión a transporte público y cercana a escenarios deportivos. Abre el mapa para consultar la ruta.`,
     actions: [mapAction],
   },
   {
-    question: '¿Hay locales disponibles?',
+    question: '¿Qué tiendas y restaurantes tendrá?',
+    audience: 'visitor',
+    relatedQuestions: [
+      '¿Qué marcas estarán en Girardot Express?',
+      '¿Girardot Express tendrá restaurantes o plazoleta de comidas?',
+    ],
+    keywords: [
+      'que marcas', 'marcas confirmadas', 'que tiendas', 'que negocios', 'quienes estaran',
+      'mezcla comercial', 'restaurantes', 'restaurante', 'gastronomia', 'plazoleta',
+      'comida', 'comidas', 'comer', 'cafe',
+    ],
+    shortQueries: ['marcas', 'tiendas', 'negocios'],
+    answer:
+      'El proyecto contempla una mezcla comercial de compras, servicios, bienestar y experiencias, con plazoleta de comidas, islas y espacios para diferentes conceptos gastronómicos. Las marcas y los operadores están por confirmar; el directorio se publicará cuando estén confirmados.',
+  },
+  {
+    question: '¿Qué servicios tendrá para mi visita?',
+    audience: 'visitor',
+    relatedQuestions: [
+      '¿Qué servicios tendrá Girardot Express?',
+      '¿Girardot Express tendrá parqueaderos?',
+      '¿Girardot Express será pet friendly?',
+      '¿Habrá puntos de carga para vehículos eléctricos?',
+      '¿El proyecto tendrá facilidades de accesibilidad y movilidad?',
+    ],
+    keywords: [
+      'servicios', 'zonas comunes', 'amenidades', 'coworking', 'parque infantil', 'vigilancia',
+      'seguridad', 'parqueaderos', 'parqueadero', 'parqueo', 'estacionamiento', 'estacionar',
+      'mascotas', 'perros', 'pet friendly', 'animales', 'electrolinera', 'carga electrica',
+      'carga para vehiculos', 'carro electrico', 'vehiculo electrico', 'vehiculos electricos',
+      'cargador ev', 'cargadores', 'accesibilidad', 'movilidad reducida', 'rampas',
+      'ascensores', 'escaleras electricas', 'discapacidad', 'silla de ruedas',
+    ],
+    answer:
+      'Se proyectan coworking, parque infantil, zona para mascotas y parqueo para motos, bicicletas, carros y personas con movilidad reducida. Las facilidades de circulación previstas incluyen rampas, ascensores y escaleras eléctricas, junto con vigilancia, circuito cerrado de televisión y sistemas de respaldo y seguridad. La infraestructura de carga eléctrica está prevista; su alcance y fecha de operación están por confirmar. Las condiciones de ingreso de mascotas y uso de su zona serán informadas oficialmente antes de la apertura.',
+  },
+  {
+    question: '¿Cómo integra el proyecto la sostenibilidad?',
+    relatedQuestions: ['¿Girardot Express es un proyecto sostenible con el medio ambiente?'],
+    keywords: ['sostenibilidad', 'sostenible', 'iluminacion natural', 'ventilacion', 'ecoeficiente', 'medio ambiente'],
+    answer:
+      'El diseño incorpora iluminación natural, ventilación cruzada, áreas abiertas y materiales ecoeficientes para mejorar el confort y la integración con el entorno.',
+  },
+  {
+    question: '¿Cómo consulto precios, tamaños y reserva de locales?',
     audience: 'commercial',
+    relatedQuestions: [
+      '¿Hay locales disponibles?',
+      '¿Cuánto cuesta un local?',
+      '¿Qué tamaños de locales tienen disponibles?',
+      'Tengo un negocio y estoy interesado en un local',
+      '¿Cómo puedo separar o reservar un local?',
+    ],
     keywords: [
       'locales disponibles', 'local disponible', 'hay locales', 'disponibilidad de locales',
-      'disponibilidad de espacios', 'locales en arriendo', 'arrendar un local',
-      'alquilar un local', 'rentar un local', 'busco un local',
-    ],
-    shortQueries: ['disponibilidad', 'arrendar', 'alquiler', 'rentar'],
-    answer:
-      'Sí. Girardot Express se encuentra en etapa de construcción y comercialización. Puedes consultar los espacios disponibles con nuestro equipo comercial, que te orientará según el tipo de negocio, formato y necesidades de operación.',
-    actions: [advisorFor('Hola, quisiera consultar los locales disponibles en Girardot Express.')],
-  },
-  {
-    question: '¿Cuánto cuesta un local?',
-    audience: 'commercial',
-    keywords: [
-      'precio de un local', 'precios de locales', 'valor de un local', 'costo de un local',
-      'cuanto vale un local', 'cuanto cuesta el arriendo', 'valor del arriendo',
-      'precio del arriendo', 'canon de arrendamiento', 'canon de arriendo',
-    ],
-    shortQueries: ['precio', 'precios', 'valor', 'costo', 'canon', 'arriendo', 'cuanto cuesta'],
-    answer:
-      'Las condiciones comerciales dependen del espacio, su ubicación dentro del proyecto, el área requerida y las características de cada operación. Puedes hablar con nuestro equipo comercial para solicitar una propuesta ajustada a tu marca.',
-    actions: [advisorFor('Hola, quisiera consultar las condiciones y el precio de un local en Girardot Express.')],
-  },
-  {
-    question: '¿Qué tamaños de locales tienen disponibles?',
-    audience: 'commercial',
-    keywords: [
+      'disponibilidad de espacios', 'locales en arriendo', 'arrendar un local', 'alquilar un local',
+      'rentar un local', 'busco un local', 'precio de un local', 'precios de locales',
+      'valor de un local', 'costo de un local', 'cuanto vale un local', 'cuanto cuesta el arriendo',
+      'valor del arriendo', 'precio del arriendo', 'canon de arrendamiento', 'canon de arriendo',
       'tamano de local', 'tamanos de locales', 'metros cuadrados', 'cuantos metros',
       'area de un local', 'areas de locales', 'local grande', 'local pequeno', 'm2',
-    ],
-    shortQueries: ['tamano', 'tamanos', 'area', 'areas', 'formatos', 'islas', 'oficinas'],
-    answer:
-      'Girardot Express contará con distintos formatos de espacios comerciales para comercios, franquicias, servicios y operadores. Nuestro equipo comercial puede ampliar la información sobre las áreas y ubicaciones disponibles según las necesidades de tu negocio.',
-    actions: [advisorFor('Hola, quisiera conocer los tamaños y formatos de locales disponibles en Girardot Express.')],
-  },
-  {
-    question: 'Tengo un negocio y estoy interesado en un local',
-    audience: 'commercial',
-    keywords: [
       'tengo un negocio', 'tengo una marca', 'llevar mi marca', 'quiero un local',
       'interesado en un local', 'expandir mi negocio', 'mi empresa', 'mi franquicia',
-    ],
-    answer:
-      '¡Nos encantará conocer tu negocio! Girardot Express busca reunir conceptos atractivos y útiles para la comunidad. Puedes hablar con nuestro equipo para conocer el proyecto, las oportunidades disponibles, las características de los espacios y las condiciones comerciales.',
-    actions: [advisorFor('Hola, tengo un negocio y estoy interesado en un local en Girardot Express.')],
-  },
-  {
-    question: '¿Cómo puedo separar o reservar un local?',
-    audience: 'commercial',
-    keywords: [
       'separar un local', 'reservar un local', 'apartar un local', 'reserva de local',
       'proceso de arriendo', 'proceso de negociacion',
     ],
-    shortQueries: ['separar', 'reservar', 'reserva', 'apartar'],
+    shortQueries: [
+      'disponibilidad', 'arrendar', 'alquiler', 'rentar', 'precio', 'precios', 'valor', 'costo',
+      'canon', 'arriendo', 'cuanto cuesta', 'tamano', 'tamanos', 'area', 'areas', 'formatos',
+      'islas', 'oficinas', 'separar', 'reservar', 'reserva', 'apartar',
+    ],
     answer:
-      'Para iniciar el proceso puedes comunicarte con nuestro equipo comercial. Un asesor podrá conocer tu marca, revisar la disponibilidad y ayudarte a seleccionar un espacio; también te explicará las condiciones y los pasos para avanzar con la reserva o vinculación.',
-    actions: [advisorFor('Hola, quisiera conocer el proceso para reservar un local en Girardot Express.')],
+      'Estamos en etapa de construcción y comercialización, con distintos formatos para comercios, franquicias, servicios y operadores. Las condiciones comerciales dependen del área, la ubicación y las necesidades de tu operación. Comparte tu tipo de negocio con un asesor para revisar disponibilidad, tamaños y una propuesta para tu marca. El equipo también te explicará los pasos para la reserva o vinculación.',
+    actions: [advisorFor('Hola, quisiera consultar disponibilidad, tamaños, precios y reserva de locales en Girardot Express.', 'Consultar locales disponibles')],
   },
   {
-    question: '¿Qué marcas estarán en Girardot Express?',
-    audience: 'visitor',
-    keywords: ['que marcas', 'marcas confirmadas', 'que tiendas', 'que negocios', 'quienes estaran', 'mezcla comercial'],
-    shortQueries: ['marcas', 'tiendas', 'negocios'],
-    answer:
-      'Tendremos una mezcla comercial pensada para nuestra población, con marcas y conceptos de compras, gastronomía, servicios, bienestar y experiencias. Nuestro equipo comercial puede ampliar la información sobre las marcas y el proyecto.',
-    actions: [advisorFor('Hola, quisiera conocer más sobre las marcas y la mezcla comercial de Girardot Express.')],
-  },
-  {
-    question: '¿Cuándo abre Girardot Express?',
-    keywords: ['cuando abre', 'apertura', 'inauguracion', 'fecha de apertura', 'cuando van a abrir'],
-    shortQueries: ['abrir', 'fecha', '2026'],
-    answer: `${SITE_CONTENT.openingLabel}. La fecha exacta de inauguración se anunciará en la página web y las redes sociales del centro comercial. Síguenos como ${SITE_CONTENT.socialHandle} para conocer las novedades y avances.`,
-    actions: [instagramAction],
-  },
-  {
-    question: '¿Puedo conocer el proyecto antes de adquirir un local?',
+    question: '¿Cómo conozco los planos y las oportunidades para mi negocio?',
     audience: 'commercial',
-    keywords: ['conocer el proyecto', 'visitar el proyecto', 'visita comercial', 'coordinar una reunion', 'presentacion del proyecto', 'antes de adquirir'],
-    shortQueries: ['visita', 'visitar', 'reunion', 'presentacion', 'render'],
+    relatedQuestions: [
+      '¿Puedo conocer el proyecto antes de adquirir un local?',
+      '¿Dónde puedo ver los planos o encontrar información de los espacios disponibles?',
+      '¿Por qué Girardot Express es una oportunidad para mi negocio?',
+    ],
+    keywords: [
+      'conocer el proyecto', 'visitar el proyecto', 'visita comercial', 'coordinar una reunion',
+      'presentacion del proyecto', 'antes de adquirir', 'planos', 'distribucion de espacios',
+      'distribucion comercial', 'portafolio comercial', 'portafolio', 'oportunidad para mi negocio',
+      'oportunidad comercial', 'por que alquilar', 'por que arrendar', 'por que invertir en el proyecto',
+      'expansion de mi negocio', 'via nacional',
+    ],
+    shortQueries: ['visita', 'visitar', 'reunion', 'presentacion', 'render', 'oportunidad', 'expansion'],
     answer:
-      'Sí. Puedes solicitar información comercial y coordinar una reunión con nuestro equipo para conocer mejor el proyecto y las oportunidades disponibles para tu negocio.',
-    actions: [commercialAction],
-  },
-  {
-    question: '¿Girardot Express tendrá restaurantes o plazoleta de comidas?',
-    audience: 'visitor',
-    keywords: ['restaurantes', 'restaurante', 'gastronomia', 'plazoleta', 'comida', 'comidas', 'comer', 'cafe'],
-    answer:
-      'Sí. La gastronomía hará parte de la experiencia de Girardot Express. El proyecto contempla islas, plazoleta de comidas y espacios para diferentes conceptos gastronómicos, pensados para compartir, hacer una pausa y disfrutar con quienes quieras.',
-  },
-  {
-    question: '¿Girardot Express tendrá parqueaderos?',
-    audience: 'visitor',
-    keywords: ['parqueaderos', 'parqueadero', 'parqueo', 'estacionamiento', 'estacionar'],
-    answer:
-      'Sí. Girardot Express contará con zonas de parqueo para motos, bicicletas, carros y personas con movilidad reducida. El proyecto también contempla infraestructura para movilidad eléctrica.',
-  },
-  {
-    question: '¿Dónde puedo ver los planos o encontrar información de los espacios disponibles?',
-    audience: 'commercial',
-    keywords: ['planos', 'distribucion de espacios', 'distribucion comercial', 'portafolio comercial', 'portafolio'],
-    answer:
-      'Puedes solicitar el portafolio comercial y coordinar una reunión con nuestro equipo para conocer mejor el proyecto, su distribución y las alternativas disponibles según tu tipo de negocio. Usa estas opciones para iniciar la consulta con el equipo comercial.',
+      'Puedes solicitar el portafolio comercial y coordinar una reunión para conocer los planos, la distribución y las oportunidades para tu negocio. El equipo te orientará sobre los espacios disponibles y las características del proyecto según tu marca.',
     actions: [portfolioAction, commercialAction],
   },
   {
-    question: '¿Cómo puedo comunicarme con Girardot Express?',
-    keywords: ['contacto', 'telefono', 'whatsapp', 'correo', 'asesor', 'comunicarme', 'redes sociales'],
-    answer: `Puedes comunicarte directamente por WhatsApp al ${SITE_CONTENT.whatsappLabel} o escribir a ${SITE_CONTENT.email}. También puedes seguir las novedades del proyecto en Instagram como ${SITE_CONTENT.socialHandle}.`,
-    actions: [advisorAction, { label: 'Enviar correo', href: `mailto:${SITE_CONTENT.email}` }, instagramAction],
-  },
-  {
-    question: 'Quiero recibir más información de Girardot Express',
-    keywords: ['mas informacion', 'quiero informacion', 'recibir informacion', 'estoy interesado'],
+    question: '¿Cómo me comunico con el equipo?',
+    relatedQuestions: [
+      '¿Cómo puedo comunicarme con Girardot Express?',
+      'Quiero recibir más información de Girardot Express',
+    ],
+    keywords: [
+      'contacto', 'telefono', 'whatsapp', 'correo', 'asesor', 'comunicarme', 'redes sociales',
+      'mas informacion', 'quiero informacion', 'recibir informacion', 'estoy interesado',
+    ],
     shortQueries: ['informacion', 'novedades'],
-    answer:
-      '¡Claro! Puedo orientarte sobre ubicación, espacios comerciales, gastronomía, servicios, zonas comunes y otros aspectos de Girardot Express. Indícame qué deseas conocer o usa el botón para hablar con nuestro equipo comercial.',
-    actions: [advisorAction],
+    answer: `Escríbenos por WhatsApp al ${SITE_CONTENT.whatsappLabel} o al correo ${SITE_CONTENT.email} para recibir orientación. Las novedades del proyecto también están en Instagram como ${SITE_CONTENT.socialHandle}.`,
+    actions: [advisorAction, { label: 'Enviar correo', href: `mailto:${SITE_CONTENT.email}` }],
   },
-  {
-    question: '¿Qué servicios tendrá Girardot Express?',
-    audience: 'visitor',
-    keywords: ['servicios', 'zonas comunes', 'amenidades', 'coworking', 'parque infantil', 'vigilancia', 'seguridad'],
-    answer:
-      'Girardot Express contará con plazoleta de comidas, espacios de coworking, parque infantil, zona para mascotas y facilidades de parqueo. También tendrá ascensores, escaleras eléctricas, rampas peatonales, vigilancia, circuito cerrado de televisión y sistemas de respaldo y seguridad.',
-  },
-  {
-    question: '¿Girardot Express será pet friendly?',
-    audience: 'visitor',
-    keywords: ['mascotas', 'perros', 'pet friendly', 'animales'],
-    answer:
-      'El proyecto contempla un espacio para mascotas. Las condiciones de ingreso y uso de estos espacios serán informadas oficialmente antes de la apertura.',
-  },
-  {
-    question: '¿Habrá puntos de carga para vehículos eléctricos?',
-    audience: 'visitor',
-    keywords: ['electrolinera', 'carga electrica', 'carga para vehiculos', 'carro electrico', 'vehiculo electrico', 'vehiculos electricos', 'cargador ev', 'cargadores'],
-    answer:
-      'Sí. Girardot Express contempla infraestructura de carga para vehículos eléctricos como parte de sus servicios y de su enfoque hacia una movilidad más sostenible.',
-  },
-  {
-    question: '¿El proyecto tendrá facilidades de accesibilidad y movilidad?',
-    audience: 'visitor',
-    keywords: ['accesibilidad', 'movilidad reducida', 'rampas', 'ascensores', 'escaleras electricas', 'discapacidad', 'silla de ruedas'],
-    answer:
-      'Sí. El diseño contempla facilidades de circulación y acceso, como rampas peatonales, ascensores y escaleras eléctricas, para hacer más cómodo el recorrido entre los diferentes espacios del mall.',
-  },
-  {
-    question: '¿Girardot Express es un proyecto sostenible con el medio ambiente?',
-    keywords: ['sostenibilidad', 'sostenible', 'iluminacion natural', 'ventilacion', 'ecoeficiente', 'medio ambiente'],
-    answer:
-      'Girardot Express ha sido concebido con un enfoque de funcionalidad y sostenibilidad. Su propuesta incorpora iluminación natural, ventilación cruzada, áreas abiertas y materiales ecoeficientes, buscando mayor confort y una mejor integración con el entorno.',
-  },
-  {
-    question: '¿Por qué Girardot Express es una oportunidad para mi negocio?',
-    audience: 'commercial',
-    keywords: ['oportunidad para mi negocio', 'oportunidad comercial', 'por que alquilar', 'por que arrendar', 'por que invertir en el proyecto', 'expansion de mi negocio', 'via nacional'],
-    shortQueries: ['oportunidad', 'expansion'],
-    answer: `Girardot Express es una oportunidad para posicionar tu negocio donde la ciudad está creciendo. Su ubicación en una zona de expansión, sobre una vía nacional de alto tráfico, su fácil acceso, cercanía con Bogotá y amplia fachada ofrecen exposición para nuevos formatos comerciales. Reunirá compras, gastronomía, servicios, bienestar y experiencias para residentes y visitantes. ${SITE_CONTENT.openingLabel}.`,
-    actions: [portfolioAction],
-  },
+];
+
+const chatbotIntents: readonly ChatbotIntent[] = [
+  ...FAQ_ITEMS,
   {
     // La opción de inversión necesita orientación comercial; no implica venta ni rentabilidad.
     question: 'Inversión en el Proyecto',
@@ -259,16 +217,13 @@ export const CHATBOT_QUICK_ACTIONS: readonly ChatbotQuickAction[] = [
   { label: 'Hablar con un asesor', prompt: '¿Cómo puedo comunicarme con un asesor?' },
 ];
 
-export type FaqAudience = 'visitor' | 'commercial';
-
-// The canonical client questions are also the public FAQ. The additional
-// investment intent remains in the assistant's commercial guidance.
-export const FAQ_ITEMS = chatbotIntents.filter(intent => intent.question !== 'Inversión en el Proyecto');
-
 export function searchFaq(query: string, audience: FaqAudience | 'all' = 'all') {
   const words = normalize(query).split(' ').filter(Boolean);
   return FAQ_ITEMS.filter(item => {
-    const content = normalize(`${item.question} ${item.answer} ${item.keywords.join(' ')}`);
+    const content = normalize([
+      item.question, item.answer, ...(item.relatedQuestions ?? []),
+      ...item.keywords, ...(item.shortQueries ?? []),
+    ].join(' '));
     return (audience === 'all' || !item.audience || item.audience === audience)
       && words.every(word => content.includes(word));
   });
@@ -320,7 +275,8 @@ function matchIntent(input: string): { intent?: ChatbotIntent; score: number } {
   for (const intent of chatbotIntents) {
     const score = intent.shortQueries?.some((phrase) => input === normalize(phrase))
       ? 1000
-      : Math.max(...[intent.question, ...intent.keywords].map((phrase) => keywordScore(input, phrase)));
+      : Math.max(...[intent.question, ...(intent.relatedQuestions ?? []), ...intent.keywords]
+        .map((phrase) => keywordScore(input, phrase)));
 
     if (score > bestScore) {
       bestScore = score;

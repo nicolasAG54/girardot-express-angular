@@ -1,0 +1,30 @@
+<div class="location-map">
+  <div class="location-map__frame" [attr.aria-busy]="status() === 'loading' || status() === 'idle'">
+    <div #mapCanvas class="location-map__canvas" role="region"
+      aria-label="Mapa de Girardot Express y sus puntos de referencia"
+      aria-description="Usa las flechas para desplazarte y los botones para acercar o alejar. Cada punto muestra su nombre y más información al seleccionarlo."></div>
+
+    @if (hasMap()) {
+      <button class="location-map__reset" type="button" [disabled]="zooming()" (click)="resetView()" aria-label="Ver todos los puntos del mapa">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M8 12h8M12 8v8" /></svg>
+        Ver todo
+      </button>
+    }
+
+    @if (status() === 'idle' || status() === 'loading') {
+      <div class="location-map__status" role="status"><span>Cargando mapa de Girardot…</span></div>
+    }
+    @if (status() === 'error' || status() === 'slow') {
+      <div class="location-map__notice" role="status">
+        <span>{{ status() === 'slow' ? 'El mapa está tardando en cargar.' : 'No pudimos cargar el mapa.' }}</span>
+        <button type="button" (click)="reloadMap()">Volver a cargar</button>
+      </div>
+    }
+  </div>
+  <div class="location-map__caption">
+    <p><span class="location-map__legend" aria-hidden="true"></span>Girardot Express y su entorno</p>
+    <a [href]="content.mapsUrl" target="_blank" rel="noopener">Abrir en Google Maps
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
+    </a>
+  </div>
+</div>

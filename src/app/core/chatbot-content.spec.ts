@@ -12,22 +12,22 @@ describe('chatbot content', () => {
     ['¿Hay locales disponibles?', 'construcción y comercialización'],
     ['¿Cuánto cuesta un local?', 'condiciones comerciales dependen'],
     ['¿Qué tamaños de locales tienen disponibles?', 'distintos formatos'],
-    ['Tengo un negocio y estoy interesado en un local', 'Nos encantará conocer tu negocio'],
+    ['Tengo un negocio y estoy interesado en un local', 'Comparte tu tipo de negocio'],
     ['¿Cómo puedo separar o reservar un local?', 'reserva o vinculación'],
-    ['¿Qué marcas estarán en Girardot Express?', 'mezcla comercial pensada'],
+    ['¿Qué marcas estarán en Girardot Express?', 'marcas y los operadores están por confirmar'],
     ['¿Cuándo abre Girardot Express?', SITE_CONTENT.openingLabel],
     ['¿Puedo conocer el proyecto antes de adquirir un local?', 'coordinar una reunión'],
     ['¿Girardot Express tendrá restaurantes o plazoleta de comidas?', 'conceptos gastronómicos'],
     ['¿Girardot Express tendrá parqueaderos?', 'parqueo para motos, bicicletas, carros'],
     ['¿Dónde puedo ver los planos o encontrar información de los espacios disponibles?', 'solicitar el portafolio comercial'],
     ['¿Cómo puedo comunicarme con Girardot Express?', SITE_CONTENT.whatsappLabel],
-    ['Quiero recibir más información de Girardot Express', 'Indícame qué deseas conocer'],
+    ['Quiero recibir más información de Girardot Express', SITE_CONTENT.whatsappLabel],
     ['¿Qué servicios tendrá Girardot Express?', 'coworking'],
     ['¿Girardot Express será pet friendly?', 'condiciones de ingreso'],
     ['¿Habrá puntos de carga para vehículos eléctricos?', 'infraestructura de carga'],
     ['¿El proyecto tendrá facilidades de accesibilidad y movilidad?', 'facilidades de circulación'],
     ['¿Girardot Express es un proyecto sostenible con el medio ambiente?', 'ventilación cruzada'],
-    ['¿Por qué Girardot Express es una oportunidad para mi negocio?', 'posicionar tu negocio'],
+    ['¿Por qué Girardot Express es una oportunidad para mi negocio?', 'oportunidades para tu negocio'],
   ];
 
   it.each(documentQuestions)('answers the client question: %s', (question, expected) => {
@@ -39,7 +39,7 @@ describe('chatbot content', () => {
     ['TAMANO de un LOCAL en m²', 'distintos formatos'],
     ['Que tamanos tienen los locales?', 'distintos formatos'],
     ['¿Cuánto vale el local?', 'condiciones comerciales dependen'],
-    ['Quiero conocer qué marcas tendrán locales', 'mezcla comercial pensada'],
+    ['Quiero conocer qué marcas tendrán locales', 'marcas y los operadores están por confirmar'],
     ['Necesito carga para mi vehículo eléctrico', 'infraestructura de carga'],
     ['¿Puedo ingresar con mi perro? ¿Es pet friendly?', 'condiciones de ingreso'],
     ['¿Hay rampas para una silla de ruedas?', 'facilidades de circulación'],
@@ -103,7 +103,15 @@ describe('chatbot content', () => {
     expect(findChatbotReply('apertura').answer).toContain('Primera etapa: apertura prevista');
     expect(findChatbotReply('apertura').answer).toContain('finales de 2026');
     expect(findChatbotReply('pet friendly').answer).toContain('serán informadas oficialmente');
+    expect(findChatbotReply('carga electrica').answer).toContain('alcance y fecha de operación están por confirmar');
+    expect(findChatbotReply('marcas').answer).toContain('el directorio se publicará cuando estén confirmados');
   });
+
+  it.each(['precios y tamaños de locales', 'mascotas y accesibilidad'])(
+    'answers related subjects together using their consolidated answer: %s', (query) => {
+      expect(findChatbotReply(query)).not.toBe(CHATBOT_FALLBACK_REPLY);
+    },
+  );
 
   it('uses one consistent location and approved contact details', () => {
     const mapAction = findChatbotReply('ubicacion').actions![0];

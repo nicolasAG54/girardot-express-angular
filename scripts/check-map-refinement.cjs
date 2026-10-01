@@ -1,5 +1,45 @@
-const {chromium}=require('playwright'); const assert=require('node:assert/strict');const fs=require('node:fs');
-(async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.BROWSER_EXECUTABLE});fs.mkdirSync('../.codex_artifacts/v3-map-refinement',{recursive:true});const results=[];
-for(const width of [1440,390])for(const route of ['/#ubicacion','/proyecto#ubicacion-proyecto']){const page=await browser.newPage({viewport:{width,height:960},reducedMotion:'reduce'});await page.goto('http://127.0.0.1:4300'+route);const map=page.locator('app-location-map');await map.scrollIntoViewIfNeeded();await page.waitForTimeout(7000);const info=await map.locator('iframe').evaluate(e=>({height:e.getBoundingClientRect().height,filter:getComputedStyle(e).filter,overflow:document.documentElement.scrollWidth-innerWidth}));assert.equal(info.overflow,0);assert.equal(info.height,route.includes('proyecto')?(width===1440?520:360):(width===1440?380:320));assert.equal(info.filter,'none');const prefix=`${width}-${route.includes('proyecto')?'project':'home'}`;await page.screenshot({path:`../.codex_artifacts/v3-map-refinement/${prefix}.png`});assert.equal(await map.getByRole('button',{name:'Terminal',exact:true}).isVisible(),true);await map.getByRole('button',{name:'Terminal',exact:true}).click();await page.waitForFunction(()=>document.querySelector('app-location-map iframe').src.includes('Terminal'));assert.ok((await map.getByRole('link',{name:'Abrir mapa'}).getAttribute('href')).includes('Terminal'));await page.screenshot({path:`../.codex_artifacts/v3-map-refinement/${prefix}-open.png`});results.push({width,route,...info});await page.close();}await browser.close();console.log(JSON.stringify(results));})().catch(e=>{console.error(e);process.exit(1)});
+const { chromium } = require('playwright');
+const assert = require('node:assert/strict');
+const base = process.env.BASE_URL || 'http://127.0.0.1:4300';
+const tile = '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e9eddf"/></svg>';
 
-
+(async () => {
+  const browser = await chromium.launch({ headless: true, executablePath: process.env.BROWSER_EXECUTABLE });
+  const results = [];
+  try {
+    for (const width of [1440, 768, 390, 320]) {
+      for (const route of ['/#ubicacion', '/proyecto#ubicacion-proyecto']) {
+        const page = await browser.newPage({ viewport: { width, height: 960 }, reducedMotion: 'reduce' });
+        // Functional layout tests never bulk-fetch map tiles from the public service.
+        await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: tile }));
+        await page.goto(base + route);
+        const map = page.locator('app-location-map');
+        await map.scrollIntoViewIfNeeded();
+        await map.locator('.leaflet-container').waitFor();
+        await map.locator('.location-map__status').waitFor({ state: 'hidden' });
+        const info = await map.evaluate(element => {
+          const canvas = element.querySelector('.location-map__canvas').getBoundingClientRect();
+          const labels = [...element.querySelectorAll('.location-marker__label')].map(label => {
+            const bounds = label.getBoundingClientRect();
+            return { text: label.textContent, left: bounds.left, right: bounds.right, top: bounds.top, bottom: bounds.bottom };
+          });
+          const overlaps = labels.flatMap((a, i) => labels.slice(i + 1).filter(b => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top).map(b => [a.text, b.text]));
+          const clipped = labels.filter(label => label.left < canvas.left || label.right > canvas.right || label.top < canvas.top || label.bottom > canvas.bottom).map(label => label.text);
+          return { height: canvas.height, overflow: document.documentElement.scrollWidth - innerWidth, labels, overlaps, clipped, filter: getComputedStyle(element.querySelector('.leaflet-tile-pane')).filter };
+        });
+        assert.equal(info.overflow, 0);
+        assert.equal(info.height, width > 700 ? 540 : 440);
+        assert.equal(info.filter, 'none');
+        assert.equal(info.labels.length, 5);
+        assert.deepEqual(info.overlaps, [], `${width} ${route}: overlapping labels; ${JSON.stringify(info.labels)}`);
+        assert.deepEqual(info.clipped, [], `${width} ${route}: clipped labels`);
+        assert.equal(await map.locator('.location-map__choices').count(), 0);
+        results.push({ width, route, ...info });
+        await page.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  console.log(JSON.stringify(results, null, 2));
+})().catch(error => { console.error(error); process.exitCode = 1; });

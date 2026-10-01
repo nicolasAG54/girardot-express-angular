@@ -1,0 +1,32 @@
+@import 'leaflet/dist/leaflet.css';
+
+// Leaflet creates these elements outside Angular's style scoping.
+app-location-map {
+  .leaflet-container { background: #e9eddf; font-family: Poppins, 'Segoe UI', sans-serif; }
+  .leaflet-control-zoom { overflow: hidden; border: 0; border-radius: 8px; box-shadow: 0 3px 12px rgb(24 35 19 / .18); }
+  .leaflet-control-zoom a { width: 44px; height: 44px; line-height: 44px; color: #20251d; }
+  .leaflet-bottom .leaflet-control-zoom { margin: 0 16px 16px 0; }
+  .leaflet-control-attribution { background: rgb(255 255 255 / .94); font-size: 10px; color: #263421; }
+  .leaflet-control-attribution a { color: #176e78; }
+  .leaflet-container:focus-visible, .leaflet-marker-icon:focus-visible { outline: 3px solid #176e78; outline-offset: 3px; }
+  .location-marker { border: 0; background: transparent; }
+  .location-marker__content { display: block; position: relative; width: 44px; height: 44px; }
+  .location-marker__dot { position: absolute; left: 15px; top: 15px; width: 14px; height: 14px; border: 3px solid white; border-radius: 50%; background: #176e78; box-shadow: 0 2px 5px rgb(24 35 19 / .28); }
+  .location-marker__label { position: absolute; display: block; width: max-content; max-width: 160px; padding: 5px 8px; border-radius: 5px; background: white; color: #263421; box-shadow: 0 2px 7px rgb(24 35 19 / .2); font-size: 11px; font-weight: 600; line-height: 1.35; white-space: nowrap; }
+  .location-marker__label--above { left: 22px; bottom: 34px; transform: translateX(-50%); }
+  .location-marker__label--below { left: 22px; top: 34px; transform: translateX(-50%); }
+  .location-marker__label--left { right: 34px; top: 22px; transform: translateY(-50%); }
+  .location-marker__label--right { left: 34px; top: 22px; transform: translateY(-50%); }
+  .location-marker--mall .location-marker__dot { left: 10px; top: 10px; width: 24px; height: 24px; border-width: 4px; background: #f3b71a; box-shadow: 0 3px 9px rgb(24 35 19 / .3); }
+  .location-marker--mall .location-marker__label { max-width: none; padding: 9px 13px; background: #20251d; color: white; font-size: 14px; }
+  .location-marker--mall .location-marker__label--below { top: 44px; }
+  .location-road { pointer-events: none; }
+  .location-road span { display: block; transform: rotate(-43deg); color: #764900; text-shadow: 0 1px 1px #fff, 1px 0 1px #fff, 0 -1px 1px #fff, -1px 0 1px #fff; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 5px 18px rgb(24 35 19 / .2); }
+  .location-popup .leaflet-popup-content { margin: 20px; font-size: 12px; line-height: 1.6; color: #263421; }
+  .location-popup strong { display: block; padding-right: 8px; font-size: 14px; line-height: 1.35; }
+  .location-popup p { margin: 10px 0; }
+  .location-popup a { color: #176e78; text-underline-offset: 3px; }
+  .location-popup .leaflet-popup-close-button { width: 32px; height: 32px; line-height: 32px; color: #263421; }
+  @media (max-width: 600px) { .location-marker__label { font-size: 10px; padding: 4px 6px; } .location-marker--mall .location-marker__label { font-size: 12px; padding: 8px 10px; } }
+}

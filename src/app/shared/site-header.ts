@@ -199,7 +199,7 @@ export class SiteHeader {
   @HostListener('window:resize')
   protected realignNavigationIndicator(): void {
     this.clearDestination();
-    if (window.innerWidth > 1280) this.closeMenu();
+    if (window.innerWidth > 1360) this.closeMenu();
     this.scheduleSectionTracking(this.router.url);
     this.scheduleNavigationIndicator();
   }
