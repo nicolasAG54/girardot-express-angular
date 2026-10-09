@@ -190,8 +190,8 @@ export const FAQ_ITEMS: readonly ChatbotIntent[] = [
       'mas informacion', 'quiero informacion', 'recibir informacion', 'estoy interesado',
     ],
     shortQueries: ['informacion', 'novedades'],
-    answer: `Escríbenos por WhatsApp al ${SITE_CONTENT.whatsappLabel} o al correo ${SITE_CONTENT.email} para recibir orientación. Las novedades del proyecto también están en Instagram como ${SITE_CONTENT.socialHandle}.`,
-    actions: [advisorAction, { label: 'Enviar correo', href: `mailto:${SITE_CONTENT.email}` }],
+    answer: `Escríbenos por WhatsApp al ${SITE_CONTENT.whatsappLabel}${SITE_CONTENT.email ? ` o al correo ${SITE_CONTENT.email}` : ''} para recibir orientación. Las novedades del proyecto también están en Instagram como ${SITE_CONTENT.socialHandle}.`,
+    actions: [advisorAction, ...(SITE_CONTENT.email ? [{ label: 'Enviar correo', href: `mailto:${SITE_CONTENT.email}` }] : [])],
   },
 ];
 

@@ -19,7 +19,9 @@
     </div>
     <div class="footer-group">
       <h2>Conversemos</h2>
-      <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      @if (site.email) {
+        <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      }
       <a [href]="site.whatsappUrl" target="_blank" rel="noopener">WhatsApp {{ site.whatsappLabel }}</a>
       <a routerLink="/proyecto" fragment="contacto-comercial">Información comercial</a>
     </div>
@@ -29,6 +31,12 @@
     </div>
   </div>
   <p class="footer-statement">Un lugar para resolver.<br /><span>Y tiempo para disfrutar.</span></p>
+  <nav class="footer-legal" aria-label="Privacidad e información legal">
+    <a routerLink="/privacidad">Privacidad</a>
+    <a routerLink="/cookies">Cookies y servicios externos</a>
+    <a routerLink="/terminos">Términos de uso</a>
+    <a routerLink="/privacidad" fragment="solicitudes">Solicitudes sobre tus datos</a>
+  </nav>
   <div class="footer-bottom">
     <p>© {{ year }} Girardot Express</p>
     <p>{{ site.address }}</p>

@@ -26,6 +26,11 @@ interface ChatMessage {
   readonly actions?: readonly ChatbotAction[];
 }
 
+const INITIAL_MESSAGES: Record<FaqAudience, readonly ChatMessage[]> = {
+  visitor: [{ id: 0, role: 'assistant', text: 'Hola. Te ayudo a conocer la apertura, los servicios y cómo llegar a Girardot Express.' }],
+  commercial: [{ id: 1, role: 'assistant', text: 'Hola. Conversemos sobre tu marca: formatos, espacios disponibles y contacto con el equipo comercial.' }],
+};
+
 @Component({
   selector: 'app-chatbot-widget',
   templateUrl: './chatbot-widget.html',
@@ -44,12 +49,10 @@ export class ChatbotWidget {
 
   protected readonly isOpen = signal(false);
   protected readonly draft = signal('');
+  protected readonly cleared = signal(false);
   protected readonly audience = signal<FaqAudience>('visitor');
   private hasChosenAudience = false;
-  private readonly histories = signal<Record<FaqAudience, readonly ChatMessage[]>>({
-    visitor: [{ id: 0, role: 'assistant', text: 'Hola. Te ayudo a conocer la apertura, los servicios y cómo llegar a Girardot Express.' }],
-    commercial: [{ id: 1, role: 'assistant', text: 'Hola. Conversemos sobre tu marca: formatos, espacios disponibles y contacto con el equipo comercial.' }],
-  });
+  private readonly histories = signal<Record<FaqAudience, readonly ChatMessage[]>>(INITIAL_MESSAGES);
   private readonly drafts = { visitor: '', commercial: '' };
   protected readonly messages = computed(() => this.histories()[this.audience()]);
   protected readonly quickActions = computed<readonly ChatbotQuickAction[]>(() => this.audience() === 'commercial'
@@ -113,6 +116,17 @@ export class ChatbotWidget {
     this.scheduleConversationScroll();
   }
 
+  protected clearConversation(): void {
+    this.histories.set(INITIAL_MESSAGES);
+    this.drafts.visitor = '';
+    this.drafts.commercial = '';
+    this.draft.set('');
+    this.nextMessageId = 2;
+    this.cleared.set(true);
+    this.scheduleInputFocus();
+    this.scheduleConversationScroll();
+  }
+
   protected openFaq(event: MouseEvent): void {
     this.handleAction({ label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' }, event);
   }
@@ -132,6 +146,8 @@ export class ChatbotWidget {
   private sendQuestion(rawQuestion: string): void {
     const question = rawQuestion.trim();
     if (!question) return;
+
+    this.cleared.set(false);
 
     const reply = findChatbotReply(question);
     const audience = this.audience();

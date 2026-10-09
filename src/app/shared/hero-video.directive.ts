@@ -99,6 +99,15 @@ export class HeroVideoDirective {
     this.playing.set(true);
   }
 
+  @HostListener('loadeddata')
+  protected onLoadedData(): void {
+    // Bound <source> URLs can briefly be empty while a route is mounted.
+    // A decoded frame proves the selected resource recovered; keep respecting
+    // explicit Pause, reduced motion and viewport visibility when retrying.
+    this.needsReload = false;
+    this.syncPlayback();
+  }
+
   @HostListener('pause')
   @HostListener('waiting')
   @HostListener('ended')

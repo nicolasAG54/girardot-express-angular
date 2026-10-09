@@ -20,6 +20,7 @@ describe('SiteHeader', () => {
         provideRouter([
           { path: '', component: EmptyRoute },
           { path: 'proyecto', component: EmptyRoute },
+          { path: 'privacidad', component: EmptyRoute },
         ]),
       ],
     }).compileComponents();
@@ -96,5 +97,15 @@ describe('SiteHeader', () => {
     expect(menuButton.getAttribute('aria-expanded')).toBe('false');
     expect(element.querySelector('.primary-nav')?.classList.contains('is-open')).toBe(false);
     expect(document.activeElement).toBe(menuButton);
+  });
+
+  it('does not mark a Home section as active on a legal page, including a direct fragment', async () => {
+    await router.navigateByUrl('/privacidad#solicitudes');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('.context-nav a.is-active')).toBeNull();
+    await router.navigateByUrl('/#contacto');
+    fixture.detectChanges();
+    expect(element.querySelector('.context-nav a.is-active')?.textContent?.trim()).toBe('Contacto');
   });
 });

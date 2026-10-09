@@ -2,7 +2,7 @@
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 label { display: grid; gap: 0.45rem; color: inherit; font-size: 0.78rem; font-weight: 600; }
 label span em { margin-left: 0.35rem; color: var(--ink-soft); font-size: 0.72rem; font-style: normal; font-weight: 500; }
-input, select, textarea { width: 100%; border: 1px solid rgb(10 10 10 / 0.2); border-radius: 8px; background: var(--white); color: var(--ink); padding: 0.9rem 0.95rem; font: inherit; font-weight: 500; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease; }
+input, select, textarea { width: 100%; border: 1px solid #868683; border-radius: 8px; background: var(--white); color: var(--ink); padding: 0.9rem 0.95rem; font: inherit; font-weight: 500; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease; }
 textarea { resize: vertical; }
 input::placeholder, textarea::placeholder { color: #696969; opacity: 1; }
 input:focus, select:focus, textarea:focus { border-color: #887c00; box-shadow: 0 0 0 3px rgb(244 223 0 / 0.28); }
@@ -11,6 +11,11 @@ input:focus, select:focus, textarea:focus { border-color: #887c00; box-shadow: 0
 small { color: var(--error); font-size: 0.75rem; font-weight: 650; }
 .consent-error { margin-top: -0.65rem; }
 .contact-form .button { justify-self: start; margin-top: 0.25rem; }
+.privacy-link { display: inline-flex; align-items: center; justify-self: start; min-height: 44px; color: var(--teal-deep); font-size: .78rem; text-underline-offset: .25em; }
+.form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+.form-clear { min-height: 44px; border: 0; padding: .5rem 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: .78rem; text-decoration: underline; text-underline-offset: .25em; cursor: pointer; }
+.form-clear-status { margin: 0; color: var(--ink-soft); font-size: .78rem; line-height: 1.6; }
+.form-clear-status:empty { display: none; }
 .form-note { margin: -0.35rem 0 0; color: var(--ink-soft); font-size: 0.74rem; }
 @media (max-width: 620px) { .field-row { grid-template-columns: 1fr; } .contact-form .button { width: 100%; } }
 

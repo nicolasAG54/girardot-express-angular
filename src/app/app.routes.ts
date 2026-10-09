@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 import { routeTransition } from './core/route-transition';
 
 export const routes: Routes = [
+  ...([
+    ['privacidad', 'privacy'],
+    ['cookies', 'cookies'],
+    ['terminos', 'terms'],
+  ] as const).map(([path, document]) => ({
+    path,
+    data: { document },
+    loadComponent: () => import('./pages/legal/legal').then((module) => module.Legal),
+  })),
   {
     path: 'preguntas-frecuentes',
     loadComponent: () => import('./pages/faq/faq').then((module) => module.Faq),

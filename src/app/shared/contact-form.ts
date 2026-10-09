@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnChanges, inject, signal } from '@angula
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SITE_CONTENT } from '../core/site-content';
+import { CONTACT_AUTHORIZATION, CONTACT_LIMITS, LEGAL_CONTENT } from '../core/legal-content';
 
 @Component({
   selector: 'app-contact-form',
@@ -13,17 +14,20 @@ export class ContactForm implements OnChanges {
   @Input() context: 'general' | 'commercial' = 'general';
 
   protected readonly submitted = signal(false);
+  protected readonly cleared = signal(false);
   protected readonly site = SITE_CONTENT;
+  protected readonly authorization = CONTACT_AUTHORIZATION;
+  protected readonly limits = CONTACT_LIMITS;
   protected readonly form = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    phone: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    company: new FormControl('', { nonNullable: true }),
-    role: new FormControl('', { nonNullable: true }),
-    category: new FormControl('', { nonNullable: true }),
-    area: new FormControl('', { nonNullable: true }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(CONTACT_LIMITS.name)] }),
+    phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(CONTACT_LIMITS.phone)] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email, Validators.maxLength(CONTACT_LIMITS.email)] }),
+    company: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(CONTACT_LIMITS.company)] }),
+    role: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(CONTACT_LIMITS.role)] }),
+    category: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(CONTACT_LIMITS.category)] }),
+    area: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(CONTACT_LIMITS.area)] }),
     interest: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    message: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    message: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(CONTACT_LIMITS.message)] }),
     consent: new FormControl(false, { nonNullable: true, validators: [Validators.requiredTrue] }),
   });
   private readonly hostElement = inject(ElementRef) as ElementRef<HTMLElement>;
@@ -31,12 +35,16 @@ export class ContactForm implements OnChanges {
   ngOnChanges(): void {
     for (const name of ['company', 'role', 'category', 'area'] as const) {
       const control = this.form.controls[name];
-      control.setValidators(this.context === 'commercial' ? [Validators.required] : []);
+      control.setValidators([
+        Validators.maxLength(CONTACT_LIMITS[name]),
+        ...(this.context === 'commercial' ? [Validators.required] : []),
+      ]);
       control.updateValueAndValidity({ emitEvent: false });
     }
   }
 
   protected openWhatsApp(): void {
+    this.cleared.set(false);
     this.submitted.set(true);
 
     if (this.form.invalid) {
@@ -63,6 +71,9 @@ export class ContactForm implements OnChanges {
         `Categoría del negocio: ${value.category}`, `Área requerida: ${value.area}`,
       ] : []),
       value.message,
+      '',
+      `Autorización de contacto (${LEGAL_CONTENT.version}): ${CONTACT_AUTHORIZATION}`,
+      'Información de privacidad: https://girardotexpress.com.co/privacidad',
     ]
       .filter(Boolean)
       .join('\n');
@@ -70,7 +81,14 @@ export class ContactForm implements OnChanges {
     window.open(
       `${this.site.whatsappUrl}?text=${encodeURIComponent(message)}`,
       '_blank',
-      'noopener',
+      'noopener,noreferrer',
     );
+  }
+
+  protected clearForm(): void {
+    this.form.reset();
+    this.submitted.set(false);
+    this.cleared.set(true);
+    this.hostElement.nativeElement.querySelector<HTMLInputElement>('#contact-name')?.focus();
   }
 }

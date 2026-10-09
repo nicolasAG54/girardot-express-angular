@@ -4,6 +4,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { SITE_CONTENT } from '../../core/site-content';
+import { SITE_MEDIA } from '../../core/site-media';
 import { LocationMap } from '../../shared/location-map';
 import { ContactForm } from '../../shared/contact-form';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
@@ -20,6 +21,7 @@ export class Home {
   @ViewChild('galleryDialog') private galleryDialog?: ElementRef<HTMLDialogElement>;
 
   protected readonly site = SITE_CONTENT;
+  protected readonly media = SITE_MEDIA;
   protected readonly galleryIndex = signal(0);
   protected readonly brandCategories = [
     { name: 'Compras', title: 'Lo que necesitas para tu día a día.', description: 'Comercios y formatos pensados para hacer tus compras cerca de casa.' },
@@ -29,9 +31,11 @@ export class Home {
     { name: 'Experiencias', title: 'Tiempo para encontrarnos.', description: 'Lugares para compartir, trabajar y disfrutar con los tuyos.' },
   ] as const;
   protected readonly gallery = [
-    { src: 'assets/render-1.webp', title: 'Espacios para encontrarnos.', alt: 'Render de la plazoleta abierta y los recorridos comerciales de Girardot Express', width: 1765, height: 904 },
-    { src: 'assets/render-3.webp', title: 'Todo más cerca.', alt: 'Render de la fachada y los accesos del centro comercial Girardot Express', width: 1765, height: 898 },
-    { src: 'assets/vida-cotidiana.webp', title: 'Diseñado para recorrerlo fácilmente.', alt: 'Visualización de los espacios peatonales previstos en Girardot Express', width: 1280, height: 720 },
+    SITE_MEDIA.courtyard,
+    SITE_MEDIA.facade,
+    SITE_MEDIA.promenade,
+    SITE_MEDIA.entrance,
+    SITE_MEDIA.aerial,
   ] as const;
   protected readonly selectedImage = computed(() => this.gallery[this.galleryIndex()]);
 

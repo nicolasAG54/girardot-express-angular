@@ -7,6 +7,7 @@
         formControlName="name"
         id="contact-name"
         autocomplete="name"
+        [maxlength]="limits.name"
         required
         aria-required="true"
         placeholder="¿Cómo te llamas?"
@@ -25,6 +26,7 @@
         formControlName="phone"
         id="contact-phone"
         autocomplete="tel"
+        [maxlength]="limits.phone"
         required
         aria-required="true"
         placeholder="Tu número de contacto"
@@ -44,6 +46,7 @@
       formControlName="email"
       id="contact-email"
       autocomplete="email" required aria-required="true"
+      [maxlength]="limits.email"
       placeholder="nombre@correo.com"
       [attr.aria-invalid]="submitted() && form.controls.email.invalid ? 'true' : null"
       [attr.aria-describedby]="submitted() && form.controls.email.invalid ? 'contact-email-error' : null"
@@ -54,10 +57,10 @@
   </label>
 
   @if (context === 'commercial') {
-    <fieldset class="commercial-fields"><legend>Acerca de tu negocio</legend><div class="field-row"><label><span>Empresa o marca</span><input id="contact-company" formControlName="company" type="text" autocomplete="organization" placeholder="Nombre de tu negocio" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.company.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.company.invalid ? 'contact-company-error' : null" />@if (submitted() && form.controls.company.invalid) {<small id="contact-company-error" role="alert">Completa este campo.</small>}</label>
-<label><span>Cargo</span><input id="contact-role" formControlName="role" type="text" autocomplete="organization-title" placeholder="Tu rol en la empresa" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.role.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.role.invalid ? 'contact-role-error' : null" />@if (submitted() && form.controls.role.invalid) {<small id="contact-role-error" role="alert">Completa este campo.</small>}</label>
-<label><span>Categoría del negocio</span><input id="contact-category" formControlName="category" type="text" autocomplete="off" placeholder="Ej. moda, gastronomía, salud" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.category.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.category.invalid ? 'contact-category-error' : null" />@if (submitted() && form.controls.category.invalid) {<small id="contact-category-error" role="alert">Completa este campo.</small>}</label>
-<label><span>Área requerida</span><input id="contact-area" formControlName="area" type="text" autocomplete="off" placeholder="Ej. 60 m² o necesito orientación" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.area.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.area.invalid ? 'contact-area-error' : null" />@if (submitted() && form.controls.area.invalid) {<small id="contact-area-error" role="alert">Completa este campo.</small>}</label>
+    <fieldset class="commercial-fields"><legend>Acerca de tu negocio</legend><div class="field-row"><label><span>Empresa o marca</span><input id="contact-company" [maxlength]="limits.company" formControlName="company" type="text" autocomplete="organization" placeholder="Nombre de tu negocio" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.company.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.company.invalid ? 'contact-company-error' : null" />@if (submitted() && form.controls.company.invalid) {<small id="contact-company-error" role="alert">Completa este campo.</small>}</label>
+<label><span>Cargo</span><input id="contact-role" [maxlength]="limits.role" formControlName="role" type="text" autocomplete="organization-title" placeholder="Tu rol en la empresa" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.role.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.role.invalid ? 'contact-role-error' : null" />@if (submitted() && form.controls.role.invalid) {<small id="contact-role-error" role="alert">Completa este campo.</small>}</label>
+<label><span>Categoría del negocio</span><input id="contact-category" [maxlength]="limits.category" formControlName="category" type="text" autocomplete="off" placeholder="Ej. moda, gastronomía, salud" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.category.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.category.invalid ? 'contact-category-error' : null" />@if (submitted() && form.controls.category.invalid) {<small id="contact-category-error" role="alert">Completa este campo.</small>}</label>
+<label><span>Área requerida</span><input id="contact-area" [maxlength]="limits.area" formControlName="area" type="text" autocomplete="off" placeholder="Ej. 60 m² o necesito orientación" required aria-required="true" [attr.aria-invalid]="submitted() && form.controls.area.invalid ? 'true' : null" [attr.aria-describedby]="submitted() && form.controls.area.invalid ? 'contact-area-error' : null" />@if (submitted() && form.controls.area.invalid) {<small id="contact-area-error" role="alert">Completa este campo.</small>}</label>
 </div></fieldset>
   }
   <label>
@@ -97,6 +100,7 @@
       formControlName="message"
       id="contact-message"
       rows="4"
+      [maxlength]="limits.message"
       required
       aria-required="true"
       placeholder="Escribe aquí tu consulta"
@@ -118,12 +122,17 @@
       [attr.aria-invalid]="submitted() && form.controls.consent.invalid ? 'true' : null"
       [attr.aria-describedby]="submitted() && form.controls.consent.invalid ? 'contact-consent-error' : null"
     />
-    <span>Acepto que mis datos sean usados para responder esta solicitud.</span>
+    <span>{{ authorization }}</span>
   </label>
   @if (submitted() && form.controls.consent.invalid) {
     <small id="contact-consent-error" class="consent-error" role="alert">Necesitamos tu autorización para continuar.</small>
   }
 
-  <button class="button button-primary" type="submit">Continuar por WhatsApp</button>
-  <p class="form-note">Se abrirá WhatsApp con tu consulta preparada. Allí podrás revisarla y enviarla al equipo.</p>
+  <a class="privacy-link" href="/privacidad" target="_blank" rel="noopener noreferrer">Leer información de privacidad (otra pestaña)</a>
+  <div class="form-actions">
+    <button class="button button-primary" type="submit">Continuar por WhatsApp</button>
+    <button class="form-clear" type="button" (click)="clearForm()">Borrar formulario</button>
+  </div>
+  <p class="form-note">Al continuar, WhatsApp recibe los datos del borrador. Puedes revisarlo allí; el equipo lo recibe cuando envías el mensaje.</p>
+  <p class="form-clear-status" role="status">{{ cleared() ? 'Los datos del formulario se borraron de esta página.' : '' }}</p>
 </form>

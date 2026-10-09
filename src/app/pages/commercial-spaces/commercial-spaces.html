@@ -81,7 +81,9 @@
     <div class="contact-copy">
       <h2>Hablemos del espacio adecuado para tu marca.</h2>
       <p>Este formulario inicia la conversación. La disponibilidad, condiciones y documentos se entregarán directamente por el equipo comercial.</p>
-      <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      @if (site.email) {
+        <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      }
     </div>
     <app-contact-form context="commercial" />
   </div>

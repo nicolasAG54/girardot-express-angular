@@ -50,7 +50,7 @@ export class App implements AfterViewInit {
       '@context': 'https://schema.org', '@type': 'ShoppingCenter',
       name: SITE_CONTENT.name, slogan: SITE_CONTENT.slogan, address: SITE_CONTENT.address,
       geo: { '@type': 'GeoCoordinates', ...SITE_CONTENT.coordinates },
-      email: SITE_CONTENT.email, telephone: SITE_CONTENT.whatsappLabel,
+      email: SITE_CONTENT.email ?? undefined, telephone: SITE_CONTENT.whatsappLabel,
       sameAs: [SITE_CONTENT.social.instagram],
     });
     // Router anchor scrolling uses window.scrollTo and does not read CSS scroll-padding.

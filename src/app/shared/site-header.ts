@@ -324,7 +324,7 @@ export class SiteHeader {
   }
 
   private sectionFromUrl(url: string, context: NavContext): string {
-    if (url.split(/[?#]/)[0] === '/preguntas-frecuentes') return '';
+    if (!['/', '/proyecto'].includes(url.split(/[?#]/)[0])) return '';
     const fragment = url.split('#')[1]?.split('?')[0];
     if (!fragment) return this.defaultSection(context);
     return fragment;

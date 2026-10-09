@@ -24,8 +24,15 @@ async function paused(p) {
 async function nav(p, label) {
  const menu = p.locator('.menu-button');
  if (await menu.isVisible() && await menu.getAttribute('aria-expanded') !== 'true') await menu.click();
- await p.locator('header nav').getByRole('link', { name: label, exact: true }).click();
+ const link = p.locator('header nav').getByRole('link', { name: label, exact: true });
+ const destination = await link.getAttribute('href');
+ if (process.env.DEBUG_MEDIA) console.log('nav', label, destination, p.url());
+ await link.click();
+ await p.waitForURL(new URL(destination, base).href);
  await p.waitForFunction(() => !document.querySelector('.route-curtain'));
+ const fragment = new URL(destination, base).hash.slice(1);
+ if (fragment) await atAnchor(p, fragment);
+ else await p.waitForFunction(() => window.scrollY < 5);
 }
 async function atAnchor(p, id) {
  await p.waitForFunction(id => Math.abs(document.getElementById(id).getBoundingClientRect().top - document.querySelector('header').getBoundingClientRect().height) < 5, id);
@@ -35,6 +42,7 @@ async function atAnchor(p, id) {
  try {
   for (const viewport of [{ width: 1440, height: 960 }, { width: 390, height: 844 }]) {
    const p = await browser.newPage({ viewport });
+   p.setDefaultNavigationTimeout(20000);
    p.on('pageerror', e => report.errors.push(e.message));
    for (const route of ['/', '/proyecto']) {
     await p.goto(base + route); await advances(p);
@@ -81,17 +89,28 @@ async function atAnchor(p, id) {
    const retry = await browser.newPage();
    retry.on('pageerror', e => report.errors.push(e.message));
    // Exercise a real failed <source> fetch, then retry without changing routes.
-   await retry.route('**/hero-loop.mp4', r => r.abort('failed'));
+   const failedVideo = route === '/' ? '**/hero-home.mp4' : '**/hero-project.mp4';
+   await retry.route(failedVideo, r => r.abort('failed'));
    await retry.goto(base + route);
+   // The network can fail before Angular hydrates the SSR controls. Wait for
+   // hydration so this tests resource recovery, independently of event replay.
+   await retry.waitForFunction(() => !document.querySelector('app-root').hasAttribute('ngh'));
    await retry.waitForFunction(() => document.querySelector('main video').networkState === HTMLMediaElement.NETWORK_NO_SOURCE);
-   await retry.unroute('**/hero-loop.mp4');
+   await retry.unroute(failedVideo);
    await control(retry).click(); await advances(retry);
    report.cases.push({ route, failedSource: 'recovered through Play without navigation' });
    await retry.close();
   }
   assert.deepEqual(report.errors, []);
   report.status = 'passed';
- } catch (error) { report.status = 'failed'; report.failure = error.stack; throw error; }
+ } catch (error) {
+  report.status = 'failed'; report.failure = error.stack;
+  report.pages = await Promise.all(browser.contexts().flatMap(c => c.pages()).map(p => p.evaluate(() => {
+   const v = document.querySelector('main video');
+   return { url: location.href, scrollY, hidden: document.hidden, video: v && { src: v.currentSrc, paused: v.paused, readyState: v.readyState, networkState: v.networkState, time: v.currentTime, error: v.error?.message, classes: v.className, bounds: v.getBoundingClientRect().toJSON() } };
+  }).catch(e => ({ error: e.message }))));
+  console.error(JSON.stringify(report, null, 2)); throw error;
+ }
  finally { fs.writeFileSync(path.join(out, 'results.json'), JSON.stringify(report, null, 2)); await browser.close(); }
  console.log(JSON.stringify(report, null, 2));
 })().catch(e => { console.error(e); process.exitCode = 1; });

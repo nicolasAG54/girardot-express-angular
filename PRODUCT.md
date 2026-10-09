@@ -31,7 +31,7 @@ La mayoría de visitantes consultará el sitio desde el teléfono, muchas veces 
 - Portada pública centrada en conveniencia, ubicación, experiencias y contacto.
 - Ruta canónica `/proyecto` para información B2B, cifras, niveles y oportunidades de arrendamiento; `/espacios-comerciales` permanece como alias para enlaces existentes.
 - Dirección del documento actualizado del cliente: Diagonal 9 # 23–31, Girardot, Cundinamarca. Punto de mapa: 4.299272, -74.819122.
-- Correo comercial: comercial@girardotexpress.com.
+- Correo comercial pendiente de verificar tras la compra de `girardotexpress.com.co`; el buzón `.com` del documento anterior queda oculto hasta confirmar un canal operativo.
 - WhatsApp comercial: +57 313 887 0580.
 - Instagram: @girardotexpresscc. No mostrar Facebook hasta contar con su enlace oficial.
 - Primera etapa: apertura prevista para finales de 2026. No hay día exacto ni cuenta regresiva.
@@ -88,3 +88,9 @@ La revisión V3 del cliente autoriza ampliar el contenido del Home, reunir exper
 El portafolio con registro sustituye la restricción anterior de no ofrecer brochure cuando se reciba el PDF aprobado y se defina un destino real para guardar los datos. Hasta entonces se ofrece solicitarlo al equipo por WhatsApp. Las políticas legales y la identificación de promotores necesitan contenido aprobado; las cifras desagregadas y la disponibilidad requieren confirmación. El mapa incorpora referencias institucionales verificadas, seleccionables una a una.
 
 Estado de implementación y validación: CAMBIOS_V3.md.
+
+## Datos personales · octubre de 2026
+
+El sitio no realiza transacciones, no inscribe a newsletters y no incluye analítica/publicidad ni cookies propias. El formulario prepara una URL de WhatsApp tras autorización explícita: el borrador se comparte con ese proveedor al continuar y el equipo recibe el mensaje cuando el usuario lo envía. No afirmar que el dato permanece local después de abrir WhatsApp. El chat usa respuestas locales predefinidas, con borrado de sus dos perfiles; el formulario también ofrece borrado local. Esos controles no eliminan copias externas.
+
+Privacidad es un borrador pendiente de identificación legal, canal operativo, procedimientos y conservación aprobados por la empresa. El WhatsApp de contacto orienta las solicitudes sin simular su radicación. `legal-content.ts` conserva estos pendientes explícitos. El correo anterior `.com` requiere confirmación tras la compra de `.com.co`; no crear ni anunciar buzones sin verificar su existencia. Antes de publicar debe confirmarse el permiso de uso del material suministrado e ilustrativo.

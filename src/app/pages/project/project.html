@@ -8,16 +8,17 @@
       loop
       playsinline
       preload="metadata"
-      poster="assets/hero-first-frame.jpg"
+      [poster]="media.projectHero.poster"
     >
-      <source src="assets/hero-loop.mp4" type="video/mp4" />
+      <source [src]="media.projectHero.mobileVideo" type="video/mp4" media="(max-width: 767px)" />
+      <source [src]="media.projectHero.video" type="video/mp4" />
     </video>
     <img
       class="project-hero__fallback"
-      src="assets/hero-first-frame.jpg"
+      [src]="media.projectHero.poster"
       alt=""
-      width="1280"
-      height="720"
+      [width]="media.projectHero.width"
+      [height]="media.projectHero.height"
       fetchpriority="high"
     />
   </div>
@@ -134,19 +135,19 @@
       <div class="project-architecture__frame">
         <img
           class="project-architecture__main"
-          src="assets/render-1.webp"
-          alt="Arquitectura abierta y paisajismo proyectados para Girardot Express"
-          width="1765"
-          height="904"
+          [src]="media.facade.src"
+          [alt]="media.facade.alt"
+          [width]="media.facade.width"
+          [height]="media.facade.height"
           loading="lazy"
         />
       </div>
       <img
         class="project-architecture__detail"
-        src="assets/vida-cotidiana.webp"
-        alt="Detalle proyectado de acceso y locales en Girardot Express"
-        width="1280"
-        height="720"
+        [src]="media.promenade.src"
+        [alt]="media.promenade.alt"
+        [width]="media.promenade.width"
+        [height]="media.promenade.height"
         loading="lazy"
       />
       <p class="project-architecture__caption">Renders de referencia del proyecto.</p>
@@ -305,7 +306,9 @@
         Girardot Express, inicia una conversación directa con el equipo.
       </p>
       <div class="project-contact__channels">
-        <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+        @if (site.email) {
+          <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+        }
         <a [href]="site.whatsappUrl" target="_blank" rel="noopener">
           WhatsApp {{ site.whatsappLabel }}
         </a>

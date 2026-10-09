@@ -7,6 +7,7 @@
 
 .footer-shell,
 .footer-bottom,
+.footer-legal,
 .footer-statement {
   width: min(calc(100% - (2 * var(--page-pad))), var(--page-max));
   margin-inline: auto;
@@ -60,7 +61,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
   padding-top: 1.4rem;
   border-top: 1px solid rgb(255 255 255 / 0.18);
   color: rgb(255 255 255 / 0.7);
@@ -68,6 +69,9 @@
 }
 
 .footer-bottom p { margin: 0; }
+
+.footer-legal { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; margin-top: 3rem; }
+.footer-legal a { display: inline-flex; align-items: center; min-height: 44px; color: rgb(255 255 255 / .8); font-size: .8rem; text-underline-offset: .25em; }
 
 @media (hover: hover) and (pointer: fine) {
   .footer-group a:hover { color: var(--white); }

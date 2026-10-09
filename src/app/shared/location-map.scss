@@ -11,5 +11,7 @@ svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; s
 .location-map__caption p { display: flex; align-items: center; gap: .55rem; margin: 0; font-size: .75rem; line-height: 1.6; }
 .location-map__legend { width: 11px; height: 11px; flex: none; border-radius: 50%; background: var(--yellow); outline: 1px solid #20251d; outline-offset: 2px; }
 .location-map__caption a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; color: inherit; font-size: .75rem; text-underline-offset: 4px; }
+.location-map__privacy { margin: .25rem 0 0; font-size: .75rem; line-height: 1.7; }
+.location-map__privacy a { display: inline-flex; align-items: center; min-height: 24px; color: inherit; text-underline-offset: 3px; }
 @media (hover: hover) { .location-map__reset:hover { background: #f3b71a; } }
 @media (max-width: 700px) { .location-map__frame { height: var(--location-map-mobile-height, 440px); } .location-map__reset { top: 12px; right: 12px; } .location-map__notice { top: 65px; left: 12px; right: 12px; max-width: none; } }

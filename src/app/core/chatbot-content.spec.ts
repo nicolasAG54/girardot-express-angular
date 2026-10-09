@@ -121,7 +121,8 @@ describe('chatbot content', () => {
 
     const contact = findChatbotReply('contacto');
     expect(contact.answer).toContain('+57 313 887 0580');
-    expect(contact.answer).toContain('comercial@girardotexpress.com');
+    expect(contact.answer).not.toContain('comercial@girardotexpress.com');
+    expect(contact.actions?.some(action => action.href.startsWith('mailto:'))).toBe(false);
     expect(contact.answer).toContain('@girardotexpresscc');
     expect(contact.actions?.[0].href).toMatch(/^https:\/\/wa\.me\/573138870580\?text=/);
     expect(SITE_CONTENT.social.facebook).toBeNull();

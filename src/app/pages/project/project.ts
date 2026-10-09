@@ -9,6 +9,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { COMMERCIAL_FACTS, SITE_CONTENT } from '../../core/site-content';
+import { SITE_MEDIA } from '../../core/site-media';
 import { LocationMap } from '../../shared/location-map';
 import { ContactForm } from '../../shared/contact-form';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
@@ -25,6 +26,7 @@ export class Project {
 
   protected readonly facts = COMMERCIAL_FACTS;
   protected readonly site = SITE_CONTENT;
+  protected readonly media = SITE_MEDIA;
   protected readonly selectedMetric = signal(0);
   protected readonly selectedGalleryIndex = signal(0);
 
@@ -55,20 +57,11 @@ export class Project {
   );
 
   protected readonly galleryImages = [
-    {
-      title: 'Plazoleta y recorrido comercial',
-      src: 'assets/render-1.webp',
-      alt: 'Render de la plazoleta abierta y los recorridos comerciales proyectados de Girardot Express',
-      width: 1765,
-      height: 904,
-    },
-    {
-      title: 'Fachada y accesos',
-      src: 'assets/render-3.webp',
-      alt: 'Render de la fachada y los accesos proyectados de Girardot Express',
-      width: 1765,
-      height: 898,
-    },
+    SITE_MEDIA.facade,
+    SITE_MEDIA.promenade,
+    SITE_MEDIA.entrance,
+    SITE_MEDIA.courtyard,
+    SITE_MEDIA.aerial,
   ] as const;
   protected readonly activeGalleryImage = computed(
     () => this.galleryImages[this.selectedGalleryIndex()] ?? this.galleryImages[0],

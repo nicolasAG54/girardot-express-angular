@@ -1,8 +1,14 @@
-<header #headerElement class="site-header">
+<header #headerElement class="site-header" [class.has-open-menu]="menuOpen()">
   <div class="nav-shell">
     <a class="brand" routerLink="/" aria-label="Ir al inicio de Girardot Express" (click)="closeMenu()">
       <img [src]="site.horizontalLogoUrl" alt="" width="910" height="380" fetchpriority="high" />
     </a>
+
+    <div class="nav-utilities" aria-label="Accesos rápidos">
+      <a [href]="site.whatsappUrl" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+        <img src="assets/icons/whatsapp.svg" alt="" width="24" height="24" />
+      </a>
+    </div>
 
     <button #menuButton class="menu-button" type="button" [attr.aria-expanded]="menuOpen()" aria-controls="primary-navigation" (click)="toggleMenu()">
       <span>{{ menuOpen() ? 'Cerrar' : 'Menú' }}</span>
@@ -42,11 +48,5 @@
         </span>
       </a>
     </nav>
-
-    <div class="nav-utilities" aria-label="Accesos rápidos">
-      <a [href]="site.whatsappUrl" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.3-4A8 8 0 1 1 20 11.6Z"/><path d="M9.2 8.2c.4 2.9 2 4.5 4.8 5.5"/></svg>
-      </a>
-    </div>
   </div>
 </header>

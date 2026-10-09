@@ -1,8 +1,9 @@
 <section id="inicio" tabindex="-1" class="home-hero" aria-labelledby="hero-title" data-nav-section="inicio">
   <div class="hero-scene" aria-hidden="true">
-    <img class="hero-poster" src="assets/hero-first-frame.jpg" alt="" width="1280" height="720" fetchpriority="high" />
-    <video appVideoReveal appHeroVideo #heroPlayback="heroPlayback" loop muted playsinline preload="metadata" poster="assets/hero-first-frame.jpg">
-      <source src="assets/hero-loop.mp4" type="video/mp4" />
+    <img class="hero-poster" [src]="media.homeHero.poster" alt="" [width]="media.homeHero.width" [height]="media.homeHero.height" fetchpriority="high" />
+    <video appVideoReveal appHeroVideo #heroPlayback="heroPlayback" loop muted playsinline preload="metadata" [poster]="media.homeHero.poster">
+      <source [src]="media.homeHero.mobileVideo" type="video/mp4" media="(max-width: 767px)" />
+      <source [src]="media.homeHero.video" type="video/mp4" />
     </video>
   </div>
   <div class="hero-shade" aria-hidden="true"></div>
@@ -30,7 +31,7 @@
       <a class="text-link" routerLink="/" fragment="experiencia">Explora el mall</a>
     </div>
     <figure class="story-image">
-      <img src="assets/vida-cotidiana.webp" alt="Visualización de los recorridos abiertos de Girardot Express" width="1280" height="720" loading="lazy" />
+      <img [src]="media.promenade.src" [alt]="media.promenade.alt" [width]="media.promenade.width" [height]="media.promenade.height" loading="lazy" />
       <figcaption>Un lugar para resolver, disfrutar y compartir.</figcaption>
     </figure>
   </div>
@@ -44,7 +45,7 @@
     </div>
     <div class="visit-mosaic">
       <a class="visit-card" routerLink="/" fragment="marcas">
-        <img src="assets/vida-cotidiana.webp" alt="Personas recorriendo los espacios comerciales" width="1280" height="720" loading="lazy" />
+        <img [src]="media.entrance.src" [alt]="media.entrance.alt" [width]="media.entrance.width" [height]="media.entrance.height" loading="lazy" />
         <span class="visit-card-shade" aria-hidden="true"></span><span class="visit-card-copy"><strong>Compras y servicios</strong><small>Resuelve tus compras en un mismo recorrido.</small></span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
       </a>
       <a class="visit-card" routerLink="/" fragment="marcas">
@@ -76,7 +77,7 @@
 </section>
 
 <section id="sostenibilidad" tabindex="-1" class="sustainability" aria-labelledby="sustainability-title">
-  <img src="assets/render-1.webp" alt="Render de la plazoleta abierta, los recorridos y la vegetación proyectada de Girardot Express" width="1765" height="904" loading="lazy" />
+  <img [src]="media.courtyard.src" [alt]="media.courtyard.alt" [width]="media.courtyard.width" [height]="media.courtyard.height" loading="lazy" />
   <div class="sustainability-copy section-shell">
     <h2 id="sustainability-title">Un espacio abierto a una nueva manera de vivir la ciudad.</h2>
     <p>Diseñado para aprovechar la iluminación natural, favorecer la ventilación y conectar sus espacios con el entorno, Girardot Express propone una experiencia comercial más abierta, confortable y consciente.</p>
@@ -143,7 +144,7 @@
 
 <section id="contacto" tabindex="-1" class="contact-section section" aria-labelledby="contact-title" data-nav-section="contacto">
   <div class="contact-layout section-shell" appRevealOnScroll>
-    <div class="contact-copy"><h2 id="contact-title">Conversemos.</h2><p>Cuéntanos qué necesitas. Al completar el formulario podrás enviar tu consulta al equipo por WhatsApp.</p><div class="contact-detail"><span>Correo</span><a [href]="'mailto:' + site.email">{{ site.email }}</a></div><div class="contact-detail"><span>WhatsApp</span><a [href]="site.whatsappUrl" target="_blank" rel="noopener">{{ site.whatsappLabel }}</a></div></div>
+    <div class="contact-copy"><h2 id="contact-title">Conversemos.</h2><p>Cuéntanos qué necesitas. Al completar el formulario podrás enviar tu consulta al equipo por WhatsApp.</p>@if (site.email) {<div class="contact-detail"><span>Correo</span><a [href]="'mailto:' + site.email">{{ site.email }}</a></div>}<div class="contact-detail"><span>WhatsApp</span><a [href]="site.whatsappUrl" target="_blank" rel="noopener noreferrer">{{ site.whatsappLabel }}</a></div></div>
     <app-contact-form context="general" />
   </div>
 </section>
@@ -160,8 +161,8 @@
       <div class="project-actions"><a class="button button-yellow" routerLink="/proyecto">Espacios comerciales</a><a class="button button-outline" routerLink="/proyecto" fragment="contacto-comercial">Hablar con el equipo</a></div>
     </div>
     <figure class="project-media">
-      <img src="assets/render-1.webp" alt="Arquitectura abierta proyectada de Girardot Express" width="1765" height="904" loading="lazy" />
-      <img class="project-media-detail" src="assets/render-3.webp" alt="Fachada y accesos proyectados" width="1765" height="898" loading="lazy" />
+      <img [src]="media.facade.src" [alt]="media.facade.alt" [width]="media.facade.width" [height]="media.facade.height" loading="lazy" />
+      <img class="project-media-detail" [src]="media.promenade.src" [alt]="media.promenade.alt" [width]="media.promenade.width" [height]="media.promenade.height" loading="lazy" />
     </figure>
   </div>
 </section>

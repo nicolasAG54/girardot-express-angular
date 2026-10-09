@@ -62,7 +62,7 @@
                 <a
                   [href]="action.href"
                   [attr.target]="action.external ? '_blank' : null"
-                  [attr.rel]="action.external ? 'noopener' : null"
+                  [attr.rel]="action.external ? 'noopener noreferrer' : null"
                   (click)="handleAction(action, $event)"
                 >{{ action.label }}</a>
               }
@@ -72,7 +72,14 @@
       }
     </div>
 
-    <a class="chatbot-faq-link" href="/preguntas-frecuentes" (click)="openFaq($event)">Ver todas las preguntas frecuentes</a>
+    <div class="chatbot-privacy">
+      <p>Chat local. Evita escribir datos personales. <a href="/privacidad" target="_blank" rel="noopener noreferrer">Privacidad (otra pestaña)</a></p>
+      <div class="chatbot-tools">
+        <a href="/preguntas-frecuentes" (click)="openFaq($event)">Preguntas frecuentes</a>
+        <button type="button" (click)="clearConversation()">Borrar conversación</button>
+      </div>
+      <p class="chatbot-clear-status" role="status">{{ cleared() ? 'Conversaciones y borradores borrados de esta página.' : '' }}</p>
+    </div>
     <form class="chatbot-composer" (submit)="submitMessage($event)">
       <label class="sr-only" for="chatbot-message">Escribe tu pregunta</label>
       <input

@@ -1,0 +1,132 @@
+<article class="legal-page section-shell" aria-labelledby="legal-title">
+  <a class="legal-back" routerLink="/">Volver al inicio</a>
+  <header class="legal-intro">
+    <h1 id="legal-title" tabindex="-1">{{ document.title }}</h1>
+    <p>{{ document.description }}</p>
+    <p class="legal-version">Versión del contenido: {{ legal.version }}</p>
+  </header>
+
+  <nav class="legal-navigation" aria-label="Información legal">
+    <a routerLink="/privacidad" [attr.aria-current]="kind === 'privacy' ? 'page' : null">Privacidad</a>
+    <a routerLink="/cookies" [attr.aria-current]="kind === 'cookies' ? 'page' : null">Cookies y servicios externos</a>
+    <a routerLink="/terminos" [attr.aria-current]="kind === 'terms' ? 'page' : null">Términos de uso</a>
+  </nav>
+
+  <div class="legal-content">
+    @switch (kind) {
+      @case ('privacy') {
+        @if (legal.privacyDraft) {
+          <aside class="legal-draft" aria-label="Estado del documento">
+            <h2>Borrador para revisión</h2>
+            <p>Este texto describe el funcionamiento actual del sitio. Falta confirmar la identificación legal del responsable, el canal formal de atención, el procedimiento y los tiempos de conservación de los datos. No constituye todavía una política de tratamiento aprobada.</p>
+          </aside>
+        }
+        <section aria-labelledby="responsible-title">
+          <h2 id="responsible-title">Quién atiende tus datos</h2>
+          @if (legal.responsible; as responsible) {
+            <dl class="legal-details">
+              <dt>Responsable</dt><dd>{{ responsible.legalName }}</dd>
+              <dt>NIT</dt><dd>{{ responsible.nit }}</dd>
+              <dt>Notificaciones</dt><dd>{{ responsible.notificationAddress }}</dd>
+              <dt>Correo de privacidad</dt><dd><a [href]="'mailto:' + responsible.privacyEmail">{{ responsible.privacyEmail }}</a></dd>
+            </dl>
+          } @else {
+            <p>Girardot Express es la marca presentada en este sitio. La razón social y los datos del responsable del tratamiento están pendientes de confirmación.</p>
+          }
+          <p>Contacto del proyecto: WhatsApp {{ site.whatsappLabel }}. Dirección del proyecto: {{ site.address }}. Esta dirección no se presenta como domicilio legal del responsable.</p>
+        </section>
+        <section aria-labelledby="form-data-title">
+          <h2 id="form-data-title">Qué datos solicita el formulario</h2>
+          <p>Nombre, teléfono, correo electrónico, interés y mensaje para responder tu consulta. Si buscas un espacio comercial, también se solicita empresa o marca, cargo, categoría del negocio y área requerida para orientar esa conversación.</p>
+          <p>La autorización se limita a atender esta solicitud. No te inscribe en boletines ni autoriza campañas publicitarias. Puedes consultar la información del sitio sin completar el formulario.</p>
+          <p>No incluyas documentos de identidad, información bancaria, datos de salud ni datos de menores de edad. Estos formularios de contacto están dirigidos a personas adultas; no existe un registro de niños ni una solicitud de datos sensibles.</p>
+        </section>
+        <section aria-labelledby="whatsapp-data-title">
+          <h2 id="whatsapp-data-title">Qué pasa al continuar por WhatsApp</h2>
+          <p>Los campos permanecen en la memoria de esta página mientras los completas. El sitio no tiene una base de datos de solicitudes ni guarda el formulario en cookies o almacenamiento local del navegador.</p>
+          <p>Al pulsar «Continuar por WhatsApp», el texto se incorpora a un enlace y se comparte con WhatsApp para abrir un borrador. El equipo recibe el mensaje cuando tú lo envías allí. El enlace puede quedar en el historial del navegador.</p>
+          <p>El borrador incluye el texto y la versión de tu autorización. Puedes revisarlo antes de enviar. Abrir WhatsApp no confirma la recepción de tu consulta ni genera una reserva comercial.</p>
+          <p>WhatsApp es un servicio externo y aplica su propia <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">política de privacidad (otra pestaña)</a>.</p>
+        </section>
+        <section aria-labelledby="chat-data-title">
+          <h2 id="chat-data-title">Asistente y borrado en esta página</h2>
+          <p>El asistente responde con información predefinida. Las preguntas se procesan en tu navegador, sin enviarse a un servicio de inteligencia artificial ni al equipo comercial. No escribas información personal o sensible en el chat.</p>
+          <p>«Borrar conversación» elimina las preguntas y borradores de los dos perfiles del asistente. «Borrar formulario» elimina los datos de los campos de contacto. El sitio no conserva ese contenido al recargar la página.</p>
+          <p>Estos controles no eliminan mensajes ya compartidos con WhatsApp, copias recibidas por el equipo ni el historial de tu navegador.</p>
+        </section>
+        <section id="solicitudes" aria-labelledby="data-rights-title">
+          <h2 id="data-rights-title">Tus derechos y cómo solicitar ayuda</h2>
+          <p>Puedes conocer, consultar, actualizar y rectificar tus datos, solicitar prueba de la autorización, información sobre su uso y acceso gratuito. También puedes solicitar revocación de la autorización o supresión cuando proceda, y presentar una queja ante la Superintendencia de Industria y Comercio, cumpliendo los requisitos aplicables.</p>
+          @if (legal.requestProcedure) {
+            <p>{{ legal.requestProcedure }}</p>
+          } @else {
+            <p>El canal formal y el procedimiento del responsable están por confirmar. Mientras se completan, puedes pedir al contacto del proyecto que te indique cómo presentar tu solicitud. No envíes documentos de identidad en este primer contacto.</p>
+          }
+          <a class="button button-primary" [href]="privacyRequestUrl" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+          <p class="legal-note">Abre un borrador en un servicio externo. Tú decides si lo envías; no es un radicado automático ni una confirmación de eliminación.</p>
+        </section>
+        <section aria-labelledby="retention-title">
+          <h2 id="retention-title">Conservación y cambios</h2>
+          @if (legal.retention) {
+            <p>{{ legal.retention }}</p>
+          } @else {
+            <p>La conversación local del asistente y los campos del formulario son temporales. El responsable debe confirmar los criterios de conservación y eliminación de los mensajes recibidos y sus eventuales registros comerciales; esos criterios no se han definido en este borrador.</p>
+          }
+          <p>La versión indicada corresponde a este contenido del sitio. Si cambian las finalidades o los servicios utilizados, se deberá actualizar la información y gestionar las autorizaciones que correspondan antes de aplicar esos cambios.</p>
+          <p>Referencia normativa: <a href="https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/ley_1581_2012.htm" target="_blank" rel="noopener noreferrer">Ley 1581 de 2012 (otra pestaña)</a>.</p>
+        </section>
+      }
+      @case ('cookies') {
+        <section aria-labelledby="cookie-use-title">
+          <h2 id="cookie-use-title">Almacenamiento en tu navegador</h2>
+          <p>La aplicación actual no instala cookies propias, identificadores publicitarios ni herramientas de analítica. Tampoco guarda formularios o conversaciones en localStorage o sessionStorage.</p>
+          <p>El asistente y el formulario usan memoria temporal. Los archivos del sitio pueden permanecer en la caché del navegador para cargar más rápido; esa caché no es una cookie de seguimiento.</p>
+          <p>Por esta configuración no se muestra un banner para aceptar cookies inexistentes. Si se incorporan analítica, publicidad u otras tecnologías opcionales, deberá actualizarse este aviso e implementarse la gestión de preferencias antes de activarlas.</p>
+        </section>
+        <section id="servicio-mapa" aria-labelledby="map-service-title">
+          <h2 id="map-service-title">Mapa de OpenStreetMap</h2>
+          <p>Cuando el mapa entra en pantalla, el navegador solicita sus imágenes a tile.openstreetmap.org. Ese proveedor recibe información técnica de conexión, como tu dirección IP. El sitio no solicita tu ubicación mediante GPS ni usa la geolocalización del navegador.</p>
+          <p>La biblioteca Leaflet se entrega desde este sitio. Los datos cartográficos y las imágenes del mapa pertenecen a OpenStreetMap y sus colaboradores; su atribución permanece visible.</p>
+          <p>Puedes consultar la <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">política de privacidad de OpenStreetMap (otra pestaña)</a>.</p>
+        </section>
+        <section aria-labelledby="external-service-title">
+          <h2 id="external-service-title">Enlaces a otros servicios</h2>
+          <p>WhatsApp, Instagram, Google Maps y Waze se abren cuando eliges sus enlaces. No hay widgets de redes sociales ni reproductores externos incrustados. Al abrir esos servicios, sus operadores pueden tratar datos o utilizar cookies según sus propias políticas.</p>
+          <p>El formulario comparte su borrador con WhatsApp solo después de tu autorización y de pulsar el botón para continuar. <a routerLink="/privacidad">Consulta los detalles sobre tus datos</a>.</p>
+        </section>
+        <section aria-labelledby="hosting-title">
+          <h2 id="hosting-title">Archivos y alojamiento</h2>
+          <p>Las fuentes, fotos, visualizaciones y videos se sirven desde el propio sitio. Para entregarlos, el proveedor de alojamiento recibe información técnica de la conexión. Los registros y medidas de seguridad de la plataforma de alojamiento se deben considerar por separado de las cookies de la aplicación.</p>
+        </section>
+      }
+      @case ('terms') {
+        <section aria-labelledby="site-purpose-title">
+          <h2 id="site-purpose-title">Un sitio informativo</h2>
+          <p>Este sitio presenta el proyecto Girardot Express, su ubicación, las experiencias previstas y las oportunidades para marcas y negocios. El proyecto está en desarrollo.</p>
+          <p>La apertura de la primera etapa está prevista para {{ site.openingPeriod.toLowerCase() }}. Es una previsión, no una fecha de apertura garantizada.</p>
+        </section>
+        <section aria-labelledby="project-info-title">
+          <h2 id="project-info-title">Cifras, imágenes y disponibilidad</h2>
+          <p>Las áreas, cantidades de locales, niveles, parqueaderos y servicios descritos son proyecciones sujetas al desarrollo y la validación final del proyecto. Consulta al equipo para confirmar disponibilidad y condiciones vigentes.</p>
+          <p>Los renders y videos arquitectónicos son visualizaciones de referencia y pueden cambiar. Las escenas de estilo de vida son ilustrativas; no representan locales abiertos, marcas confirmadas ni eventos programados.</p>
+          <p>El sitio no promete rentabilidad, valorización ni resultados comerciales para una marca o inversionista.</p>
+        </section>
+        <section aria-labelledby="sales-title">
+          <h2 id="sales-title">Consultas y acuerdos comerciales</h2>
+          <p>No se realizan compras, pagos, reservas ni suscripciones de pago en esta página. Los botones de contacto preparan o abren una conversación; no formalizan un arrendamiento ni garantizan disponibilidad.</p>
+          <p>Cualquier precio, obligación de pago, condición contractual o régimen de devolución que corresponda a un acuerdo futuro debe informarse y pactarse por los canales del responsable antes de contratar. Este sitio no ofrece una política de reembolso para operaciones que aquí no se realizan.</p>
+        </section>
+        <section aria-labelledby="content-rights-title">
+          <h2 id="content-rights-title">Uso del contenido</h2>
+          <p>La publicación de marcas, diseños y material audiovisual en este sitio no concede una licencia para reutilizarlos comercialmente. Para solicitar autorización de uso o reportar un posible problema con un contenido, contacta al equipo del proyecto.</p>
+          <p>Los datos del mapa incluyen su atribución y condiciones de uso. Se conservan las licencias de <a href="/assets/licenses/poppins-OFL.txt" target="_blank" rel="noopener noreferrer">Poppins (OFL)</a>, <a href="/assets/licenses/leaflet-BSD.txt" target="_blank" rel="noopener noreferrer">Leaflet (BSD)</a> y <a href="/assets/icons/BOOTSTRAP-LICENSE.txt" target="_blank" rel="noopener noreferrer">Bootstrap Icons (MIT)</a>.</p>
+        </section>
+        <section aria-labelledby="terms-contact-title">
+          <h2 id="terms-contact-title">Contacto y derechos</h2>
+          <p>Para dudas sobre el proyecto, utiliza el WhatsApp {{ site.whatsappLabel }}. El tratamiento de los datos del formulario y los servicios externos se explica en las páginas de <a routerLink="/privacidad">privacidad</a> y <a routerLink="/cookies">cookies y servicios externos</a>.</p>
+          <p>Estos términos no limitan los derechos que te reconoce la legislación aplicable ni sustituyen los acuerdos que se celebren con el responsable del proyecto.</p>
+        </section>
+      }
+    }
+  </div>
+</article>
