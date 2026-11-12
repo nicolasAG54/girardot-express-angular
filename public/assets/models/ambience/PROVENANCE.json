@@ -1,0 +1,37 @@
+[
+  {
+    "file": "car-static.glb",
+    "author": "Quaternius",
+    "source": "https://poly.pizza/m/Cz6yDaUcM9",
+    "license": "CC0 1.0 Universal",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "sha256": "ed7fc5221b1ea2a13ea62adf6a75c836ea6698bd00ecd5068dfed7a3b9ad7a5c",
+    "processing": "Static pose baked locally and normalized to metric scale; no AI generation"
+  },
+  {
+    "file": "woman-static.glb",
+    "author": "Quaternius",
+    "source": "https://poly.pizza/m/jpKRgGDxhk",
+    "license": "CC0 1.0 Universal",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "sha256": "a572914610c251bbf950aac6a6e0f0897c9dcd677ba4d1544fab6f794966a260",
+    "processing": "Static pose baked locally and normalized to metric scale; no AI generation"
+  },
+  {
+    "file": "man-static.glb",
+    "author": "Quaternius",
+    "source": "https://poly.pizza/m/HMnuH5geEG",
+    "license": "CC0 1.0 Universal",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "sha256": "d4bef0c5b308261714bdc665a7e74cebba2bbdab54119dc4df5a06f5f3df7bfc",
+    "processing": "Static pose baked locally and normalized to metric scale; no AI generation"
+  },
+  {
+    "file": "ivy.glb",
+    "source": "Client-supplied GirardotExpress.skp",
+    "component": "Devil's_Ivy_Component_02",
+    "license": "Client project asset; retain the same usage rights as the source model",
+    "sha256": "5dd8e397f161a30567027e5f9e2471500ea3d93da4c8f31453ff8b027b277bb8",
+    "processing": "Extracted original leaf and stem geometry/materials. Original building untouched."
+  }
+]

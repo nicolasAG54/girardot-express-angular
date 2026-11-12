@@ -1,9 +1,10 @@
-// Verifies local data handling; window.open is stubbed, so no message is sent.
+// Local-only UI checks. Contact delivery rejects localhost; never run against production.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 const base = process.env.BASE_URL || 'http://127.0.0.1:4300';
+assert.ok(['localhost', '127.0.0.1', '[::1]'].includes(new URL(base).hostname), 'Privacy checks are restricted to localhost to avoid sending real submissions');
 const output = process.argv[2] || path.resolve('../.codex_artifacts/privacy-2026-10-09');
 
 async function checkLayout(page) {
@@ -72,9 +73,8 @@ async function checkContrast(page) {
       await page.locator('app-location-map').scrollIntoViewIfNeeded();
       await page.locator('.leaflet-tile-loaded').first().waitFor();
       assert.match(await page.locator('.location-map__privacy').innerText(), /OpenStreetMap/);
-      assert.equal(await page.locator('a[href^="mailto:"]').count(), 0, 'Unverified mailbox is still offered');
+      assert.ok(await page.locator('a[href="mailto:comercial@girardotexpress.com.co"]').count() > 0);
       await page.locator('app-contact-form').scrollIntoViewIfNeeded();
-      await page.evaluate(() => { window.__preparedMessages = []; window.open = (...args) => { window.__preparedMessages.push(args); return null; }; });
       const form = page.locator('app-contact-form');
       assert.equal(await form.locator('#contact-consent').isChecked(), false);
       await form.locator('#contact-name').fill('Consulta de prueba');
@@ -82,17 +82,13 @@ async function checkContrast(page) {
       await form.locator('#contact-email').fill('test@example.com');
       await form.locator('#contact-interest').selectOption('Información general');
       await form.locator('#contact-message').fill('Quisiera conocer el proyecto.');
-      await form.getByRole('button', { name: 'Continuar por WhatsApp', exact: true }).click();
+      await form.getByRole('button', { name: 'Enviar solicitud', exact: true }).click();
       await page.waitForFunction(() => document.activeElement?.id === 'contact-consent');
-      assert.equal(await page.evaluate(() => window.__preparedMessages.length), 0);
+      assert.equal(await form.locator('.form-delivery-error').count(), 0);
       await form.locator('#contact-consent').check();
-      await form.getByRole('button', { name: 'Continuar por WhatsApp', exact: true }).click();
-      const prepared = await page.evaluate(() => window.__preparedMessages);
-      assert.equal(prepared.length, 1);
-      const message = new URL(prepared[0][0]).searchParams.get('text');
-      assert.match(message, /Autorización de contacto \(2026-10-09\)/);
-      assert.match(message, /se compartan con WhatsApp/);
-      assert.ok(!message.includes('Empresa o marca:'));
+      await form.getByRole('button', { name: 'Enviar solicitud', exact: true }).click();
+      await form.locator('.form-delivery-error').waitFor();
+      assert.match(await form.locator('.form-delivery-error').innerText(), /Esta copia local no envía/);
       assert.equal(await form.locator('.privacy-link').getAttribute('target'), '_blank');
       await form.getByRole('button', { name: 'Borrar formulario', exact: true }).click();
       assert.equal(await form.locator('#contact-name').inputValue(), '');
@@ -121,7 +117,7 @@ async function checkContrast(page) {
       await page.locator('app-contact-form').scrollIntoViewIfNeeded();
       assert.equal(await page.locator('#contact-company').getAttribute('maxlength'), '150');
       assert.equal(await page.locator('#contact-consent').isChecked(), false);
-      assert.equal(await page.locator('a[href^="mailto:"]').count(), 0);
+      assert.ok(await page.locator('a[href="mailto:comercial@girardotexpress.com.co"]').count() > 0);
       await checkLayout(page);
       assert.equal(await page.locator('img:not([alt])').count(), 0);
       assert.deepEqual(errors, []);

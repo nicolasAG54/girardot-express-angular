@@ -1,0 +1,47 @@
+{
+  "origin": "Original architectural renders supplied by the client",
+  "processing": "Local resize/crop and WebP encoding only. No generative editing.",
+  "design": "Straight roof matching the current 3D model",
+  "files": [
+    {
+      "file": "fachada.webp",
+      "source": "renderfinal1.png",
+      "sourceSha256": "7f5ed851d77f24e222a09e3f3a3490631f60869b456f98ab7cbc3cac12929557",
+      "sha256": "67f843ca3d87df76c50c6e95d8e914b8f7b2a98c7c0929a7c8a12ec784b9513d",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "file": "recorrido.webp",
+      "source": "renderfinal12.png",
+      "sourceSha256": "7a056a408724f6c763c74063c885e47843fbf367b100d898af1f48fa5f8dfc1f",
+      "sha256": "8f8231725e92491f784522b4d3ee1c12094bb96a605e59652f4e187a4fb23277",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "file": "acceso.webp",
+      "source": "renderfinal5.png",
+      "sourceSha256": "a53fa64abb4f552f5e99e944c665c1c1cb51009ef82be222c7b04f27d026c1f3",
+      "sha256": "4d0ac33747584bb757fc5f7152f34b7507ea7d12effdf628e42a4be089c5d7f3",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "file": "plazoleta.webp",
+      "source": "renderfinal8.png",
+      "sourceSha256": "9ae668caeecb1257d420f7bb37a714ef0f262b5c9ade2178b4553b521665d0d3",
+      "sha256": "bcf3e5ac27a0d299b3357519a245ef87e383af785f4172666c0003850f65d306",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "file": "vista-general.webp",
+      "source": "renderfinal10.png",
+      "sourceSha256": "a86f6a2b46a339a083164102d18435e4a94bfafbec6a7845af011308e6a204fb",
+      "sha256": "f6e0cdc6b486482f7e0e4ad36b613be47a230889ff7ebbfcdb1444218b4fe5c1",
+      "width": 1920,
+      "height": 1080
+    }
+  ]
+}

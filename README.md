@@ -25,12 +25,12 @@ npm run build
 
 ## Datos y material pendientes
 
-WhatsApp, Instagram y dirección corresponden al material recibido del cliente y se centralizan en `src/app/core/site-content.ts`. El correo comercial queda pendiente de verificar tras el cambio de dominio.
+WhatsApp, Instagram, dirección y correo se centralizan en `src/app/core/site-content.ts`. El usuario confirmó `comercial@girardotexpress.com.co` como receptor de ambos formularios.
 
 Antes de publicar se deben confirmar:
 
 - Responsable legal, política de tratamiento y canales operativos.
-- Buzón comercial del dominio confirmado. Facebook solo se muestra cuando exista un enlace oficial.
+- Verificar publicación y recepción real de los formularios. El destinatario de Netlify está confirmado y el usuario autorizó publicar esta versión. Facebook solo se muestra cuando exista un enlace oficial.
 - Permisos de publicación del material audiovisual y de marca.
 - Disponibilidad y condiciones comerciales vigentes.
 
@@ -42,7 +42,7 @@ Rutas nuevas: `/privacidad`, `/cookies` y `/terminos`, enlazadas desde el footer
 
 Antes de publicar una política final, el cliente debe confirmar razón social/NIT, domicilio de notificaciones, correo de privacidad operativo, procedimiento y área responsable de consultas/reclamos, criterios de conservación y aprobación del contenido. El dominio adquirido es `girardotexpress.com.co`; el correo anterior `comercial@girardotexpress.com` quedó oculto en contacto, footer, FAQ, chatbot y datos estructurados hasta verificar un buzón operativo. No se inventó un correo nuevo. La dirección del mall no se utiliza como domicilio legal sin confirmación.
 
-El formulario sigue siendo local y prepara un enlace a WhatsApp. Al abrirlo, WhatsApp recibe el borrador en la URL; el equipo solo recibe el mensaje si la persona lo envía. Se informa de esta diferencia antes de continuar. La casilla empieza desmarcada y es obligatoria; el borrador lleva el texto y versión de autorización, pero puede ser editado por el usuario. **No hay un registro de consentimientos en servidor**: el responsable deberá conservar y gestionar las autorizaciones efectivamente recibidas. No usar el contacto para campañas sin gestionar su autorización correspondiente.
+Actualización de noviembre de 2026: el formulario de esta versión envía por POST a Netlify Forms, con autorización inicialmente desmarcada, texto/versión y fecha indicada por el navegador. La plataforma registra la recepción y notifica al correo comercial de Zoho. La confirmación visual no acredita que alguien haya leído el correo. Ver `scripts/FORMULARIOS_CORREO.md` para activación y verificación; la implementación anterior de WhatsApp descrita en los documentos históricos ya no es el envío del formulario. No usar el contacto para campañas sin autorización correspondiente.
 
 «Borrar formulario» y «Borrar conversación» eliminan únicamente datos locales de la página. No borran WhatsApp, el historial del navegador ni los registros de la empresa. La solicitud de supresión se explica en `/privacidad#solicitudes`; el WhatsApp ofrece orientación mientras se confirma el canal formal, sin simular un radicado o una eliminación automática.
 

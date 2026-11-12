@@ -1,6 +1,7 @@
-// Client media trial, October 2026. Previous assets remain available for comparison.
-// The stills are extracted from the supplied architectural video, not photographs of completed work.
+// Architecture stills use the client's original straight-roof renders.
+// These are project visualizations, not photographs of completed work.
 const directory = 'assets/media-2026-10';
+const architecture = 'assets/techo-recto';
 
 export const SITE_MEDIA = {
   homeHero: {
@@ -18,37 +19,37 @@ export const SITE_MEDIA = {
     height: 1080,
   },
   facade: {
-    src: `${directory}/fachada.webp`,
+    src: `${architecture}/fachada.webp`,
     title: 'Fachada y accesos',
     alt: 'Visualización de la fachada, los locales y el acceso peatonal de Girardot Express',
     width: 1920,
     height: 1080,
   },
   promenade: {
-    src: `${directory}/recorrido.webp`,
+    src: `${architecture}/recorrido.webp`,
     title: 'Recorridos abiertos',
-    alt: 'Visualización del recorrido comercial cubierto con cubierta ondulada y jardines de Girardot Express',
+    alt: 'Render del pasillo comercial con cubierta recta, locales y jardineras de Girardot Express',
     width: 1920,
     height: 1080,
   },
   entrance: {
-    src: `${directory}/acceso.webp`,
+    src: `${architecture}/acceso.webp`,
     title: 'Acceso principal',
-    alt: 'Visualización del acceso principal y la fachada con el logo de Girardot Express',
+    alt: 'Render del acceso peatonal y la fachada turquesa de Girardot Express con cubierta recta',
     width: 1920,
     height: 1080,
   },
   courtyard: {
-    src: `${directory}/plazoleta.webp`,
+    src: `${architecture}/plazoleta.webp`,
     title: 'Plazoleta y zonas de encuentro',
-    alt: 'Visualización de la plazoleta con fuente, vegetación y recorridos comerciales de Girardot Express',
+    alt: 'Render de la plazoleta comercial con mesas, jardineras y cubierta recta de Girardot Express',
     width: 1920,
     height: 1080,
   },
   aerial: {
-    src: `${directory}/vista-aerea.webp`,
+    src: `${architecture}/vista-general.webp`,
     title: 'Vista general del proyecto',
-    alt: 'Visualización aérea de las cubiertas, la fachada y los parqueaderos de Girardot Express',
+    alt: 'Vista general elevada de la fachada, la cubierta recta y los parqueaderos de Girardot Express',
     width: 1920,
     height: 1080,
   },

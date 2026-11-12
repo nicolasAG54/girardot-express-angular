@@ -1,0 +1,90 @@
+<section id="explorar-3d" class="explorer section" aria-labelledby="explorer-title" tabindex="-1">
+  <div class="section-shell">
+    <div class="explorer-heading">
+      <div>
+        <h2 id="explorer-title">Míralo desde<br />otro ángulo.</h2>
+      </div>
+      <p>Conoce Girardot Express desde afuera o recorre sus dos plantas, desde el pasillo hasta los balcones de la plazoleta.</p>
+    </div>
+
+    <div class="explorer-stage" [class.is-active]="active()" [attr.aria-busy]="state() === 'loading'">
+      <div #sceneHost class="scene-canvas"></div>
+      @if (!active()) {
+        <img class="explorer-poster" [src]="poster.src" [alt]="poster.alt" width="1920" height="1080" loading="lazy" />
+      }
+
+      @if (state() !== 'ready') {
+        <div class="explorer-overlay">
+          @if (state() === 'loading') {
+            <div class="launch-panel">
+              <p class="launch-title">Cargando el modelo 3D</p>
+              <p>{{ progress() > 0 ? progress() + ' %' : 'Puede tomar unos momentos.' }}</p>
+              <progress max="100" [value]="progress()" aria-label="Carga del modelo 3D"></progress>
+              <button class="cancel-button" type="button" (click)="close()">Cancelar</button>
+            </div>
+          } @else {
+            <div class="launch-panel">
+              <p class="launch-title">Elige tu punto de vista.</p>
+              @if (state() === 'error') {
+                <p>No pudimos abrir el modelo en este navegador. Puedes reintentar o seguir explorando la galería.</p>
+              } @else {
+                <p>Explora el exterior o elige una planta para recorrer sus pasillos y la plazoleta.</p>
+              }
+              <button #startButton class="button button-yellow launch-button" type="button" (click)="start()">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7Zm0 10L3 7m9 5 9-5m-9 5v10M7.5 4.5l9 5" /></svg>
+                {{ state() === 'error' ? 'Reintentar vista 3D' : 'Explorar en 3D' }}
+              </button>
+              <small>Se carga al abrir. Usa datos y requiere un navegador compatible con 3D.</small>
+            </div>
+          }
+        </div>
+      }
+
+      @if (state() === 'ready') {
+        <div class="view-controls">
+          <div class="view-switch" role="group" aria-label="Tipo de vista">
+            <button type="button" [attr.aria-pressed]="!interior()" (click)="reset()">Vista exterior</button>
+            <button type="button" [attr.aria-pressed]="interior()" (click)="enter()">Recorrer interior</button>
+          </div>
+          <div class="view-options">
+          @if (interior()) {
+            <label class="floor-picker">
+              <span class="sr-only">Planta del recorrido</span>
+              <select aria-label="Planta del recorrido" [value]="floor()" (change)="selectFloor($event)">
+                <option value="ground">Planta baja</option>
+                <option value="upper">Segundo piso</option>
+              </select>
+            </label>
+          }
+          <button class="ambience-button" type="button" [attr.aria-pressed]="ambience()" (click)="toggleAmbience()">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4Z" />@if (ambience()) {<path d="m7 12 3 3 7-7" />}</svg>
+            Ambientación
+          </button>
+          </div>
+        </div>
+        @if (!interior()) {
+        <div class="explorer-tools" role="group" aria-label="Controles del modelo 3D">
+          <button type="button" (click)="zoom(1)" aria-label="Acercar modelo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
+          <button type="button" (click)="zoom(-1)" aria-label="Alejar modelo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /></svg></button>
+          <button class="reset-button" type="button" (click)="reset()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2 6M4 4v7h7" /></svg><span>Vista inicial</span></button>
+        </div>
+        } @else {
+          <div class="walk-controls" role="group" [attr.aria-label]="floor() === 'upper' ? 'Recorrido por el segundo piso' : 'Recorrido por la planta baja'">
+            <p class="walk-point" aria-live="polite"><span>{{ step() + 1 }} / {{ points().length }}</span>{{ points()[step()].title }}</p>
+            <div class="walk-actions">
+              <button type="button" [disabled]="step() === 0 || moving()" (click)="advance(-1)">Retroceder</button>
+              <button type="button" [disabled]="step() === points().length - 1 || moving()" (click)="advance(1)">{{ moving() ? 'Avanzando…' : 'Avanzar' }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></button>
+            </div>
+          </div>
+        }
+        <button class="close-button" type="button" (click)="close()" aria-label="Cerrar vista 3D"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
+      }
+    </div>
+
+    <div class="explorer-caption">
+      <p>{{ state() === 'ready' ? interior() ? 'Arrastra para mirar. Avanza con los botones o las teclas W y S; mira con las flechas.' : 'Arrastra para girar. Usa la rueda o dos dedos para acercarte.' : 'Visualización interactiva del proyecto.' }}</p>
+      <p>Modelo de referencia. Personas y autos ilustrativos. Acabados sujetos a ajustes.</p>
+    </div>
+    <p class="sr-only" role="status">{{ state() === 'ready' ? 'Modelo 3D listo para explorar.' : state() === 'error' ? 'No se pudo cargar el modelo 3D.' : state() === 'loading' ? 'Cargando modelo 3D.' : '' }}</p>
+  </div>
+</section>

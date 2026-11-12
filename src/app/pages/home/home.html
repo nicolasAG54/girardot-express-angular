@@ -118,7 +118,7 @@
         </button>
       }
     </div>
-    <p class="gallery-note">Renders de referencia del proyecto, sujetos a ajustes de diseño. El recorrido 360° se compartirá cuando esté disponible.</p>
+    <p class="gallery-note">Renders de referencia del proyecto, sujetos a ajustes de diseño. También puedes <a routerLink="/proyecto" fragment="explorar-3d">explorar el modelo en 3D</a>.</p>
   </div>
 </section>
 
@@ -144,7 +144,7 @@
 
 <section id="contacto" tabindex="-1" class="contact-section section" aria-labelledby="contact-title" data-nav-section="contacto">
   <div class="contact-layout section-shell" appRevealOnScroll>
-    <div class="contact-copy"><h2 id="contact-title">Conversemos.</h2><p>Cuéntanos qué necesitas. Al completar el formulario podrás enviar tu consulta al equipo por WhatsApp.</p>@if (site.email) {<div class="contact-detail"><span>Correo</span><a [href]="'mailto:' + site.email">{{ site.email }}</a></div>}<div class="contact-detail"><span>WhatsApp</span><a [href]="site.whatsappUrl" target="_blank" rel="noopener noreferrer">{{ site.whatsappLabel }}</a></div></div>
+    <div class="contact-copy"><h2 id="contact-title">Conversemos.</h2><p>Cuéntanos qué necesitas. Envía el formulario y nuestro equipo se pondrá en contacto contigo.</p>@if (site.email) {<div class="contact-detail"><span>Correo</span><a [href]="'mailto:' + site.email">{{ site.email }}</a></div>}<div class="contact-detail"><span>WhatsApp</span><a [href]="site.whatsappUrl" target="_blank" rel="noopener noreferrer">{{ site.whatsappLabel }}</a></div></div>
     <app-contact-form context="general" />
   </div>
 </section>

@@ -1,4 +1,6 @@
-<form class="contact-form" [formGroup]="form" (ngSubmit)="openWhatsApp()" novalidate>
+<form class="contact-form" [formGroup]="form" (ngSubmit)="send()" [attr.name]="formName" [attr.aria-busy]="deliveryState() === 'sending'" novalidate>
+  <input type="hidden" name="form-name" [value]="formName" />
+  <label class="form-honeypot" aria-hidden="true">Deja este campo vacío<input name="bot-field" formControlName="website" autocomplete="off" tabindex="-1" /></label>
   <div class="field-row">
     <label>
       <span>Nombre completo</span>
@@ -130,9 +132,13 @@
 
   <a class="privacy-link" href="/privacidad" target="_blank" rel="noopener noreferrer">Leer información de privacidad (otra pestaña)</a>
   <div class="form-actions">
-    <button class="button button-primary" type="submit">Continuar por WhatsApp</button>
-    <button class="form-clear" type="button" (click)="clearForm()">Borrar formulario</button>
+    <button class="button button-primary" type="submit" [disabled]="deliveryState() === 'sending' || deliveryState() === 'sent'">{{ deliveryState() === 'sending' ? 'Enviando…' : deliveryState() === 'sent' ? 'Solicitud enviada' : 'Enviar solicitud' }}</button>
+    <button class="form-clear" type="button" (click)="clearForm()" [disabled]="deliveryState() === 'sending'">{{ deliveryState() === 'sent' ? 'Nueva consulta' : 'Borrar formulario' }}</button>
   </div>
-  <p class="form-note">Al continuar, WhatsApp recibe los datos del borrador. Puedes revisarlo allí; el equipo lo recibe cuando envías el mensaje.</p>
+  <p class="form-note">Tu solicitud se enviará al equipo de Girardot Express. Te responderemos al correo o teléfono que indiques.</p>
+  <p class="form-delivery-status" role="status">{{ deliveryState() === 'sent' ? 'Tu solicitud quedó registrada. Nuestro equipo la revisará y se pondrá en contacto contigo.' : deliveryState() === 'sending' ? 'Enviando tu solicitud…' : '' }}</p>
+  @if (deliveryState() === 'error') {
+    <div class="form-delivery-error" role="alert"><p>{{ deliveryError() }}</p><a [href]="site.whatsappUrl" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a></div>
+  }
   <p class="form-clear-status" role="status">{{ cleared() ? 'Los datos del formulario se borraron de esta página.' : '' }}</p>
 </form>

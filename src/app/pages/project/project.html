@@ -46,11 +46,13 @@
     <p class="project-hero__opening">{{ site.openingLabel }}</p>
     <div class="project-actions" aria-label="Acciones del proyecto">
       <a class="project-button project-button--yellow" routerLink="/proyecto" fragment="contacto-comercial">Solicitar información comercial</a>
-      <a class="project-button project-button--light" routerLink="/proyecto" fragment="cifras">Explorar los espacios</a>
+      <a class="project-button project-button--light" routerLink="/proyecto" fragment="explorar-3d">Explorar los espacios</a>
     </div>
   </div>
   <span class="project-hero__visual-note">Visualización arquitectónica del proyecto</span>
 </section>
+
+<app-mall-explorer />
 
 <section id="cifras" tabindex="-1" class="project-metrics" aria-labelledby="metrics-title" data-nav-section="cifras" appRevealOnScroll>
   <div class="project-shell project-metrics__stage">

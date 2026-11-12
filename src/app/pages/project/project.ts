@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { COMMERCIAL_FACTS, SITE_CONTENT } from '../../core/site-content';
 import { SITE_MEDIA } from '../../core/site-media';
 import { LocationMap } from '../../shared/location-map';
+import { MallExplorer } from '../../shared/mall-explorer';
 import { ContactForm } from '../../shared/contact-form';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { HeroVideoDirective } from '../../shared/hero-video.directive';
@@ -18,7 +19,7 @@ import { VideoRevealDirective } from '../../shared/video-reveal.directive';
 
 @Component({
   selector: 'app-project',
-  imports: [RouterLink, ContactForm, LocationMap, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
+  imports: [RouterLink, ContactForm, LocationMap, MallExplorer, RevealOnScrollDirective, VideoRevealDirective, HeroVideoDirective],
   templateUrl: './project.html',
   styleUrl: './project.scss',
 })

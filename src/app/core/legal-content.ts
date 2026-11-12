@@ -14,16 +14,16 @@ export const LEGAL_CONTENT: {
   retention: string | null;
   requestProcedure: string | null;
 } = {
-  version: '2026-10-09',
+  version: '2026-11-12',
   privacyDraft: true,
   responsible: null,
   retention: null,
   requestProcedure: null,
 };
 
-// One source for the checkbox and the authorization included in the WhatsApp draft.
+// One source for the checkbox and the authorization recorded with the submission.
 export const CONTACT_AUTHORIZATION =
-  'Autorizo que Girardot Express use estos datos para responder mi solicitud y que se compartan con WhatsApp al continuar. He leído la información de privacidad.';
+  'Autorizo que Girardot Express use los datos de este formulario para responder mi solicitud y me contacte por correo o teléfono. He leído la información de privacidad.';
 
 export const CONTACT_LIMITS = {
   name: 100, phone: 32, email: 254, company: 150,

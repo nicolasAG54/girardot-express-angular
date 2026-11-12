@@ -41,18 +41,18 @@
           <p>La autorización se limita a atender esta solicitud. No te inscribe en boletines ni autoriza campañas publicitarias. Puedes consultar la información del sitio sin completar el formulario.</p>
           <p>No incluyas documentos de identidad, información bancaria, datos de salud ni datos de menores de edad. Estos formularios de contacto están dirigidos a personas adultas; no existe un registro de niños ni una solicitud de datos sensibles.</p>
         </section>
-        <section aria-labelledby="whatsapp-data-title">
-          <h2 id="whatsapp-data-title">Qué pasa al continuar por WhatsApp</h2>
-          <p>Los campos permanecen en la memoria de esta página mientras los completas. El sitio no tiene una base de datos de solicitudes ni guarda el formulario en cookies o almacenamiento local del navegador.</p>
-          <p>Al pulsar «Continuar por WhatsApp», el texto se incorpora a un enlace y se comparte con WhatsApp para abrir un borrador. El equipo recibe el mensaje cuando tú lo envías allí. El enlace puede quedar en el historial del navegador.</p>
-          <p>El borrador incluye el texto y la versión de tu autorización. Puedes revisarlo antes de enviar. Abrir WhatsApp no confirma la recepción de tu consulta ni genera una reserva comercial.</p>
+        <section aria-labelledby="form-delivery-title">
+          <h2 id="form-delivery-title">Qué pasa al enviar el formulario</h2>
+          <p>Mientras completas el formulario, los campos permanecen en la memoria de esta página y no se envían al equipo. El formulario no guarda un borrador en cookies ni en almacenamiento local del navegador.</p>
+          <p>Al pulsar «Enviar solicitud», los datos se transmiten a Netlify Forms, el servicio de recepción del sitio. Netlify almacena las solicitudes recibidas para su gestión y envía una notificación al correo comercial de Girardot Express: {{ site.email }}. El correo del proyecto se gestiona con Zoho Mail.</p>
+          <p>La solicitud incluye el texto y la versión de tu autorización. La fecha indicada por el navegador acompaña el registro de recepción de la plataforma. La confirmación en pantalla informa del registro de la solicitud; no garantiza que el equipo la haya leído ni genera una reserva comercial.</p>
           <p>WhatsApp es un servicio externo y aplica su propia <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">política de privacidad (otra pestaña)</a>.</p>
         </section>
         <section aria-labelledby="chat-data-title">
           <h2 id="chat-data-title">Asistente y borrado en esta página</h2>
           <p>El asistente responde con información predefinida. Las preguntas se procesan en tu navegador, sin enviarse a un servicio de inteligencia artificial ni al equipo comercial. No escribas información personal o sensible en el chat.</p>
           <p>«Borrar conversación» elimina las preguntas y borradores de los dos perfiles del asistente. «Borrar formulario» elimina los datos de los campos de contacto. El sitio no conserva ese contenido al recargar la página.</p>
-          <p>Estos controles no eliminan mensajes ya compartidos con WhatsApp, copias recibidas por el equipo ni el historial de tu navegador.</p>
+          <p>Estos controles no eliminan solicitudes ya registradas en Netlify, correos recibidos por el equipo, mensajes compartidos por WhatsApp ni el historial de tu navegador.</p>
         </section>
         <section id="solicitudes" aria-labelledby="data-rights-title">
           <h2 id="data-rights-title">Tus derechos y cómo solicitar ayuda</h2>
@@ -92,7 +92,7 @@
         <section aria-labelledby="external-service-title">
           <h2 id="external-service-title">Enlaces a otros servicios</h2>
           <p>WhatsApp, Instagram, Google Maps y Waze se abren cuando eliges sus enlaces. No hay widgets de redes sociales ni reproductores externos incrustados. Al abrir esos servicios, sus operadores pueden tratar datos o utilizar cookies según sus propias políticas.</p>
-          <p>El formulario comparte su borrador con WhatsApp solo después de tu autorización y de pulsar el botón para continuar. <a routerLink="/privacidad">Consulta los detalles sobre tus datos</a>.</p>
+          <p>El formulario envía los datos a Netlify Forms después de tu autorización y de pulsar «Enviar solicitud». El equipo recibe las notificaciones por correo, gestionado con Zoho Mail. Los enlaces de WhatsApp siguen siendo una opción de contacto independiente. <a routerLink="/privacidad">Consulta los detalles sobre tus datos</a>.</p>
         </section>
         <section aria-labelledby="hosting-title">
           <h2 id="hosting-title">Archivos y alojamiento</h2>

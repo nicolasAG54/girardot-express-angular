@@ -13,9 +13,7 @@ export const SITE_CONTENT = {
   openingCaption: 'Apertura prevista · Primera etapa',
   openingLabel: `Primera etapa: apertura prevista para ${openingPeriod.toLowerCase()}`,
   address: 'Diagonal 9 # 23–31, Girardot, Cundinamarca',
-  // Previous .com mailbox is unverified after acquisition of the .com.co domain.
-  // Set only a confirmed, operational mailbox; templates omit contact email while null.
-  email: null as string | null,
+  email: 'comercial@girardotexpress.com.co' as string | null,
   whatsappLabel: '+57 313 887 0580',
   whatsappUrl: 'https://wa.me/573138870580',
   mapSearchBase,

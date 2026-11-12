@@ -34,8 +34,8 @@ describe('App', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('app-site-header')).toBeTruthy();
     expect(element.querySelector('app-site-footer')).toBeTruthy();
-    expect(element.querySelector('a[href^="mailto:"]')).toBeNull();
-    expect(JSON.parse(document.querySelector('#site-schema')!.textContent!).email).toBeUndefined();
+    expect(element.querySelector('a[href="mailto:comercial@girardotexpress.com.co"]')).toBeTruthy();
+    expect(JSON.parse(document.querySelector('#site-schema')!.textContent!).email).toBe('comercial@girardotexpress.com.co');
   });
 
   it('makes cross-page scroll restoration immediate and cleans up on destruction', async () => {

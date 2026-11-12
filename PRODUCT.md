@@ -31,7 +31,7 @@ La mayoría de visitantes consultará el sitio desde el teléfono, muchas veces 
 - Portada pública centrada en conveniencia, ubicación, experiencias y contacto.
 - Ruta canónica `/proyecto` para información B2B, cifras, niveles y oportunidades de arrendamiento; `/espacios-comerciales` permanece como alias para enlaces existentes.
 - Dirección del documento actualizado del cliente: Diagonal 9 # 23–31, Girardot, Cundinamarca. Punto de mapa: 4.299272, -74.819122.
-- Correo comercial pendiente de verificar tras la compra de `girardotexpress.com.co`; el buzón `.com` del documento anterior queda oculto hasta confirmar un canal operativo.
+- Correo oficial confirmado por el usuario: `comercial@girardotexpress.com.co`, receptor de ambos formularios. No usar el antiguo buzón `.com`.
 - WhatsApp comercial: +57 313 887 0580.
 - Instagram: @girardotexpresscc. No mostrar Facebook hasta contar con su enlace oficial.
 - Primera etapa: apertura prevista para finales de 2026. No hay día exacto ni cuenta regresiva.
@@ -42,7 +42,7 @@ La mayoría de visitantes consultará el sitio desde el teléfono, muchas veces 
 - El video existente es provisional; debe quedar desacoplado para reemplazarlo fácilmente.
 - Las cifras 6.629 m², 56 locales, 3 niveles y 275 parqueaderos solo se presentan en el contexto B2B.
 - No mostrar áreas desagregadas por piso: el nuevo material presenta una diferencia de 1 m² pendiente de aclaración.
-- El formulario prepara una consulta de WhatsApp que el visitante debe enviar. No guarda solicitudes ni confirma recepción automática.
+- El formulario envía la solicitud a Netlify Forms y notifica al correo comercial; la activación exige publicar esta versión, detectar los formularios y confirmar el destinatario en Netlify. La confirmación de registro no garantiza lectura del mensaje.
 - Chatbot local de respuestas predefinidas: 21 preguntas del cliente, seis accesos rápidos y orientación comercial para inversión. No implica venta ni rentabilidad.
 
 ## Brand Commitments
@@ -91,6 +91,6 @@ Estado de implementación y validación: CAMBIOS_V3.md.
 
 ## Datos personales · octubre de 2026
 
-El sitio no realiza transacciones, no inscribe a newsletters y no incluye analítica/publicidad ni cookies propias. El formulario prepara una URL de WhatsApp tras autorización explícita: el borrador se comparte con ese proveedor al continuar y el equipo recibe el mensaje cuando el usuario lo envía. No afirmar que el dato permanece local después de abrir WhatsApp. El chat usa respuestas locales predefinidas, con borrado de sus dos perfiles; el formulario también ofrece borrado local. Esos controles no eliminan copias externas.
+El sitio no realiza transacciones, no inscribe a newsletters y no incluye analítica/publicidad ni cookies propias. Desde noviembre de 2026, esta versión envía el formulario a Netlify Forms tras autorización explícita, registrando texto/versión de autorización y la fecha indicada por el navegador. Netlify conserva el registro de recepción y notifica al correo comercial, gestionado en Zoho Mail. La copia local no entrega solicitudes. El chat usa respuestas locales predefinidas; los controles de borrado local no eliminan solicitudes de Netlify, correos ni copias externas.
 
-Privacidad es un borrador pendiente de identificación legal, canal operativo, procedimientos y conservación aprobados por la empresa. El WhatsApp de contacto orienta las solicitudes sin simular su radicación. `legal-content.ts` conserva estos pendientes explícitos. El correo anterior `.com` requiere confirmación tras la compra de `.com.co`; no crear ni anunciar buzones sin verificar su existencia. Antes de publicar debe confirmarse el permiso de uso del material suministrado e ilustrativo.
+Privacidad sigue como borrador pendiente de identificación legal, procedimientos y conservación aprobados por la empresa. WhatsApp orienta las solicitudes de derechos sin simular su radicación. `legal-content.ts` conserva estos pendientes. El correo comercial `.com.co` fue confirmado por el usuario; no anunciar el antiguo `.com` ni inventar otros buzones. Antes de publicar debe confirmarse el permiso de uso del material suministrado e ilustrativo.

@@ -17,6 +17,13 @@ small { color: var(--error); font-size: 0.75rem; font-weight: 650; }
 .form-clear-status { margin: 0; color: var(--ink-soft); font-size: .78rem; line-height: 1.6; }
 .form-clear-status:empty { display: none; }
 .form-note { margin: -0.35rem 0 0; color: var(--ink-soft); font-size: 0.74rem; }
+.form-honeypot { display: none; }
+.form-delivery-status { margin: 0; font-size: .85rem; line-height: 1.6; }
+.form-delivery-status:empty { display: none; }
+.form-delivery-error { color: var(--error); font-size: .85rem; line-height: 1.6; }
+.form-delivery-error p { margin: 0 0 .5rem; }
+.form-delivery-error a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-underline-offset: .2em; }
+button:disabled { opacity: .65; cursor: default; }
 @media (max-width: 620px) { .field-row { grid-template-columns: 1fr; } .contact-form .button { width: 100%; } }
 
 .commercial-fields { min-width: 0; margin: .5rem 0; padding: 1.25rem 0 0; border: 0; border-top: 1px solid var(--line); }

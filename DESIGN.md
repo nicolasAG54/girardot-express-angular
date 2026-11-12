@@ -19,6 +19,7 @@ colors:
   project-yellow: "#f3b71a"
   project-muted: "#656565"
   project-line: "#dcdcd7"
+  mall-explorer-stage: "#e5e4df"
 typography:
   display-home:
     fontFamily: "Poppins, Segoe UI, sans-serif"
@@ -71,6 +72,28 @@ typography:
     fontWeight: 600
     lineHeight: 0.84
     letterSpacing: "-0.04em"
+  mall-explorer-headline:
+    fontFamily: "Poppins, Segoe UI, sans-serif"
+    fontSize: "clamp(2.5rem, 4.7vw, 4.7rem)"
+    fontWeight: 500
+    lineHeight: 1.04
+    letterSpacing: "-0.04em"
+  mall-explorer-launch:
+    fontFamily: "Poppins, Segoe UI, sans-serif"
+    fontSize: "clamp(1.65rem, 2.6vw, 2.5rem)"
+    fontWeight: 500
+    lineHeight: 1.15
+    letterSpacing: "-0.035em"
+  mall-explorer-body:
+    fontFamily: "Poppins, Segoe UI, sans-serif"
+    fontSize: "0.9rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  mall-explorer-caption:
+    fontFamily: "Poppins, Segoe UI, sans-serif"
+    fontSize: "0.75rem"
+    fontWeight: 400
+    lineHeight: 1.6
 rounded:
   field: "8px"
   sm: "12px"
@@ -167,6 +190,12 @@ components:
     textColor: "{colors.paper}"
     typography: "{typography.footer-wordmark}"
     padding: "clamp(4rem, 7vw, 6rem) 0 1.5rem"
+  mall-explorer-stage:
+    backgroundColor: "{colors.mall-explorer-stage}"
+    height: "clamp(420px, 46vw, 660px)"
+  mall-explorer-stage-mobile:
+    backgroundColor: "{colors.mall-explorer-stage}"
+    height: "460px"
 ---
 
 # Design System: Girardot Express
@@ -220,6 +249,7 @@ La paleta se comporta como señalética: los neutros construyen la mayor parte d
 - **Gris de Sala:** sección de novedades y superficie suave de formularios B2B.
 - **Línea Editorial:** separadores, placeholders de marcas y matrices técnicas.
 - **Neutros de Proyecto:** `project-muted` y `project-line` afinan el contraste de lectura en la ruta técnica sin crear otra identidad.
+- **Neutro del visor:** `mall-explorer-stage` pertenece únicamente al lienzo 3D de MallExplorer; acompaña el modelo sobre la sección Gris de Sala y no amplía la paleta general.
 
 **The Yellow Route Rule.** El amarillo guía; no tapiza. Debe aparecer en acciones, focos, flechas, subrayados o detalles pequeños, nunca como un fondo de sección completa ni como degradado decorativo.
 
@@ -242,6 +272,7 @@ La paleta se comporta como señalética: los neutros construyen la mayor parte d
 - **Body:** peso 400, base de 1rem e interlineado de 1.65–1.75; mantener párrafos entre 34ch y 58ch según el contexto.
 - **Label:** peso 600 para navegación, formularios y acciones. El peso 700 queda reservado a la marca, CTA compartidos y microetiquetas amarillas.
 - **Microcopy:** 0.58–0.82rem para fechas, categorías, notas y estados; nunca se usa para información esencial sin una alternativa legible.
+- **Escalas locales de MallExplorer:** `mall-explorer-headline` corresponde al título del capítulo; `mall-explorer-launch`, a la invitación y los estados del visor; `mall-explorer-body`, al cuerpo del panel de activación y su CTA; y `mall-explorer-caption`, a las ayudas y notas de referencia. Conservan Poppins y solo se aplican a este componente, sin sustituir los titulares, cuerpos ni etiquetas compartidos.
 
 **The One Grotesk Rule.** No introducir serif, display ornamental ni una segunda sans serif. El carácter se obtiene con escala, composición y fotografía.
 
@@ -256,6 +287,8 @@ Home alterna cinco formas de composición para evitar la sensación de catálogo
 Proyecto organiza una lectura más técnica: hero a sangre, cifras asimétricas alrededor de una síntesis central y un capítulo negro 1+3 con un medio protagonista y tres escenas de mezcla en una fila. Después siguen la composición arquitectónica por capas, la matriz de servicios, la ubicación negra con mapa y el contacto blanco. La información técnica nunca se traslada a Home para llenar espacio.
 
 La respuesta móvil preserva la secuencia, no la miniaturiza. A 1100px se reordena la arquitectura de Proyecto y la navegación se convierte en panel; a 980px se apilan los layouts principales de Home; a 900px la fila de tres escenas de Proyecto pasa a 2+1; entre 700px y 720px el mosaico de Home y los encabezados pasan a una columna; a 620px los campos dobles se apilan; y entre 430px y 540px servicios, métricas, mezcla técnica y footer quedan en una sola columna. Los carruseles horizontales usan `scroll-snap`; los CTA principales ocupan todo el ancho cuando la lectura táctil lo requiere.
+
+MallExplorer se integra en Espacios comerciales (/proyecto), inmediatamente después de la portada y antes de Cifras, dentro del contenedor y el ritmo de sección compartidos. El botón Explorar los espacios de la portada y el enlace de la galería de Inicio llevan a /proyecto#explorar-3d. Su cabecera enfrenta título y explicación; el visor ocupa todo el ancho disponible y usa la altura local `mall-explorer-stage`. A 700px o menos, la cabecera y los pies de figura se apilan y el visor usa `mall-explorer-stage-mobile`. La vista exterior ajusta la distancia de cámara a la proporción del lienzo; el recorrido interior mantiene una altura de mirada de 1.65m en seis puntos conectados por planta. En el segundo piso, la losa está a 4.75m y la cámara a 6.40m; la ruta dibuja una U alrededor del atrio y conserva el vacío central.
 
 **The Chapter Rhythm Rule.** Una pantalla nueva debe alternar composición, tono y escala. No repetir la misma cuadrícula de tarjetas de principio a fin.
 
@@ -309,6 +342,56 @@ Las escenas generadas o conceptuales se identifican de forma visible cerca del m
 ### Services
 
 Home presenta servicios como una rejilla de iconos lineales, títulos y cuerpo sin cajas. Proyecto usa una matriz con bordes compartidos para comunicar estructura técnica. En ambos casos la iconografía tiene trazo fino y el espacio negativo reemplaza la decoración.
+
+### Imágenes arquitectónicas · cubierta recta
+
+Las vistas arquitectónicas de ambas páginas deben corresponder al modelo actual,
+con cubierta recta. No reutilizar las imágenes anteriores de cubierta ondulada.
+`SITE_MEDIA` centraliza cinco renders originales del cliente en
+`assets/techo-recto`: fachada, pasillo, acceso, plazoleta y vista general elevada.
+Las galerías, secciones editoriales y póster de MallExplorer comparten estas fuentes;
+la imagen Open Graph también usa la fachada actualizada. Los textos alternativos
+describen las vistas actuales y su cubierta recta. Los videos de portada
+con cubierta recta y las escenas ilustrativas de experiencia se conservan.
+
+Las copias web se preparan localmente a 1920×1080 con
+`scripts/prepare-straight-roof-media.py`; procedencia y hashes en
+`public/assets/techo-recto/PROVENANCE.json`. No hay edición generativa del diseño.
+
+### MallExplorer · Experience
+
+Extensión de la identidad existente para explorar el modelo real suministrado en SKP y convertido a GLB para la web. El modo Experience combina una vista exterior orbital con recorridos interiores por puntos conectados de planta baja y segundo piso. La planta baja recorre acceso, pasillo y plazoleta; el segundo piso enlaza llegada de escaleras, galería superior, vista al atrio, zona de mesas, balcón y fachada. Conserva Poppins, blanco, neutros y amarillo; el encabezado «Míralo desde otro ángulo.» y la invitación «Elige tu punto de vista.» sostienen la jerarquía sin kickers redundantes.
+
+El lienzo es rectangular, de borde fino y sin sombra; sobre el póster arquitectónico, un overlay oscuro concentra la invitación y el CTA amarillo «Explorar en 3D». Three.js, el modelo y los recursos de ambientación se cargan solo tras esa activación explícita, nunca al entrar a Home. El panel informa del uso de datos y la compatibilidad requerida; durante la carga muestra progreso y Cancelar. Ante un error ofrece «Reintentar vista 3D» y conserva la galería como alternativa.
+
+Una vez listo, el selector superior permite alternar «Vista exterior» y «Recorrer interior», con amarillo para la opción activa. En exterior, arrastrar gira el modelo y la rueda o dos dedos controlan el zoom; los botones de acercar, alejar y «Vista inicial» ocupan la barra blanca inferior izquierda. En interior, el select nativo «Planta del recorrido» ofrece «Planta baja» y «Segundo piso»; la planta baja sigue siendo la opción inicial. Cambiar al segundo piso sitúa directamente al visitante en la llegada de escaleras, sin animar una subida. La barra inferior identifica el punto y su posición entre seis en la planta elegida; «Avanzar» y «Retroceder», o W/S con el lienzo enfocado, conectan los puntos de `MALL_ROUTES`. Arrastrar y las flechas cambian la mirada. Los límites y los desplazamientos en curso deshabilitan las acciones correspondientes. Con `prefers-reduced-motion`, el cambio de punto es instantáneo. «Vista exterior» recupera el encuadre orbital.
+
+«Ambientación» permite mostrar u ocultar ocho autos y catorce personas estáticas CC0, junto con follaje reutilizado del SKP; son referencias ilustrativas de escala y ocupación. Dos figuras del segundo piso reutilizan los recursos existentes: ampliar el recorrido no añade dependencias ni descargas de assets. Los recursos añadidos de ambientación siguen sumando aproximadamente 0.67MB y conservan intacto el modelo de 29.1MB. No hay movimiento autónomo de personajes ni giro automático del modelo. El render funciona por demanda, las sombras se recalculan al cargar o alternar la ambientación y se conservan estáticas durante el movimiento de cámara; el render se pausa fuera de pantalla o con la pestaña oculta.
+
+El refinamiento local de materiales se aplica en runtime según los nombres de material del modelo, sin deducir acabados a partir del color de una fachada. Conserva geometría, colores de albedo, mapas y UV originales; cambia la respuesta superficial, sin sustituir texturas ni añadir envejecimiento. El vidrio usa material físico con rugosidad de 0.075, IOR de 1.5 y capa de barniz, sin transmisión ni una pasada adicional de refracción. Conserva el tinte y solo limita la opacidad a 0.32 cuando el vidrio original ya es transparente, neutro y no tiene mapa.
+
+| Acabado local | Rugosidad | Metalicidad |
+| --- | --- | --- |
+| Acero y otros metales identificados por nombre | 0.30 | 0.82 |
+| Piedra, terrazo y baldosa | 0.38 | 0 |
+| Concreto y estuco | 0.88 | 0 |
+| Asfalto | 0.96 | 0 |
+| Madera y laminado | 0.52 | 0 |
+| Tela y cuero | 0.94 | 0 |
+| Follaje | 0.82 | 0 |
+| Pintura y materiales sin otra clasificación | 0.72 | 0 |
+
+En piedra, concreto, asfalto y madera con mapa de albedo pero sin mapas normales ni bump, el mismo albedo aporta un relieve sutil: escala de 0.008 en asfalto y 0.003 en las demás superficies. La anisotropía se limita a 4 o al máximo soportado por el dispositivo, si es menor. Estos valores pertenecen al visor y no son nuevos tokens de marca.
+
+La iluminación diurna se genera localmente una vez por escena con `Sky` y PMREM, sin HDRI remoto, créditos ni servicio D5. El entorno tiene intensidad de 0.12; el sol cálido, 3.1; la luz hemisférica, 0.35; y la exposición con mapeo tonal ACES, 0.95. El mapa de sombras estáticas es de 2048×2048. Una única sonda local de 128px por cara captura solo la arquitectura al cargar, excluyendo personas y autos para respetar el control de ambientación, y aplica su reflejo a los vidrios con intensidad de 0.7. Es una aproximación fija compartida por todo el edificio: no se actualiza al mover la cámara o alternar la ambientación, no es reflexión dinámica ni ray tracing. El carácter low poly y las texturas originales siguen visibles; el acabado no se presenta como un render fotorrealista de D5. Se mantienen la activación lazy y el dibujo por demanda.
+
+Los controles heredan superficies blancas, bordes finos, iconos lineales y respuesta amarilla. Las acciones exteriores y Cerrar mantienen un mínimo de 46×46px; los botones del selector de vista y del recorrido tienen una altura mínima de 44px. El select de planta mide al menos 46px de alto, con ancho máximo de 150px y fuente local de 0.78rem en escritorio; a 700px o menos pasa a un máximo de 140px y 0.75rem. La etiqueta del punto usa una escala local de 0.85rem en escritorio y 0.78rem a 700px o menos; en ese mismo corte, los botones superiores pasan a 0.72rem. Estas medidas pertenecen a MallExplorer y no redefinen las etiquetas globales. En móvil, los controles superiores se ordenan en dos filas y la barra del recorrido apila el nombre y las dos acciones para conservar el espacio del lienzo.
+
+Cerrar ocupa la esquina superior derecha, cancela la carga o libera escena, recursos y contexto WebGL, devuelve el póster y restaura el foco al CTA. El visor admite foco visible y anuncios de carga, disponibilidad y error; el nombre del punto se anuncia al cambiar de posición.
+
+El pie conserva «Modelo de referencia. Personas y autos ilustrativos. Acabados sujetos a ajustes.» y adapta las instrucciones al exterior o al recorrido interior. Esa aclaración acompaña siempre la experiencia sin presentarla como fotografía real, desplazamiento libre por todo el inmueble ni acceso a todos los locales. La implementación se concentra en `mall-explorer.*`, `mall-scene.ts` y `mall-walk.ts`. Evidencia del exterior y la planta baja: `../.codex_artifacts/recorrido-3d/exterior-desktop.jpg`, `../.codex_artifacts/recorrido-3d/entrada-desktop.jpg`, `../.codex_artifacts/recorrido-3d/plazoleta-desktop.jpg` y `../.codex_artifacts/recorrido-3d/interior-mobile.jpg`. Evidencia de la extensión al segundo piso: `../.codex_artifacts/segundo-piso-3d/galeria-desktop-final.jpg`, `../.codex_artifacts/segundo-piso-3d/atrio-desktop.jpg` y `../.codex_artifacts/segundo-piso-3d/segundo-mobile.jpg`.
+
+El tratamiento local de superficies se concentra en `mall-materials.ts` y la iluminación en `mall-scene.ts`, conservando rutas, distribución y marca. Evidencia del refinamiento: `../.codex_artifacts/materiales-iluminacion-3d/pasillo-desktop.jpg`, `../.codex_artifacts/materiales-iluminacion-3d/segundo-piso-desktop.jpg` y `../.codex_artifacts/materiales-iluminacion-3d/segundo-piso-mobile.jpg`.
 
 ### Inputs / Fields
 
@@ -465,6 +548,6 @@ El icono suelto se presenta como un botón de 48 × 48 px, con el mismo fondo, b
 
 Las rutas `/privacidad`, `/cookies` y `/terminos` extienden el lenguaje de FAQ: Poppins, fondo blanco, columna de lectura de 72ch, títulos contenidos y navegación legal de texto. El footer incluye sus accesos y el enlace a solicitudes sobre datos. Privacidad muestra explícitamente su estado de borrador y usa `noindex` mientras faltan identificación y procedimientos del responsable; la marca no sustituye la razón social.
 
-Formulario: autorización desmarcada, enlace de privacidad en otra pestaña para conservar los campos, aviso de la entrega del borrador a WhatsApp, borrado local y bordes con contraste suficiente. Chat: aviso de procesamiento local y borrado de ambas conversaciones/borradores. El mapa mantiene su presentación y añade una referencia al proveedor y su privacidad. El correo del dominio anterior queda oculto hasta verificar un buzón operativo.
+Formulario: autorización desmarcada y enlace de privacidad en otra pestaña. «Enviar solicitud» registra la consulta con Netlify Forms y la notificación se dirige a comercial@girardotexpress.com.co. Los estados Enviando/Solicitud enviada/Error se anuncian con status/alert; se bloquea el reenvío mientras está pendiente o confirmado. En error se conservan los campos y se ofrece WhatsApp como alternativa. «Nueva consulta» limpia los campos y reinicia la autorización. La copia local muestra que no puede enviar; nunca simula éxito. El correo oficial se comparte mediante SITE_CONTENT. La confirmación de registro no acredita lectura del correo. Chat: procesamiento local y borrado de ambas conversaciones/borradores. El mapa conserva sus avisos de proveedor.
 
 Validación: 97 pruebas unitarias, compilación de producción con siete rutas prerenderizadas y recorrido de privacidad en 1440/390px (`scripts/check-privacy.cjs`). El registro de consentimiento en servidor, la atención de solicitudes por la empresa y las licencias de los medios suministrados no se presentan como resueltos. Evidencia local en `../.codex_artifacts/privacy-2026-10-09/`.
