@@ -20,6 +20,7 @@
   <section
     id="girardot-chatbot"
     class="chatbot-panel"
+    [class.is-compact]="compactViewport()"
     aria-labelledby="chatbot-title"
   >
     <header class="chatbot-header">
@@ -28,7 +29,7 @@
         <h2 id="chatbot-title">Conversemos</h2>
         <p><span aria-hidden="true"></span>Orientación automática</p>
       </div>
-      <button type="button" aria-label="Cerrar asistente" (click)="closePanel()">
+      <button #closeButton type="button" aria-label="Cerrar asistente" (click)="closePanel()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg>
       </button>
     </header>

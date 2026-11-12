@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 
 import {
   CHATBOT_QUICK_ACTIONS,
@@ -40,14 +41,20 @@ export class ChatbotWidget {
   @ViewChild('launcher') private launcher?: ElementRef<HTMLButtonElement>;
   @ViewChild('messageInput') private messageInput?: ElementRef<HTMLInputElement>;
   @ViewChild('conversation') private conversation?: ElementRef<HTMLElement>;
+  @ViewChild('closeButton') private closeButton?: ElementRef<HTMLButtonElement>;
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+  private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef);
+  private viewportCleanup?: () => void;
+  private previousBodyOverflow?: string;
   private focusTimer: ReturnType<typeof setTimeout> | undefined;
   private scrollTimer: ReturnType<typeof setTimeout> | undefined;
   private nextMessageId = 2;
 
   protected readonly isOpen = signal(false);
+  protected readonly compactViewport = signal(false);
   protected readonly draft = signal('');
   protected readonly cleared = signal(false);
   protected readonly audience = signal<FaqAudience>('visitor');
@@ -69,6 +76,7 @@ export class ChatbotWidget {
     this.destroyRef.onDestroy(() => {
       if (this.focusTimer !== undefined) clearTimeout(this.focusTimer);
       if (this.scrollTimer !== undefined) clearTimeout(this.scrollTimer);
+      this.stopViewportTracking();
     });
   }
 
@@ -83,15 +91,21 @@ export class ChatbotWidget {
       this.hasChosenAudience = true;
     }
     this.isOpen.set(true);
-    this.scheduleInputFocus();
+    this.startViewportTracking();
+    this.schedulePanelFocus();
   }
 
   protected closePanel(returnFocus = true): void {
     if (!this.isOpen()) return;
 
+    if (this.focusTimer !== undefined) clearTimeout(this.focusTimer);
+    this.stopViewportTracking();
     this.isOpen.set(false);
     if (returnFocus) {
-      this.focusTimer = setTimeout(() => this.launcher?.nativeElement.focus(), 0);
+      this.focusTimer = setTimeout(() => {
+        this.launcher?.nativeElement.focus({ preventScroll: true });
+        this.focusTimer = undefined;
+      }, 0);
     }
   }
 
@@ -123,7 +137,7 @@ export class ChatbotWidget {
     this.draft.set('');
     this.nextMessageId = 2;
     this.cleared.set(true);
-    this.scheduleInputFocus();
+    this.schedulePanelFocus();
     this.scheduleConversationScroll();
   }
 
@@ -172,10 +186,61 @@ export class ChatbotWidget {
     this.scheduleConversationScroll();
   }
 
-  private scheduleInputFocus(): void {
+  private isTouchLayout(view: Window): boolean {
+    return view.innerWidth <= 560 || !!view.matchMedia?.('(pointer: coarse)').matches;
+  }
+
+  private startViewportTracking(): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+    const viewport = view.visualViewport;
+    const update = () => {
+      const height = viewport?.height ?? view.innerHeight;
+      const top = viewport?.offsetTop ?? 0;
+      const style = this.hostElement.nativeElement.style;
+      style.setProperty('--chat-viewport-height', `${Math.max(0, height)}px`);
+      style.setProperty('--chat-viewport-top', `${Math.max(0, top)}px`);
+      this.compactViewport.set(height < 480);
+      if (this.isTouchLayout(view)) {
+        if (this.previousBodyOverflow === undefined) this.previousBodyOverflow = this.document.body.style.overflow;
+        this.document.body.style.overflow = 'hidden';
+      } else {
+        this.restorePageOverflow();
+      }
+    };
+    update();
+    viewport?.addEventListener('resize', update);
+    viewport?.addEventListener('scroll', update);
+    view.addEventListener('resize', update);
+    this.viewportCleanup = () => {
+      viewport?.removeEventListener('resize', update);
+      viewport?.removeEventListener('scroll', update);
+      view.removeEventListener('resize', update);
+    };
+  }
+
+  private restorePageOverflow(): void {
+    if (this.previousBodyOverflow === undefined) return;
+    this.document.body.style.overflow = this.previousBodyOverflow;
+    this.previousBodyOverflow = undefined;
+  }
+
+  private stopViewportTracking(): void {
+    this.viewportCleanup?.();
+    this.viewportCleanup = undefined;
+    this.restorePageOverflow();
+    this.compactViewport.set(false);
+    this.hostElement.nativeElement.style.removeProperty('--chat-viewport-height');
+    this.hostElement.nativeElement.style.removeProperty('--chat-viewport-top');
+  }
+
+  private schedulePanelFocus(): void {
     if (this.focusTimer !== undefined) clearTimeout(this.focusTimer);
     this.focusTimer = setTimeout(() => {
-      this.messageInput?.nativeElement.focus();
+      if (!this.isOpen()) return;
+      const view = this.document.defaultView;
+      const target = view && this.isTouchLayout(view) ? this.closeButton : this.messageInput;
+      target?.nativeElement.focus({ preventScroll: true });
       this.focusTimer = undefined;
     }, 0);
   }

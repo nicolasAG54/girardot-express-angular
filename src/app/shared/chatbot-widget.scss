@@ -3,7 +3,7 @@
 .chatbot-launcher {
   position: fixed;
   right: 1.25rem;
-  bottom: 2rem;
+  bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   min-height: 52px;
   display: inline-flex;
@@ -231,21 +231,32 @@
   .chatbot-composer button:not(:disabled):hover { transform: translateY(-1px); }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 560px), (pointer: coarse) {
   .chatbot-launcher { right: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); width: 52px; height: 52px; padding: 6px; border-radius: 50%; }
   .chatbot-launcher > span:first-child { display: none; }
 
   .chatbot-panel {
-    inset: 0.5rem;
+    inset: auto 0.5rem;
+    top: calc(var(--chat-viewport-top, 0px) + max(0.5rem, env(safe-area-inset-top, 0px)));
     width: auto;
-    height: auto;
+    height: calc(var(--chat-viewport-height, 100dvh) - max(0.5rem, env(safe-area-inset-top, 0px)) - max(0.5rem, env(safe-area-inset-bottom, 0px)));
     border-radius: var(--radius-md);
   }
 
+  .chatbot-composer input { font-size: 16px; }
   .chatbot-header { padding: 0.85rem; }
   .chatbot-conversation { padding: 0.85rem; }
   .chatbot-message { max-width: 92%; }
 }
+
+/* Keep header, conversation and composer reachable above a phone's keyboard. */
+.chatbot-panel.is-compact .chatbot-header { padding: .5rem .75rem; }
+.chatbot-panel.is-compact .chatbot-audience { padding: .35rem .75rem; }
+.chatbot-panel.is-compact .chatbot-conversation { padding: .5rem .75rem; }
+.chatbot-panel.is-compact .chatbot-composer { padding: .5rem .75rem; }
+.chatbot-panel.is-compact .chatbot-privacy { padding: .25rem .75rem; }
+.chatbot-panel.is-compact .chatbot-privacy p { font-size: .7rem; line-height: 1.4; }
+.chatbot-panel.is-compact .chatbot-tools { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .chatbot-panel { animation: chatbot-panel-fade 160ms ease both; }
