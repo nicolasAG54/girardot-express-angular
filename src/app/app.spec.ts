@@ -36,6 +36,13 @@ describe('App', () => {
     expect(element.querySelector('app-site-footer')).toBeTruthy();
     expect(element.querySelector('a[href="mailto:comercial@girardotexpress.com.co"]')).toBeTruthy();
     expect(JSON.parse(document.querySelector('#site-schema')!.textContent!).email).toBe('comercial@girardotexpress.com.co');
+    const mall = JSON.parse(document.querySelector('#site-schema')!.textContent!);
+    const website = JSON.parse(document.querySelector('#website-schema')!.textContent!);
+    expect(mall.url).toBe('https://girardotexpress.com.co/');
+    expect(mall.address.addressLocality).toBe('Girardot');
+    expect(website.name).toBe('Girardot Express');
+    expect(website.publisher['@id']).toBe(mall['@id']);
+    expect(document.querySelectorAll('#website-schema')).toHaveLength(1);
   });
 
   it('makes cross-page scroll restoration immediate and cleans up on destruction', async () => {

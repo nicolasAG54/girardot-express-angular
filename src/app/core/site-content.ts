@@ -5,6 +5,7 @@ const mapSearchBase = 'https://www.google.com/maps/search/?api=1&query=';
 
 export const SITE_CONTENT = {
   name: 'Girardot Express',
+  url: 'https://girardotexpress.com.co',
   slogan: 'Todo lo que necesitas, más cerca.',
   horizontalLogoUrl: '/assets/brand/girardot-express-horizontal.png',
   coordinates,

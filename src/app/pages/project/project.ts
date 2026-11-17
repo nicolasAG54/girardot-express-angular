@@ -92,7 +92,8 @@ export class Project {
   private readonly document = inject(DOCUMENT);
 
   constructor() {
-    this.titleService.setTitle('Espacios comerciales | Girardot Express');
+    const title = 'Locales comerciales en Girardot | Girardot Express';
+    this.titleService.setTitle(title);
     this.meta.updateTag({
       name: 'description',
       content:
@@ -100,14 +101,14 @@ export class Project {
     });
     this.meta.updateTag({
       property: 'og:title',
-      content: 'Espacios comerciales | Girardot Express',
+      content: title,
     });
     this.meta.updateTag({
       property: 'og:description',
       content: 'Una oportunidad para tu marca en Girardot. Conoce las cifras, las etapas y los espacios proyectados.',
     });
-    this.meta.updateTag({ property: 'og:url', content: '/proyecto' });
-    this.setCanonical('/proyecto');
+    this.meta.updateTag({ property: 'og:url', content: `${SITE_CONTENT.url}/proyecto/` });
+    this.setCanonical('/proyecto/');
 
   }
 
@@ -118,6 +119,6 @@ export class Project {
       canonical.rel = 'canonical';
       this.document.head.appendChild(canonical);
     }
-    canonical.href = href;
+    canonical.href = new URL(href, SITE_CONTENT.url).href;
   }
 }

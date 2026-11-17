@@ -23,10 +23,11 @@ export class Faq {
     meta.updateTag({ name: 'description', content: description });
     meta.updateTag({ property: 'og:title', content: `Preguntas frecuentes | ${SITE_CONTENT.name}` });
     meta.updateTag({ property: 'og:description', content: description });
-    meta.updateTag({ property: 'og:url', content: '/preguntas-frecuentes' });
+    const url = `${SITE_CONTENT.url}/preguntas-frecuentes/`;
+    meta.updateTag({ property: 'og:url', content: url });
     const document = inject(DOCUMENT);
     const canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (canonical) canonical.href = '/preguntas-frecuentes';
+    if (canonical) canonical.href = url;
   }
 
   protected updateQuery(event: Event): void {

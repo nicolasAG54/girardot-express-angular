@@ -48,10 +48,31 @@ export class App implements AfterViewInit {
     }
     schema.textContent = JSON.stringify({
       '@context': 'https://schema.org', '@type': 'ShoppingCenter',
-      name: SITE_CONTENT.name, slogan: SITE_CONTENT.slogan, address: SITE_CONTENT.address,
+      '@id': `${SITE_CONTENT.url}/#centro-comercial`,
+      url: `${SITE_CONTENT.url}/`,
+      logo: new URL(SITE_CONTENT.logoUrl, SITE_CONTENT.url).href,
+      image: `${SITE_CONTENT.url}/assets/techo-recto/fachada.webp`,
+      name: SITE_CONTENT.name, slogan: SITE_CONTENT.slogan,
+      address: {
+        '@type': 'PostalAddress', streetAddress: 'Diagonal 9 # 23–31',
+        addressLocality: 'Girardot', addressRegion: 'Cundinamarca', addressCountry: 'CO',
+      },
       geo: { '@type': 'GeoCoordinates', ...SITE_CONTENT.coordinates },
       email: SITE_CONTENT.email ?? undefined, telephone: SITE_CONTENT.whatsappLabel,
       sameAs: [SITE_CONTENT.social.instagram],
+    });
+    let website = this.pageDocument.head.querySelector<HTMLScriptElement>('#website-schema');
+    if (!website) {
+      website = this.pageDocument.createElement('script');
+      website.id = 'website-schema';
+      website.type = 'application/ld+json';
+      this.pageDocument.head.appendChild(website);
+    }
+    website.textContent = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'WebSite',
+      '@id': `${SITE_CONTENT.url}/#website`, name: SITE_CONTENT.name,
+      url: `${SITE_CONTENT.url}/`, inLanguage: 'es-CO',
+      publisher: { '@id': `${SITE_CONTENT.url}/#centro-comercial` },
     });
     // Router anchor scrolling uses window.scrollTo and does not read CSS scroll-padding.
     // Measure at the time of navigation so desktop, mobile and zoom share one offset.

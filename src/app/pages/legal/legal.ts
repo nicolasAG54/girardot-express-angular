@@ -45,9 +45,10 @@ export class Legal {
     meta.updateTag({ name: 'description', content: this.document.description });
     meta.updateTag({ property: 'og:title', content: `${this.document.title} | ${SITE_CONTENT.name}` });
     meta.updateTag({ property: 'og:description', content: this.document.description });
-    meta.updateTag({ property: 'og:url', content: this.document.path });
+    const url = `${SITE_CONTENT.url}${this.document.path}/`;
+    meta.updateTag({ property: 'og:url', content: url });
     const canonical = inject(DOCUMENT).head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (canonical) canonical.href = this.document.path;
+    if (canonical) canonical.href = url;
     if (this.kind === 'privacy' && this.legal.privacyDraft) {
       meta.updateTag({ name: 'robots', content: 'noindex, follow' });
       inject(DestroyRef).onDestroy(() => meta.removeTag('name="robots"'));

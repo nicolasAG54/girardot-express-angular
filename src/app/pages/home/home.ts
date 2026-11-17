@@ -48,18 +48,19 @@ export class Home {
   private readonly document = inject(DOCUMENT);
 
   constructor() {
-    this.titleService.setTitle(`${SITE_CONTENT.name} | ${SITE_CONTENT.slogan}`);
+    const title = `${SITE_CONTENT.name} | Centro comercial en Girardot`;
+    this.titleService.setTitle(title);
     this.meta.updateTag({
       name: 'description',
       content:
-        `Compras, servicios, gastronomía, bienestar y experiencias en Girardot. ${SITE_CONTENT.openingLabel}.`,
+        `Girardot Express, centro comercial en la Vía Nariño, Girardot. Compras, gastronomía y servicios. ${SITE_CONTENT.openingLabel}.`,
     });
-    this.meta.updateTag({ property: 'og:title', content: `${SITE_CONTENT.name} | ${SITE_CONTENT.slogan}` });
+    this.meta.updateTag({ property: 'og:title', content: title });
     this.meta.updateTag({
       property: 'og:description',
       content: ` ${SITE_CONTENT.slogan} ${SITE_CONTENT.openingLabel}.`.trim(),
     });
-    this.meta.updateTag({ property: 'og:url', content: '/' });
+    this.meta.updateTag({ property: 'og:url', content: `${SITE_CONTENT.url}/` });
     this.setCanonical('/');
 
     this.destroyRef.onDestroy(() => {
@@ -104,6 +105,6 @@ export class Home {
       canonical.rel = 'canonical';
       this.document.head.appendChild(canonical);
     }
-    canonical.href = href;
+    canonical.href = new URL(href, SITE_CONTENT.url).href;
   }
 }
