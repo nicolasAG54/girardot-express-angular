@@ -29,6 +29,13 @@ describe('MallExplorer navigation and loading lifecycle', () => {
     return { fixture, root, start };
   }
 
+  async function finishTransition(fixture: ReturnType<typeof setup>['fixture'], root: HTMLElement) {
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(root.querySelector('.scene-transition')?.classList.contains('is-visible')).toBe(false);
+    });
+  }
+
   it('keeps WebGL off the page until explicitly requested', () => {
     const { fixture, root } = setup();
     expect(fake.create).not.toHaveBeenCalled();
@@ -68,7 +75,7 @@ describe('MallExplorer navigation and loading lifecycle', () => {
     const { fixture, root, start } = setup();
     await start();
     root.querySelectorAll<HTMLButtonElement>('.view-switch button')[1].click();
-    fixture.detectChanges();
+    await finishTransition(fixture, root);
     expect(fake.scene.goTo).toHaveBeenLastCalledWith(0, true, 'ground');
     const [back, next] = root.querySelectorAll<HTMLButtonElement>('.walk-actions button');
     expect(back.disabled).toBe(true);
@@ -95,19 +102,36 @@ describe('MallExplorer navigation and loading lifecycle', () => {
     const { fixture, root, start } = setup();
     await start();
     root.querySelectorAll<HTMLButtonElement>('.view-switch button')[1].click();
-    fixture.detectChanges();
+    await finishTransition(fixture, root);
     const picker = root.querySelector<HTMLSelectElement>('.floor-picker select')!;
     picker.value = 'upper'; picker.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
+    await finishTransition(fixture, root);
     expect(fake.scene.goTo).toHaveBeenLastCalledWith(0, true, 'upper');
     expect(root.querySelector('.walk-point')?.textContent).toContain(SECOND_FLOOR_WALK[0].title);
     root.querySelectorAll<HTMLButtonElement>('.walk-actions button')[1].click();
     fixture.detectChanges();
     expect(fake.scene.goTo).toHaveBeenLastCalledWith(1, false, 'upper');
     picker.value = 'ground'; picker.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
+    await finishTransition(fixture, root);
     expect(fake.scene.goTo).toHaveBeenLastCalledWith(0, true, 'ground');
     expect(root.querySelector('.walk-point')?.textContent).toContain(MALL_WALK[0].title);
     fixture.destroy();
+  });
+
+  it('covers camera cuts and cancels a queued view change when closed', async () => {
+    const { fixture, root, start } = setup(); await start();
+    vi.useFakeTimers();
+    try {
+      root.querySelectorAll<HTMLButtonElement>('.view-switch button')[1].click(); fixture.detectChanges();
+      expect(root.querySelector('.scene-transition')?.classList.contains('is-visible')).toBe(true);
+      expect(root.querySelector('.explorer-stage')?.getAttribute('aria-busy')).toBe('true');
+      expect(fake.scene.goTo).not.toHaveBeenCalled();
+      root.querySelector<HTMLButtonElement>('.close-button')!.click();
+      vi.advanceTimersByTime(1000); fixture.detectChanges();
+      expect(fake.scene.goTo).not.toHaveBeenCalled();
+      expect(root.querySelector('.scene-transition')).toBeNull();
+      expect(fake.scene.dispose).toHaveBeenCalledOnce();
+      fixture.destroy();
+    } finally { vi.useRealTimers(); }
   });
 });

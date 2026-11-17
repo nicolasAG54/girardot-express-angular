@@ -47,7 +47,7 @@
     >
       <div class="chatbot-quick-actions" aria-label="Preguntas rápidas">
         @for (action of quickActions(); track action.label) {
-          <button type="button" (click)="selectQuickAction(action)">{{ action.label }}</button>
+          <button type="button" [disabled]="isReplying()" (click)="selectQuickAction(action)">{{ action.label }}</button>
         }
       </div>
 
@@ -71,6 +71,19 @@
           }
         </article>
       }
+      @if (isReplying()) {
+        <div class="chatbot-typing" role="status">
+          <span class="chatbot-typing__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Preparando respuesta…</span>
+        </div>
+      }
+      @if (!isReplying() && followUps().length) {
+        <div class="chatbot-quick-actions" aria-label="Seguir conversando">
+          @for (action of followUps(); track action.label) {
+            <button type="button" (click)="selectQuickAction(action)">{{ action.label }}</button>
+          }
+        </div>
+      }
     </div>
 
     <div class="chatbot-privacy">
@@ -93,7 +106,7 @@
         [value]="draft()"
         (input)="updateDraft($event)"
       />
-      <button type="submit" aria-label="Enviar pregunta" [disabled]="!draft().trim()">
+      <button type="submit" aria-label="Enviar pregunta" [disabled]="!draft().trim() || isReplying()">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m5 12 14-7-4.5 14-3-5.5L5 12Z" />
           <path d="m11.5 13.5 3-3" />

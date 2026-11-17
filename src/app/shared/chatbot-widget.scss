@@ -149,6 +149,14 @@
 
 .chatbot-message p { margin: 0; font-size: 0.78rem; line-height: 1.55; }
 
+.chatbot-typing { display: flex; align-items: center; gap: .6rem; width: fit-content; padding: .75rem .95rem; background: var(--white); border-radius: var(--radius-sm) var(--radius-sm) var(--radius-sm) 0; color: var(--ink-soft); font-size: .72rem; }
+.chatbot-typing__dots { display: flex; align-items: center; gap: 4px; }
+.chatbot-typing__dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); animation: chatbot-typing-dot 900ms var(--ease-in-out) infinite; }
+.chatbot-typing__dots i:nth-child(2) { animation-delay: 120ms; }
+.chatbot-typing__dots i:nth-child(3) { animation-delay: 240ms; }
+@keyframes chatbot-typing-dot { 0%, 60%, 100% { opacity: .35; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+.chatbot-quick-actions button:disabled { opacity: .5; cursor: default; }
+
 .chatbot-message__actions {
   display: flex;
   flex-wrap: wrap;
@@ -259,6 +267,7 @@
 .chatbot-panel.is-compact .chatbot-tools { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
+  .chatbot-typing__dots i { animation: none; opacity: .7; }
   .chatbot-panel { animation: chatbot-panel-fade 160ms ease both; }
   .chatbot-launcher { transition: opacity 120ms ease; }
   .chatbot-composer button { transition: background-color 120ms ease, opacity 120ms ease; }

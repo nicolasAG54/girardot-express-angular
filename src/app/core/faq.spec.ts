@@ -1,4 +1,4 @@
-import { FAQ_ITEMS, findChatbotReply, searchFaq } from './chatbot-content';
+import { CHATBOT_FALLBACK_REPLY, FAQ_ITEMS, findChatbotReply, searchFaq } from './chatbot-content';
 
 describe('public FAQ', () => {
   it('consolidates the 21 client questions into eight shared answers', () => {
@@ -7,12 +7,18 @@ describe('public FAQ', () => {
     for (const item of FAQ_ITEMS) expect(findChatbotReply(item.question).answer).toBe(item.answer);
   });
 
-  it('keeps every original question searchable and mapped to its consolidated answer', () => {
+  it('keeps every original question searchable and answers service details directly in chat', () => {
     for (const item of FAQ_ITEMS) {
       for (const question of item.relatedQuestions ?? []) {
         expect(searchFaq(question)).toContain(item);
-        expect(findChatbotReply(question).answer).toBe(item.answer);
-        expect(findChatbotReply(question).actions).toBe(item.actions);
+        const reply = findChatbotReply(question);
+        expect(reply).not.toBe(CHATBOT_FALLBACK_REPLY);
+        if (!item.topics) {
+          expect(reply.answer).toBe(item.answer);
+          expect(reply.actions).toBe(item.actions);
+        } else {
+          expect(reply.answer).toMatch(/proyect|previst|apertura/);
+        }
       }
     }
   });

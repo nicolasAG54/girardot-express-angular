@@ -107,6 +107,59 @@ describe('chatbot content', () => {
     expect(findChatbotReply('marcas').answer).toContain('el directorio se publicará cuando estén confirmados');
   });
 
+  it.each([
+    'puedo ir con mi perro?', '¿Puedo llevar a mi perrita?', 'Aceptan mascotas?',
+    '¿Puedo entrar con mi gato?', 'Hola, ¿puedo llevar mi cachorro?',
+  ])('answers everyday pet questions directly: %s', (query) => {
+    const reply = findChatbotReply(query);
+    expect(reply.answer).toMatch(/^Sí,/);
+    expect(reply.answer).toContain('antes de la apertura');
+    expect(reply.answer).not.toMatch(/coworking|carga eléctrica/);
+    expect(reply.suggestions?.map(action => action.label)).toEqual(['¿Hay parqueadero?', '¿Cuándo abre?']);
+  });
+
+  it.each([
+    ['¿Hay parqueadero?', 'parqueo para motos'],
+    ['¿Dónde dejo mi bici?', 'parqueo para motos'],
+    ['¿Tienen ascensor?', 'facilidades de circulación'],
+    ['¿Hay una rampa?', 'facilidades de circulación'],
+    ['¿Puedo cargar mi carro eléctrico?', 'infraestructura de carga eléctrica'],
+  ])('keeps each service response focused: %s', (query, expected) => {
+    const reply = findChatbotReply(query);
+    expect(reply.answer).toContain(expected);
+    expect(reply.answer).not.toContain('coworking');
+    expect(reply.suggestions).toHaveLength(2);
+  });
+
+  it.each([
+    ['¿Puedo llevar mi perro sin correa?', 'aún no tenemos confirmados los requisitos'],
+    ['¿Mi perro necesita bozal?', 'aún no tenemos confirmados los requisitos'],
+    ['¿El parqueadero es gratis?', 'no tenemos una tarifa confirmada'],
+    ['¿Cuánto cuesta el parqueadero?', 'no tenemos una tarifa confirmada'],
+  ])('does not invent pet rules or parking fees: %s', (query, expected) => {
+    const reply = findChatbotReply(query);
+    expect(reply.answer).toContain(expected);
+    expect(reply.answer).not.toMatch(/^Sí,/);
+    expect(reply.actions?.[0].href).toContain(SITE_CONTENT.whatsappUrl);
+  });
+
+  it.each(['Hola!', '¡Buenas tardes!', 'Gracias', 'Muchas gracias!'])(
+    'welcomes conversation and offers working next questions: %s', query => {
+      const reply = findChatbotReply(query);
+      expect(reply).not.toBe(CHATBOT_FALLBACK_REPLY);
+      expect(reply.suggestions?.length).toBeGreaterThan(0);
+      for (const action of reply.suggestions ?? []) {
+        expect(findChatbotReply(action.prompt)).not.toBe(CHATBOT_FALLBACK_REPLY);
+      }
+    },
+  );
+
+  it('keeps unrelated words from matching pets or parking', () => {
+    expect(findChatbotReply('Tengo un gato hidráulico')).toBe(CHATBOT_FALLBACK_REPLY);
+    expect(findChatbotReply('¿Venden perritos calientes?')).toBe(CHATBOT_FALLBACK_REPLY);
+    expect(findChatbotReply('¿Venden comida para mi perro?')).toBe(CHATBOT_FALLBACK_REPLY);
+  });
+
   it.each(['precios y tamaños de locales', 'mascotas y accesibilidad'])(
     'answers related subjects together using their consolidated answer: %s', (query) => {
       expect(findChatbotReply(query)).not.toBe(CHATBOT_FALLBACK_REPLY);

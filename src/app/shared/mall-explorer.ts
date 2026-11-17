@@ -19,6 +19,8 @@ export class MallExplorer {
   protected readonly interior = signal(false);
   protected readonly ambience = signal(true);
   protected readonly moving = signal(false);
+  protected readonly transitioning = signal(false);
+  protected readonly transitionLabel = signal('Cambiando de vista…');
   protected readonly step = signal(0);
   protected readonly floor = signal<MallFloor>('ground');
   protected readonly points = computed(() => MALL_ROUTES[this.floor()]);
@@ -27,9 +29,11 @@ export class MallExplorer {
   private scene?: MallScene;
   private abort?: AbortController;
   private attempt = 0;
+  private transitionTimer?: ReturnType<typeof setTimeout>;
+  private revealTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
-    this.destroyRef.onDestroy(() => { this.attempt++; this.abort?.abort(); });
+    this.destroyRef.onDestroy(() => { this.cancelTransition(); this.attempt++; this.abort?.abort(); });
   }
 
   protected async start(): Promise<void> {
@@ -46,7 +50,7 @@ export class MallExplorer {
         progress: value => { if (attempt === this.attempt) this.progress.set(Math.round(value * 100)); },
         failure: () => { if (attempt === this.attempt) this.fail(); },
         step: direction => this.advance(direction),
-        moving: value => this.moving.set(value),
+        moving: value => { if (attempt === this.attempt) this.moving.set(value); },
       });
       if (this.destroyRef.destroyed || attempt !== this.attempt) { scene.dispose(); return; }
       this.scene = scene;
@@ -62,6 +66,7 @@ export class MallExplorer {
   }
 
   protected fail(): void {
+    this.cancelTransition();
     this.attempt++;
     this.abort?.abort();
     this.scene = undefined;
@@ -70,29 +75,35 @@ export class MallExplorer {
   }
 
   protected reset(): void {
-    this.interior.set(false);
-    this.step.set(0);
-    this.scene?.reset();
+    this.transitionView('Volviendo a la vista exterior…', () => {
+      this.interior.set(false);
+      this.step.set(0);
+      this.scene?.reset();
+    });
   }
 
   protected enter(): void {
-    if (!this.scene) return;
-    this.interior.set(true);
-    this.step.set(0);
-    this.scene.goTo(0, true, this.floor());
+    if (this.interior()) return;
+    this.transitionView('Entrando al recorrido interior…', () => {
+      this.interior.set(true);
+      this.step.set(0);
+      this.scene?.goTo(0, true, this.floor());
+    });
   }
 
   protected selectFloor(event: Event): void {
     const floor = (event.target as HTMLSelectElement).value;
-    if (!this.scene || !this.interior() || (floor !== 'ground' && floor !== 'upper')) return;
-    this.floor.set(floor);
-    this.step.set(0);
-    // Changing floors starts at its landing, without a camera flight through slabs.
-    this.scene.goTo(0, true, floor);
+    if (!this.scene || !this.interior() || floor === this.floor() || (floor !== 'ground' && floor !== 'upper')) return;
+    this.transitionView(floor === 'upper' ? 'Abriendo el segundo piso…' : 'Abriendo la planta baja…', () => {
+      this.floor.set(floor);
+      this.step.set(0);
+      // Cover the camera cut instead of flying through the building's slabs.
+      this.scene?.goTo(0, true, floor);
+    });
   }
 
   protected advance(direction: number): void {
-    if (!this.scene || !this.interior() || this.moving()) return;
+    if (!this.scene || !this.interior() || this.moving() || this.transitioning()) return;
     const next = walkIndex(this.step(), direction, this.points().length);
     if (next === this.step()) return;
     this.step.set(next);
@@ -106,7 +117,30 @@ export class MallExplorer {
 
   protected zoom(direction: number): void { this.scene?.zoom(direction); }
 
+  private transitionView(label: string, change: () => void): void {
+    if (!this.scene || this.state() !== 'ready' || this.transitioning()) return;
+    this.transitionLabel.set(label);
+    this.transitioning.set(true);
+    this.transitionTimer = setTimeout(() => {
+      this.transitionTimer = undefined;
+      change();
+      // Let the requested WebGL frame paint underneath the opaque cover.
+      this.revealTimer = setTimeout(() => {
+        this.revealTimer = undefined;
+        this.transitioning.set(false);
+      }, 80);
+    }, 180);
+  }
+
+  private cancelTransition(): void {
+    if (this.transitionTimer !== undefined) clearTimeout(this.transitionTimer);
+    if (this.revealTimer !== undefined) clearTimeout(this.revealTimer);
+    this.transitionTimer = this.revealTimer = undefined;
+    this.transitioning.set(false);
+  }
+
   protected close(): void {
+    this.cancelTransition();
     this.attempt++;
     this.abort?.abort();
     this.scene = undefined;

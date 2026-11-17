@@ -3,6 +3,8 @@ import { provideRouter } from '@angular/router';
 import { ChatbotWidget } from './chatbot-widget';
 
 describe('Local chatbot privacy', () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
   it('clears both audiences and their saved drafts, then allows a new conversation', () => {
     TestBed.configureTestingModule({ providers: [provideRouter([])] });
     const fixture = TestBed.createComponent(ChatbotWidget);
@@ -21,6 +23,7 @@ describe('Local chatbot privacy', () => {
     };
     const ask = () => {
       element.querySelector<HTMLButtonElement>('.chatbot-quick-actions button')!.click();
+      vi.advanceTimersByTime(1200);
       fixture.detectChanges();
     };
     ask(); fill('Borrador de visitante'); choose(1);
@@ -39,6 +42,62 @@ describe('Local chatbot privacy', () => {
     expect(element.querySelectorAll('.chatbot-message')).toHaveLength(3);
     expect(element.querySelector('.chatbot-clear-status')?.textContent).toBe('');
     fixture.destroy();
+  });
+});
+
+describe('Chat conversation feedback', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+  });
+  afterEach(() => vi.useRealTimers());
+
+  function setup() {
+    const fixture = TestBed.createComponent(ChatbotWidget);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    element.querySelector<HTMLButtonElement>('.chatbot-launcher')!.click(); fixture.detectChanges();
+    const ask = (question: string) => {
+      const input = element.querySelector<HTMLInputElement>('#chatbot-message')!;
+      input.value = question; input.dispatchEvent(new Event('input')); fixture.detectChanges();
+      element.querySelector('form')!.dispatchEvent(new Event('submit', { cancelable: true })); fixture.detectChanges();
+    };
+    return { fixture, element, ask };
+  }
+
+  it('acknowledges a question with dots before replying and offers a working follow-up', () => {
+    const { fixture, element, ask } = setup(); ask('puedo ir con mi perro?');
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(2);
+    expect(element.querySelector('.chatbot-typing')?.textContent).toContain('Preparando respuesta');
+    ask('Otra pregunta'); // Duplicate submissions cannot race the pending reply.
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(2);
+    vi.advanceTimersByTime(1200); fixture.detectChanges();
+    expect(element.querySelector('.chatbot-typing')).toBeNull();
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(3);
+    expect(element.querySelector('.chatbot-message:last-of-type')?.textContent).toContain('Sí, el proyecto contempla');
+    element.querySelector<HTMLButtonElement>('[aria-label="Seguir conversando"] button')!.click();
+    vi.advanceTimersByTime(1200); fixture.detectChanges();
+    expect(element.querySelector('.chatbot-message:last-of-type')?.textContent).toContain('parqueo para motos');
+    fixture.destroy();
+  });
+
+  it('clearing a pending reply prevents it from reappearing later', () => {
+    const { fixture, element, ask } = setup(); ask('perro');
+    element.querySelector<HTMLButtonElement>('.chatbot-tools button')!.click(); fixture.detectChanges();
+    vi.advanceTimersByTime(2000); fixture.detectChanges();
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(1);
+    expect(element.querySelector('.chatbot-typing')).toBeNull(); fixture.destroy();
+  });
+
+  it('finishes a reply in its own history when switching audiences, without a stale timer', () => {
+    const { fixture, element, ask } = setup(); ask('perro');
+    const audiences = element.querySelectorAll<HTMLButtonElement>('.chatbot-audience button');
+    audiences[1].click(); fixture.detectChanges(); vi.advanceTimersByTime(2000); fixture.detectChanges();
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(1);
+    audiences[0].click(); fixture.detectChanges();
+    expect(element.querySelectorAll('.chatbot-message')).toHaveLength(3);
+    expect(element.querySelector('.chatbot-message:last-of-type')?.textContent).toContain('tu mascota');
+    fixture.destroy(); expect(vi.getTimerCount()).toBe(0);
   });
 });
 

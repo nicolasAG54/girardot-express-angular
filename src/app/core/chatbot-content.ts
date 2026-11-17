@@ -9,6 +9,7 @@ export interface ChatbotAction {
 export interface ChatbotReply {
   readonly answer: string;
   readonly actions?: readonly ChatbotAction[];
+  readonly suggestions?: readonly ChatbotQuickAction[];
 }
 
 export interface ChatbotQuickAction {
@@ -22,6 +23,11 @@ interface ChatbotIntent extends ChatbotReply {
   readonly relatedQuestions?: readonly string[];
   readonly keywords: readonly string[];
   readonly shortQueries?: readonly string[];
+  readonly topics?: readonly ChatbotIntent[];
+  readonly pendingDetails?: {
+    readonly keywords: readonly string[];
+    readonly answer: string;
+  };
 }
 
 function advisorFor(message: string, label = 'Hablar con un asesor'): ChatbotAction {
@@ -57,6 +63,51 @@ const instagramAction: ChatbotAction = {
 };
 
 export type FaqAudience = 'visitor' | 'commercial';
+
+const openingSuggestion = { label: '¿Cuándo abre?', prompt: '¿Cuándo abre Girardot Express?' };
+const locationSuggestion = { label: '¿Cómo llego?', prompt: '¿Dónde está ubicado Girardot Express?' };
+const parkingSuggestion = { label: '¿Hay parqueadero?', prompt: '¿Hay parqueadero?' };
+
+// Las FAQ conservan sus ocho temas. En el chat, una pregunta específica recibe
+// solo la información de ese servicio, sin presentar los servicios previstos como operativos.
+const serviceTopics: readonly ChatbotIntent[] = [
+  {
+    question: '¿Puedo ir con mi perro?',
+    keywords: [
+      'mascota', 'mascotas', 'perro', 'perros', 'perra', 'perras', 'perrito', 'perritos',
+      'perrita', 'perritas', 'gato', 'gatos', 'gatito', 'gatitos', 'cachorro', 'cachorros',
+      'pet friendly', 'petfriendly', 'animal', 'animales',
+    ],
+    answer: 'Sí, el proyecto contempla espacios para compartir con tu mascota y una zona para ellas. Las condiciones de ingreso y uso de la zona serán informadas oficialmente antes de la apertura.',
+    suggestions: [parkingSuggestion, openingSuggestion],
+    pendingDetails: {
+      keywords: ['correa', 'bozal', 'raza', 'razas', 'vacuna', 'vacunas', 'restriccion', 'restricciones', 'reglas', 'requisitos', 'condiciones', 'restaurante', 'restaurantes', 'tienda', 'tiendas'],
+      answer: 'El proyecto contempla una zona para mascotas. Las condiciones de ingreso y uso de la zona serán informadas oficialmente antes de la apertura; aún no tenemos confirmados los requisitos ni el acceso a cada tienda o restaurante. Puedes consultar tu caso con un asesor.',
+    },
+  },
+  {
+    question: '¿Hay parqueadero?',
+    keywords: ['parqueadero', 'parqueaderos', 'parqueo', 'parquear', 'estacionamiento', 'estacionar', 'aparcar', 'parking', 'ir en carro', 'ir en moto', 'ir en bicicleta', 'dejar mi carro', 'dejar el carro', 'dejar mi bici', 'dejo mi bici'],
+    answer: 'Está previsto parqueo para motos, bicicletas, carros y personas con movilidad reducida. Podrás consultar las condiciones de uso cuando se anuncien oficialmente antes de la apertura.',
+    suggestions: [locationSuggestion, openingSuggestion],
+    pendingDetails: {
+      keywords: ['cuesta', 'vale', 'costo', 'precio', 'tarifa', 'tarifas', 'gratis', 'gratuito', 'cobran', 'hora', 'horas'],
+      answer: 'El proyecto contempla parqueadero, pero no tenemos una tarifa confirmada ni información oficial sobre gratuidad o tiempos de uso. Un asesor puede orientarte sobre las novedades de este servicio.',
+    },
+  },
+  {
+    question: '¿Tendrá acceso para personas con movilidad reducida?',
+    keywords: ['accesibilidad', 'movilidad reducida', 'rampa', 'rampas', 'ascensor', 'ascensores', 'escalera electrica', 'escaleras electricas', 'discapacidad', 'silla de ruedas'],
+    answer: 'Las facilidades de circulación previstas incluyen rampas, ascensores y escaleras eléctricas, además de parqueo para personas con movilidad reducida. Estos servicios forman parte del proyecto y aún no están en operación.',
+    suggestions: [parkingSuggestion, locationSuggestion],
+  },
+  {
+    question: '¿Habrá carga para vehículos eléctricos?',
+    keywords: ['electrolinera', 'carga electrica', 'carga para vehiculos', 'carro electrico', 'vehiculo electrico', 'vehiculos electricos', 'cargador ev', 'cargador', 'cargadores', 'cargar mi carro', 'cargar el carro'],
+    answer: 'La infraestructura de carga eléctrica está prevista; su alcance y fecha de operación están por confirmar. Todavía no podemos confirmar tarifas, conectores ni disponibilidad para una visita.',
+    suggestions: [parkingSuggestion, openingSuggestion],
+  },
+];
 
 // Ocho respuestas compartidas por la página y el asistente. Conservamos las
 // 21 preguntas originales como alias para que sigan siendo fáciles de encontrar.
@@ -112,11 +163,9 @@ export const FAQ_ITEMS: readonly ChatbotIntent[] = [
     keywords: [
       'servicios', 'zonas comunes', 'amenidades', 'coworking', 'parque infantil', 'vigilancia',
       'seguridad', 'parqueaderos', 'parqueadero', 'parqueo', 'estacionamiento', 'estacionar',
-      'mascotas', 'perros', 'pet friendly', 'animales', 'electrolinera', 'carga electrica',
-      'carga para vehiculos', 'carro electrico', 'vehiculo electrico', 'vehiculos electricos',
-      'cargador ev', 'cargadores', 'accesibilidad', 'movilidad reducida', 'rampas',
-      'ascensores', 'escaleras electricas', 'discapacidad', 'silla de ruedas',
+      ...serviceTopics.flatMap(topic => topic.keywords),
     ],
+    topics: serviceTopics,
     answer:
       'Se proyectan coworking, parque infantil, zona para mascotas y parqueo para motos, bicicletas, carros y personas con movilidad reducida. Las facilidades de circulación previstas incluyen rampas, ascensores y escaleras eléctricas, junto con vigilancia, circuito cerrado de televisión y sistemas de respaldo y seguridad. La infraestructura de carga eléctrica está prevista; su alcance y fecha de operación están por confirmar. Las condiciones de ingreso de mascotas y uso de su zona serán informadas oficialmente antes de la apertura.',
   },
@@ -231,8 +280,9 @@ export function searchFaq(query: string, audience: FaqAudience | 'all' = 'all') 
 
 export const CHATBOT_FALLBACK_REPLY: ChatbotReply = {
   answer:
-    'No encontré una respuesta clara para tu consulta. Puedes preguntarme por locales disponibles, precios, ubicación, servicios, marcas, apertura o contacto. Si necesitas varios temas, pregúntame uno a la vez; también puedes hablar con un asesor.',
+    'No pude identificar el tema de tu pregunta. Prueba con una de estas opciones o habla con un asesor. Si tienes varias preguntas, podemos verlas una a una.',
   actions: [advisorAction],
+  suggestions: [openingSuggestion, { label: 'Servicios', prompt: '¿Qué servicios tendrá Girardot Express?' }, { label: 'Locales disponibles', prompt: '¿Hay locales disponibles?' }],
 };
 
 function normalize(value: string): string {
@@ -293,6 +343,18 @@ function matchIntent(input: string): { intent?: ChatbotIntent; score: number } {
 export function findChatbotReply(query: string): ChatbotReply {
   const input = normalize(query);
   if (!input) return CHATBOT_FALLBACK_REPLY;
+  // Son productos/expresiones distintos de las preguntas de visita con mascotas.
+  if (/\b(gato hidraulico|perritos? calientes?|comida para (?:mi |el )?perro)\b/.test(input)) return CHATBOT_FALLBACK_REPLY;
+
+  if (/^(hola|buenas|buenos dias|buenas tardes|buenas noches|hey)( girardot express)?$/.test(input)) {
+    return {
+      answer: '¡Hola! ¿Qué te gustaría saber sobre Girardot Express?',
+      suggestions: [openingSuggestion, { label: '¿Puedo ir con mi perro?', prompt: '¿Puedo ir con mi perro?' }, { label: 'Busco un local', prompt: '¿Hay locales disponibles?' }],
+    };
+  }
+  if (/^(muchas gracias|gracias|ok gracias|perfecto gracias|listo gracias)$/.test(input)) {
+    return { answer: '¡Con gusto! ¿Quieres consultar algo más?', suggestions: [openingSuggestion, locationSuggestion] };
+  }
 
   const match = matchIntent(input);
   if (!match.intent) return CHATBOT_FALLBACK_REPLY;
@@ -306,6 +368,17 @@ export function findChatbotReply(query: string): ChatbotReply {
         .filter((intent) => intent !== undefined),
     );
     if (subjects.size > 1) return CHATBOT_FALLBACK_REPLY;
+  }
+
+  const topics = match.intent.topics?.filter(topic =>
+    [topic.question, ...topic.keywords].some(phrase => keywordScore(input, phrase) > 0),
+  );
+  if (topics?.length === 1) {
+    const topic = topics[0];
+    if (topic.pendingDetails?.keywords.some(phrase => keywordScore(input, phrase) > 0)) {
+      return { answer: topic.pendingDetails.answer, actions: [advisorAction], suggestions: topic.suggestions };
+    }
+    return topic;
   }
 
   return match.intent;

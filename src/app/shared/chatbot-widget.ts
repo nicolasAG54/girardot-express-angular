@@ -25,6 +25,7 @@ interface ChatMessage {
   readonly role: 'assistant' | 'user';
   readonly text: string;
   readonly actions?: readonly ChatbotAction[];
+  readonly suggestions?: readonly ChatbotQuickAction[];
 }
 
 const INITIAL_MESSAGES: Record<FaqAudience, readonly ChatMessage[]> = {
@@ -51,10 +52,13 @@ export class ChatbotWidget {
   private previousBodyOverflow?: string;
   private focusTimer: ReturnType<typeof setTimeout> | undefined;
   private scrollTimer: ReturnType<typeof setTimeout> | undefined;
+  private replyTimer: ReturnType<typeof setTimeout> | undefined;
+  private pendingReply?: () => void;
   private nextMessageId = 2;
 
   protected readonly isOpen = signal(false);
   protected readonly compactViewport = signal(false);
+  protected readonly isReplying = signal(false);
   protected readonly draft = signal('');
   protected readonly cleared = signal(false);
   protected readonly audience = signal<FaqAudience>('visitor');
@@ -62,6 +66,7 @@ export class ChatbotWidget {
   private readonly histories = signal<Record<FaqAudience, readonly ChatMessage[]>>(INITIAL_MESSAGES);
   private readonly drafts = { visitor: '', commercial: '' };
   protected readonly messages = computed(() => this.histories()[this.audience()]);
+  protected readonly followUps = computed(() => this.messages().at(-1)?.suggestions ?? []);
   protected readonly quickActions = computed<readonly ChatbotQuickAction[]>(() => this.audience() === 'commercial'
     ? CHATBOT_QUICK_ACTIONS
     : [
@@ -76,6 +81,7 @@ export class ChatbotWidget {
     this.destroyRef.onDestroy(() => {
       if (this.focusTimer !== undefined) clearTimeout(this.focusTimer);
       if (this.scrollTimer !== undefined) clearTimeout(this.scrollTimer);
+      this.cancelPendingReply();
       this.stopViewportTracking();
     });
   }
@@ -123,6 +129,7 @@ export class ChatbotWidget {
   }
 
   protected chooseAudience(audience: FaqAudience): void {
+    this.finishPendingReply();
     this.drafts[this.audience()] = this.draft();
     this.audience.set(audience);
     this.draft.set(this.drafts[audience]);
@@ -131,6 +138,7 @@ export class ChatbotWidget {
   }
 
   protected clearConversation(): void {
+    this.cancelPendingReply();
     this.histories.set(INITIAL_MESSAGES);
     this.drafts.visitor = '';
     this.drafts.commercial = '';
@@ -159,7 +167,7 @@ export class ChatbotWidget {
 
   private sendQuestion(rawQuestion: string): void {
     const question = rawQuestion.trim();
-    if (!question) return;
+    if (!question || this.isReplying()) return;
 
     this.cleared.set(false);
 
@@ -175,15 +183,37 @@ export class ChatbotWidget {
     this.histories.update((histories) => ({ ...histories, [audience]: [
       ...histories[audience],
       { id: this.nextMessageId++, role: 'user', text: question },
-      {
+    ] }));
+    this.pendingReply = () => {
+      this.histories.update((histories) => ({ ...histories, [audience]: [...histories[audience], {
         id: this.nextMessageId++,
         role: 'assistant',
         text: reply.answer,
         actions,
-      },
-    ] }));
+        suggestions: reply.suggestions,
+      }] }));
+      this.scheduleConversationScroll();
+    };
+    this.isReplying.set(true);
+    this.replyTimer = setTimeout(() => this.finishPendingReply(), Math.min(1100, 550 + reply.answer.length * 1.5));
     this.draft.set('');
     this.scheduleConversationScroll();
+  }
+
+  private finishPendingReply(): void {
+    if (this.replyTimer !== undefined) clearTimeout(this.replyTimer);
+    this.replyTimer = undefined;
+    const complete = this.pendingReply;
+    this.pendingReply = undefined;
+    this.isReplying.set(false);
+    complete?.();
+  }
+
+  private cancelPendingReply(): void {
+    if (this.replyTimer !== undefined) clearTimeout(this.replyTimer);
+    this.replyTimer = undefined;
+    this.pendingReply = undefined;
+    this.isReplying.set(false);
   }
 
   private isTouchLayout(view: Window): boolean {

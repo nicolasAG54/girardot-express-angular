@@ -7,7 +7,7 @@
       <p>Conoce Girardot Express desde afuera o recorre sus dos plantas, desde el pasillo hasta los balcones de la plazoleta.</p>
     </div>
 
-    <div class="explorer-stage" [class.is-active]="active()" [attr.aria-busy]="state() === 'loading'">
+    <div class="explorer-stage" [class.is-active]="active()" [attr.aria-busy]="state() === 'loading' || transitioning() || moving()">
       <div #sceneHost class="scene-canvas"></div>
       @if (!active()) {
         <img class="explorer-poster" [src]="poster.src" [alt]="poster.alt" width="1920" height="1080" loading="lazy" />
@@ -19,7 +19,7 @@
             <div class="launch-panel">
               <p class="launch-title">Cargando el modelo 3D</p>
               <p>{{ progress() > 0 ? progress() + ' %' : 'Puede tomar unos momentos.' }}</p>
-              <progress max="100" [value]="progress()" aria-label="Carga del modelo 3D"></progress>
+              <progress max="100" [attr.value]="progress() > 0 ? progress() : null" aria-label="Carga del modelo 3D"></progress>
               <button class="cancel-button" type="button" (click)="close()">Cancelar</button>
             </div>
           } @else {
@@ -41,16 +41,19 @@
       }
 
       @if (state() === 'ready') {
+        <div class="scene-transition" [class.is-visible]="transitioning()" aria-hidden="true">
+          <span class="scene-transition__label">{{ transitionLabel() }}</span>
+        </div>
         <div class="view-controls">
           <div class="view-switch" role="group" aria-label="Tipo de vista">
-            <button type="button" [attr.aria-pressed]="!interior()" (click)="reset()">Vista exterior</button>
-            <button type="button" [attr.aria-pressed]="interior()" (click)="enter()">Recorrer interior</button>
+            <button type="button" [disabled]="transitioning()" [attr.aria-pressed]="!interior()" (click)="reset()">Vista exterior</button>
+            <button type="button" [disabled]="transitioning()" [attr.aria-pressed]="interior()" (click)="enter()">Recorrer interior</button>
           </div>
           <div class="view-options">
           @if (interior()) {
             <label class="floor-picker">
               <span class="sr-only">Planta del recorrido</span>
-              <select aria-label="Planta del recorrido" [value]="floor()" (change)="selectFloor($event)">
+              <select aria-label="Planta del recorrido" [disabled]="transitioning()" [value]="floor()" (change)="selectFloor($event)">
                 <option value="ground">Planta baja</option>
                 <option value="upper">Segundo piso</option>
               </select>
@@ -70,10 +73,10 @@
         </div>
         } @else {
           <div class="walk-controls" role="group" [attr.aria-label]="floor() === 'upper' ? 'Recorrido por el segundo piso' : 'Recorrido por la planta baja'">
-            <p class="walk-point" aria-live="polite"><span>{{ step() + 1 }} / {{ points().length }}</span>{{ points()[step()].title }}</p>
+            <p class="walk-point" aria-live="polite"><span>{{ step() + 1 }} / {{ points().length }}</span>{{ points()[step()].title }}@if (moving()) {<small class="walk-motion">En movimiento…</small>}</p>
             <div class="walk-actions">
-              <button type="button" [disabled]="step() === 0 || moving()" (click)="advance(-1)">Retroceder</button>
-              <button type="button" [disabled]="step() === points().length - 1 || moving()" (click)="advance(1)">{{ moving() ? 'Avanzando…' : 'Avanzar' }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></button>
+              <button type="button" [disabled]="step() === 0 || moving() || transitioning()" (click)="advance(-1)">Retroceder</button>
+              <button type="button" [disabled]="step() === points().length - 1 || moving() || transitioning()" (click)="advance(1)">{{ moving() ? 'Avanzando…' : 'Avanzar' }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></button>
             </div>
           </div>
         }
@@ -85,6 +88,6 @@
       <p>{{ state() === 'ready' ? interior() ? 'Arrastra para mirar. Avanza con los botones o las teclas W y S; mira con las flechas.' : 'Arrastra para girar. Usa la rueda o dos dedos para acercarte.' : 'Visualización interactiva del proyecto.' }}</p>
       <p>Modelo de referencia. Personas y autos ilustrativos. Acabados sujetos a ajustes.</p>
     </div>
-    <p class="sr-only" role="status">{{ state() === 'ready' ? 'Modelo 3D listo para explorar.' : state() === 'error' ? 'No se pudo cargar el modelo 3D.' : state() === 'loading' ? 'Cargando modelo 3D.' : '' }}</p>
+    <p class="sr-only" role="status">{{ transitioning() ? transitionLabel() : moving() ? 'Avanzando a ' + points()[step()].title : state() === 'ready' ? 'Modelo 3D listo para explorar.' : state() === 'error' ? 'No se pudo cargar el modelo 3D.' : state() === 'loading' ? 'Cargando modelo 3D.' : '' }}</p>
   </div>
 </section>
