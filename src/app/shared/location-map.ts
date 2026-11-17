@@ -64,7 +64,10 @@ export class LocationMap {
     }, 12000);
 
     try {
-      const leaflet = await import('leaflet');
+      // Production exposes Leaflet's CommonJS build under `default`; the dev
+      // server can also expose named exports. Support both module shapes.
+      const module = await import('leaflet');
+      const leaflet = module.default ?? module;
       if (this.destroyRef.destroyed || requestId !== this.requestId) return;
       const element = this.canvas().nativeElement;
       const animate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
