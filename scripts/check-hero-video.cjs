@@ -89,7 +89,7 @@ async function atAnchor(p, id) {
    const retry = await browser.newPage();
    retry.on('pageerror', e => report.errors.push(e.message));
    // Exercise a real failed <source> fetch, then retry without changing routes.
-   const failedVideo = route === '/' ? '**/hero-home-14s.mp4' : '**/hero-project.mp4';
+   const failedVideo = route === '/' ? '**/hero-home-12s.mp4' : '**/hero-project.mp4';
    await retry.route(failedVideo, r => r.abort('failed'));
    await retry.goto(base + route);
    // The network can fail before Angular hydrates the SSR controls. Wait for
