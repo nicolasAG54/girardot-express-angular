@@ -5,8 +5,8 @@ const architecture = 'assets/techo-recto';
 
 export const SITE_MEDIA = {
   homeHero: {
-    video: `${directory}/hero-home.mp4`,
-    mobileVideo: `${directory}/hero-home-mobile.mp4`,
+    video: `${directory}/hero-home-17s.mp4`,
+    mobileVideo: `${directory}/hero-home-mobile-17s.mp4`,
     poster: `${directory}/hero-home-poster.webp`,
     width: 1920,
     height: 1080,
