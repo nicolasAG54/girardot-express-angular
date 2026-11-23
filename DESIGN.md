@@ -563,3 +563,5 @@ Validación: 97 pruebas unitarias, compilación de producción con siete rutas p
 ### Recorte del video de Inicio
 
 Por solicitud del usuario, se recortan aproximadamente tres segundos del final del hero de Inicio: pasa de 20,03 a 17,07 segundos. Las versiones `hero-home-17s.mp4` y `hero-home-mobile-17s.mp4` conservan el inicio, el flujo H.264 original a 30 fps y las resoluciones 1920 × 1080 y 1280 × 720. Se realiza copia del flujo, con faststart, para conservar la calidad. Los nombres nuevos evitan reutilizar la versión anterior desde caché; los archivos originales permanecen disponibles. El póster y los controles de reproducción existentes se conservan.
+
+Un segundo recorte solicitado por el usuario elimina otros tres segundos del final. Inicio utiliza ahora `hero-home-14s.mp4` y `hero-home-mobile-14s.mp4`, ambos de 14,07 segundos, mediante copia del flujo original y con las mismas resoluciones, calidad y controles.
